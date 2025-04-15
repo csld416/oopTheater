@@ -1,0 +1,30 @@
+
+# NetBeans specific
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Swing GUI auto-generated layout files
+*.form
+
+# Compiled class files
+*.class
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE-specific
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# SQLite DB if you want it excluded
+*.db
