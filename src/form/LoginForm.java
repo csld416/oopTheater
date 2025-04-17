@@ -4,6 +4,7 @@
  */
 package form;
 
+import BaseClass.SessionManager;
 import connection.DatabaseConnection;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -44,6 +45,9 @@ public class LoginForm {
     private JPasswordField passwordField;
     private JButton buttonLogin;
     private JButton buttonRegister;
+    
+    //for session manager
+    private String userEmail = null;
 
     //dragging the form
     private boolean isdragging = false;
@@ -130,7 +134,7 @@ public class LoginForm {
         contentPanel.setBounds(10, 30, frame.getWidth() - 10, frame.getHeight() - 40);
         frame.add(contentPanel);
         //=== username Label
-        JLabel usernameLabel = new JLabel("Username:");
+        JLabel usernameLabel = new JLabel("Phone:");
         usernameLabel.setBounds(30, 40, 80, 25);
         contentPanel.add(usernameLabel);
         //=== UsernameField
@@ -161,8 +165,10 @@ public class LoginForm {
             String password = String.valueOf(passwordField.getPassword());
             if (checkLogin(username, password)) {
                 frame.dispose();
-                new DashBoardForm();
-            }else{
+                SessionManager.currentUserEmail = userEmail;
+                new StartingPage().setVisible(true);
+                // open main page
+            } else {
                 JOptionPane.showMessageDialog(frame, "Invalid username or password", "Invalid Data", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -239,16 +245,17 @@ public class LoginForm {
     }
 
     //check username and passowrd
-    private boolean checkLogin(String username, String password) {
+    private boolean checkLogin(String Phone, String password) {
         Connection connection = dbConnection.getConnection();
         if (connection != null) {
             try {
-                String query = "SELECT * FROM `users` WHERE `username` = ?";
+                String query = "SELECT * FROM `users` WHERE `phone` = ?";
                 PreparedStatement ps = connection.prepareStatement(query);
-                ps.setString(1, username);
+                ps.setString(1, Phone);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     String storedPassword = rs.getString("password");
+                    userEmail = rs.getString("email");
                     return password.equals(storedPassword);
                 }
             } catch (SQLException e) {

@@ -159,7 +159,7 @@ public class RegisterForm {
         fullnameField.setBounds(150, 20, 250, 25);
         contentPanel.add(fullnameField);
         //=== Username (Label & Field)
-        JLabel usernameLabel = new JLabel("Username:");
+        JLabel usernameLabel = new JLabel("Email:");
         usernameLabel.setBounds(30, 50, 80, 25);
         contentPanel.add(usernameLabel);
         usernameField = new JTextField();
@@ -401,7 +401,7 @@ public class RegisterForm {
     //check exists
     private boolean existed(String username) {
         Connection connection = dbConnection.getConnection();
-        String query = "SELECT * FROM `users` WHERE `username` = ?";
+        String query = "SELECT * FROM `users` WHERE `email` = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, username);
@@ -418,21 +418,21 @@ public class RegisterForm {
     //register user
     private void registerUser() {
         String fullname = fullnameField.getText();
-        String username = usernameField.getText();
+        String email = usernameField.getText();
         String password = String.valueOf(passwordField.getPassword());
         String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
         String phone = phoneField.getText().trim();
         String gender = maleRadioButton.isSelected() ? "Male" : "Female";
 
-        if (fullname.trim().isEmpty() || username.trim().isEmpty()
+        if (fullname.trim().isEmpty() || email.trim().isEmpty()
                 || password.trim().isEmpty() || confirmPassword.trim().isEmpty()
                 || phone.trim().isEmpty() || gender.trim().isEmpty()) {
             showErrorMessage("All fields must be filled");
             return;
         }
 
-        if (existed(username)) {
-            showErrorMessage("This username already exists");
+        if (existed(email)) {
+            showErrorMessage("This Email already registers");
             return;
         }
 
@@ -443,11 +443,11 @@ public class RegisterForm {
 
         try {
             Connection connection = dbConnection.getConnection();
-            String query = "INSERT INTO `users`(`fullname`, `username`, `password`, `phone`, `gender`, `picture`) VALUES (?,?,?,?,?,?)";
+            String query = "INSERT INTO `users`(`fullname`, `email`, `password`, `phone`, `gender`, `picture`) VALUES (?,?,?,?,?,?)";
             PreparedStatement prepareStatement = connection.prepareStatement(query);
 
             prepareStatement.setString(1, fullname);
-            prepareStatement.setString(2, username);
+            prepareStatement.setString(2, email);
             prepareStatement.setString(3, password);
             prepareStatement.setString(4, phone);
             prepareStatement.setString(5, gender);
