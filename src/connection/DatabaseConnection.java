@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
 
-    private static final String DB_NAME = "java_demoDB";
+    private static final String DB_NAME = "oopMovieDB";
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/" + DB_NAME;
     private static final String JDBC_USER = "root";
     private static final String JDBC_PASSWORD = "";
