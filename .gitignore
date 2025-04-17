@@ -29,5 +29,5 @@ Thumbs.db
 # SQLite DB if you want it excluded
 *.db
 
-src/test/
+src/test/*
 
