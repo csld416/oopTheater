@@ -45,7 +45,7 @@ public class LoginForm {
     private JPasswordField passwordField;
     private JButton buttonLogin;
     private JButton buttonRegister;
-
+    
     //for session manager
     private String userEmail = null;
 
@@ -66,7 +66,7 @@ public class LoginForm {
         // Title Bar
         titleBar = new JPanel();
         titleBar.setLayout(null);
-        titleBar.setBackground(new Color(169, 183, 198));
+        titleBar.setBackground(new Color(255, 204, 0));
         titleBar.setPreferredSize(new Dimension(frame.getWidth(), 30));
         frame.add(titleBar, BorderLayout.NORTH);
         //=== Title Label
@@ -86,13 +86,7 @@ public class LoginForm {
         closeLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (SessionManager.returnAfterLogin != null) {
-                    SessionManager.returnAfterLogin.setVisible(true);
-                    SessionManager.returnAfterLogin = null; // reset after use
-                } else {
-                    new StartingPage().setVisible(true); // fallback
-                }
-                frame.dispose();
+                System.exit(0);
             }
 
             @Override
@@ -135,8 +129,8 @@ public class LoginForm {
         //=== Content Panel
         contentPanel = new JPanel();
         contentPanel.setLayout(null);
-        contentPanel.setBackground(new Color(238, 236, 233));
-        contentPanel.setBorder(new LineBorder(new Color(216, 200, 196), 5));
+        contentPanel.setBackground(new Color(236, 240, 241));
+        contentPanel.setBorder(new LineBorder(new Color(255, 204, 0), 5));
         contentPanel.setBounds(10, 30, frame.getWidth() - 10, frame.getHeight() - 40);
         frame.add(contentPanel);
         //=== username Label
@@ -172,15 +166,7 @@ public class LoginForm {
             if (checkLogin(username, password)) {
                 frame.dispose();
                 SessionManager.currentUserEmail = userEmail;
-                if (SessionManager.redirectTargetPage != null) {
-                    SessionManager.redirectTargetPage.run();
-                    SessionManager.redirectTargetPage = null;
-                } else if (SessionManager.returnAfterLogin != null) {
-                    SessionManager.returnAfterLogin.setVisible(true);
-                    SessionManager.returnAfterLogin = null;
-                } else {
-                    new StartingPage().setVisible(true); // fallback
-                }
+                new StartingPage().setVisible(true);
                 // open main page
             } else {
                 JOptionPane.showMessageDialog(frame, "Invalid username or password", "Invalid Data", JOptionPane.ERROR_MESSAGE);

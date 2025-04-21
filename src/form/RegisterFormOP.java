@@ -84,7 +84,7 @@ public class RegisterForm {
         // Title Bar
         titleBar = new JPanel();
         titleBar.setLayout(null);
-        titleBar.setBackground(new Color(169, 183, 198));
+        titleBar.setBackground(new Color(255, 204, 0));
         titleBar.setPreferredSize(new Dimension(frame.getWidth(), 30));
         frame.add(titleBar, BorderLayout.NORTH);
         //=== Title Label
@@ -96,8 +96,8 @@ public class RegisterForm {
         //=== Content Panel
         contentPanel = new JPanel();
         contentPanel.setLayout(null);
-        contentPanel.setBackground(new Color(238, 236, 233));
-        contentPanel.setBorder(new LineBorder(new Color(216, 200, 196), 0));
+        contentPanel.setBackground(new Color(236, 240, 241));
+        contentPanel.setBorder(new LineBorder(new Color(255, 204, 0), 5));
         contentPanel.setBounds(10, 30, frame.getWidth() - 10, frame.getHeight() - 40);
         frame.add(contentPanel);
         //=== Close Label
@@ -217,8 +217,8 @@ public class RegisterForm {
         browseButton = new JButton("Browse");
         browseButton.setBounds(150, 200, 100, 25);
         browseButton.setFont(new Font("Arial", Font.PLAIN, 12));
-        browseButton.setBackground(new Color(182, 193, 201));
-        browseButton.setForeground(Color.BLACK);
+        browseButton.setBackground(new Color(255, 102, 0));
+        browseButton.setForeground(Color.WHITE);
         browseButton.setFocusPainted(false);
         browseButton.setBorderPainted(false);
         browseButton.setOpaque(true);
@@ -226,12 +226,12 @@ public class RegisterForm {
         browseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                browseButton.setBackground(new Color(158, 171, 184));
+                browseButton.setBackground(new Color(255, 51, 0));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                browseButton.setBackground(new Color(182, 193, 201));
+                browseButton.setBackground(new Color(255, 102, 0));
             }
 
         });
@@ -286,7 +286,7 @@ public class RegisterForm {
         buttonRegister = new JButton("Register");
         buttonRegister.setBounds(225, 380, 170, 35);
         buttonRegister.setFont(new Font("Arial", Font.BOLD, 14));
-        buttonRegister.setBackground(new Color(189, 170, 165));
+        buttonRegister.setBackground(new Color(60, 179, 113));
         buttonRegister.setForeground(Color.WHITE);
         buttonRegister.setFocusPainted(false);
         buttonRegister.setBorderPainted(false);
@@ -301,12 +301,12 @@ public class RegisterForm {
         buttonRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                buttonRegister.setBackground(new Color(68, 149, 145));
+                buttonRegister.setBackground(new Color(46, 139, 87));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                buttonRegister.setBackground(new Color(189, 170, 165));
+                buttonRegister.setBackground(new Color(60, 179, 113));
             }
 
         });
@@ -315,7 +315,7 @@ public class RegisterForm {
         buttonLogin = new JButton("Back to Login");
         buttonLogin.setBounds(40, 380, 170, 35);
         buttonLogin.setFont(new Font("Arial", Font.BOLD, 14));
-        buttonLogin.setBackground(new Color(107, 123, 140));
+        buttonLogin.setBackground(new Color(70, 130, 180));
         buttonLogin.setForeground(Color.WHITE);
         buttonLogin.setFocusPainted(false);
         buttonLogin.setBorderPainted(false);
@@ -330,12 +330,12 @@ public class RegisterForm {
         buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                buttonLogin.setBackground(new Color(90, 107, 122));
+                buttonLogin.setBackground(new Color(0, 102, 204));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                buttonLogin.setBackground(new Color(107, 123, 140));
+                buttonLogin.setBackground(new Color(70, 130, 180));
             }
 
         });
