@@ -44,7 +44,7 @@ import java.sql.SQLException;
  *
  * @author csld
  */
-public class RegisterForm {
+public class RegisterFormOP {
 
     private JFrame frame;
     private JPanel titleBar;
@@ -74,7 +74,7 @@ public class RegisterForm {
     // the database variable
     private DatabaseConnection dbConnection;
 
-    public RegisterForm() {
+    public RegisterFormOP() {
         //=== Frame
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,25 +84,25 @@ public class RegisterForm {
         // Title Bar
         titleBar = new JPanel();
         titleBar.setLayout(null);
-        titleBar.setBackground(new Color(255, 204, 0));
+        titleBar.setBackground(new Color(59, 76, 88));
         titleBar.setPreferredSize(new Dimension(frame.getWidth(), 30));
         frame.add(titleBar, BorderLayout.NORTH);
         //=== Title Label
-        titleLabel = new JLabel("Register Form");
-        titleLabel.setForeground(Color.BLACK);
+        titleLabel = new JLabel("Admin Register Form");
+        titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setBounds(10, 0, 200, 30);
         titleBar.add(titleLabel);
         //=== Content Panel
         contentPanel = new JPanel();
         contentPanel.setLayout(null);
-        contentPanel.setBackground(new Color(236, 240, 241));
-        contentPanel.setBorder(new LineBorder(new Color(255, 204, 0), 5));
+        contentPanel.setBackground(new Color(245, 243, 241));
+        contentPanel.setBorder(new LineBorder(new Color(255, 204, 0), 0));
         contentPanel.setBounds(10, 30, frame.getWidth() - 10, frame.getHeight() - 40);
         frame.add(contentPanel);
         //=== Close Label
         closeLabel = new JLabel("X");
-        closeLabel.setForeground(Color.BLACK);
+        closeLabel.setForeground(Color.WHITE);
         closeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         closeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         closeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -128,7 +128,7 @@ public class RegisterForm {
         titleBar.add(closeLabel);
         //===
         minimizeLabel = new JLabel("-");
-        minimizeLabel.setForeground(Color.BLACK);
+        minimizeLabel.setForeground(Color.WHITE);
         minimizeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         minimizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         minimizeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -217,7 +217,7 @@ public class RegisterForm {
         browseButton = new JButton("Browse");
         browseButton.setBounds(150, 200, 100, 25);
         browseButton.setFont(new Font("Arial", Font.PLAIN, 12));
-        browseButton.setBackground(new Color(255, 102, 0));
+        browseButton.setBackground(new Color(210, 193, 174));
         browseButton.setForeground(Color.WHITE);
         browseButton.setFocusPainted(false);
         browseButton.setBorderPainted(false);
@@ -226,12 +226,12 @@ public class RegisterForm {
         browseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                browseButton.setBackground(new Color(255, 51, 0));
+                browseButton.setBackground(new Color(189, 175, 154));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                browseButton.setBackground(new Color(255, 102, 0));
+                browseButton.setBackground(new Color(210, 193, 174));
             }
 
         });
@@ -286,7 +286,7 @@ public class RegisterForm {
         buttonRegister = new JButton("Register");
         buttonRegister.setBounds(225, 380, 170, 35);
         buttonRegister.setFont(new Font("Arial", Font.BOLD, 14));
-        buttonRegister.setBackground(new Color(60, 179, 113));
+        buttonRegister.setBackground(new Color(200, 182, 161));
         buttonRegister.setForeground(Color.WHITE);
         buttonRegister.setFocusPainted(false);
         buttonRegister.setBorderPainted(false);
@@ -301,12 +301,12 @@ public class RegisterForm {
         buttonRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                buttonRegister.setBackground(new Color(46, 139, 87));
+                buttonRegister.setBackground(new Color(185, 167, 142));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                buttonRegister.setBackground(new Color(60, 179, 113));
+                buttonRegister.setBackground(new Color(200, 182, 161));
             }
 
         });
@@ -315,7 +315,7 @@ public class RegisterForm {
         buttonLogin = new JButton("Back to Login");
         buttonLogin.setBounds(40, 380, 170, 35);
         buttonLogin.setFont(new Font("Arial", Font.BOLD, 14));
-        buttonLogin.setBackground(new Color(70, 130, 180));
+        buttonLogin.setBackground(new Color(160, 123, 94));
         buttonLogin.setForeground(Color.WHITE);
         buttonLogin.setFocusPainted(false);
         buttonLogin.setBorderPainted(false);
@@ -330,12 +330,12 @@ public class RegisterForm {
         buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                buttonLogin.setBackground(new Color(0, 102, 204));
+                buttonLogin.setBackground(new Color(140, 107, 82));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                buttonLogin.setBackground(new Color(70, 130, 180));
+                buttonLogin.setBackground(new Color(160, 123, 94));
             }
 
         });
@@ -487,6 +487,6 @@ public class RegisterForm {
     }
 
     public static void main(String args[]) {
-        new RegisterForm();
+        new RegisterFormOP();
     }
 }

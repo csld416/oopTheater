@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
  *
  * @author csld
  */
-public class LoginForm {
+public class LoginFormOP {
 
     private JFrame frame;
     private JPanel titleBar;
@@ -45,7 +45,7 @@ public class LoginForm {
     private JPasswordField passwordField;
     private JButton buttonLogin;
     private JButton buttonRegister;
-    
+
     //for session manager
     private String userEmail = null;
 
@@ -56,7 +56,7 @@ public class LoginForm {
     // db connection
     private DatabaseConnection dbConnection;
 
-    public LoginForm() {
+    public LoginFormOP() {
         //=== Frame
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,18 +66,18 @@ public class LoginForm {
         // Title Bar
         titleBar = new JPanel();
         titleBar.setLayout(null);
-        titleBar.setBackground(new Color(255, 204, 0));
+        titleBar.setBackground(new Color(59, 76, 88));
         titleBar.setPreferredSize(new Dimension(frame.getWidth(), 30));
         frame.add(titleBar, BorderLayout.NORTH);
         //=== Title Label
-        titleLabel = new JLabel("Login Form");
-        titleLabel.setForeground(Color.BLACK);
+        titleLabel = new JLabel("Admin Login Form");
+        titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setBounds(10, 0, 200, 30);
         titleBar.add(titleLabel);
         //=== Close Label
         closeLabel = new JLabel("X");
-        closeLabel.setForeground(Color.BLACK);
+        closeLabel.setForeground(Color.WHITE);
         closeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         closeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         closeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -86,7 +86,13 @@ public class LoginForm {
         closeLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.exit(0);
+                if (SessionManager.returnAfterLogin != null) {
+                    SessionManager.returnAfterLogin.setVisible(true);
+                    SessionManager.returnAfterLogin = null; // reset after use
+                } else {
+                    new StartingPage().setVisible(true); // fallback
+                }
+                frame.dispose();
             }
 
             @Override
@@ -103,7 +109,7 @@ public class LoginForm {
         titleBar.add(closeLabel);
         //===
         minimizeLabel = new JLabel("-");
-        minimizeLabel.setForeground(Color.BLACK);
+        minimizeLabel.setForeground(Color.WHITE);
         minimizeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         minimizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         minimizeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -122,15 +128,15 @@ public class LoginForm {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                minimizeLabel.setForeground(Color.BLACK);
+                minimizeLabel.setForeground(Color.WHITE);
             }
         });
         titleBar.add(minimizeLabel);
         //=== Content Panel
         contentPanel = new JPanel();
         contentPanel.setLayout(null);
-        contentPanel.setBackground(new Color(236, 240, 241));
-        contentPanel.setBorder(new LineBorder(new Color(255, 204, 0), 5));
+        contentPanel.setBackground(new Color(245, 243, 241));
+        contentPanel.setBorder(new LineBorder(new Color(166, 127, 104), 0));
         contentPanel.setBounds(10, 30, frame.getWidth() - 10, frame.getHeight() - 40);
         frame.add(contentPanel);
         //=== username Label
@@ -166,7 +172,15 @@ public class LoginForm {
             if (checkLogin(username, password)) {
                 frame.dispose();
                 SessionManager.currentUserEmail = userEmail;
-                new StartingPage().setVisible(true);
+                if (SessionManager.redirectTargetPage != null) {
+                    SessionManager.redirectTargetPage.run();
+                    SessionManager.redirectTargetPage = null;
+                } else if (SessionManager.returnAfterLogin != null) {
+                    SessionManager.returnAfterLogin.setVisible(true);
+                    SessionManager.returnAfterLogin = null;
+                } else {
+                    new StartingPage().setVisible(true); // fallback
+                }
                 // open main page
             } else {
                 JOptionPane.showMessageDialog(frame, "Invalid username or password", "Invalid Data", JOptionPane.ERROR_MESSAGE);
@@ -249,7 +263,7 @@ public class LoginForm {
         Connection connection = dbConnection.getConnection();
         if (connection != null) {
             try {
-                String query = "SELECT * FROM `users` WHERE `phone` = ?";
+                String query = "SELECT * FROM `Operator` WHERE `phone` = ?";
                 PreparedStatement ps = connection.prepareStatement(query);
                 ps.setString(1, Phone);
                 ResultSet rs = ps.executeQuery();
@@ -266,7 +280,7 @@ public class LoginForm {
     }
 
     public static void main(String[] args) {
-        new LoginForm();
+        new LoginFormOP();
     }
 
 }
