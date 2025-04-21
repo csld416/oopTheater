@@ -5,8 +5,16 @@
 package form;
 
 import BaseClass.SessionManager;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import form.ToggleListPanel;
 
 /**
  *
@@ -42,7 +50,7 @@ public class TopBarPanel extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         jPanel30 = new javax.swing.JPanel();
 
-        setBackground(new java.awt.Color(204, 204, 204));
+        setBackground(new java.awt.Color(235, 235, 235));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -131,6 +139,9 @@ public class TopBarPanel extends javax.swing.JPanel {
         );
 
         jPanel19.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel19MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jPanel19MouseEntered(evt);
             }
@@ -265,8 +276,25 @@ public class TopBarPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jPanel3MouseEntered
 
     private void jPanel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MousePressed
-        // TODO add your handling code here:
-        new ToggleList().setVisible(true);
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        DimLayer dimLayer = new DimLayer();
+        frame.setGlassPane(dimLayer);
+        dimLayer.setVisible(true);  // Show the dimming
+        dimLayer.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Optional: check if click is outside the toggle panel
+                Component clicked = SwingUtilities.getDeepestComponentAt(dimLayer, e.getX(), e.getY());
+                if (clicked == dimLayer) {
+                    // Remove toggle panel (if added to layered pane or main content pane)
+                    //frame.getLayeredPane().remove(ToggleListPanel);  // only if added this way
+                    frame.repaint();
+
+                    // Hide the dim layer
+                    dimLayer.setVisible(false);
+                }
+            }
+        });
     }//GEN-LAST:event_jPanel3MousePressed
 
     private void jPanel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseEntered
@@ -275,7 +303,7 @@ public class TopBarPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jPanel1MouseEntered
 
     private void jPanel19MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel19MouseEntered
-        // TODO add your handling code here:
+        jPanel19.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     }//GEN-LAST:event_jPanel19MouseEntered
 
     private void jPanel29MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel29MouseEntered
@@ -283,60 +311,41 @@ public class TopBarPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jPanel29MouseEntered
 
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         if (!SessionManager.isLoggedIn()) {
+            SessionManager.returnAfterLogin = frame;
+            SessionManager.redirectTargetPage = () -> new PersonalSpace().setVisible(true);
             new LoginForm();
         } else {
             new PersonalSpace().setVisible(true);
         }
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         frame.dispose();
     }//GEN-LAST:event_jPanel1MouseClicked
+
+    private void jPanel19MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel19MouseClicked
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        if (!SessionManager.isLoggedIn()) {
+            SessionManager.returnAfterLogin = frame;
+            SessionManager.redirectTargetPage = () -> new MyTicketSpace().setVisible(true);
+            new LoginForm();
+        } else {
+            new MyTicketSpace().setVisible(true);
+        }
+        frame.dispose();
+    }//GEN-LAST:event_jPanel19MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel16;
-    private javax.swing.JPanel jPanel17;
-    private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel20;
-    private javax.swing.JPanel jPanel21;
-    private javax.swing.JPanel jPanel22;
-    private javax.swing.JPanel jPanel23;
-    private javax.swing.JPanel jPanel24;
-    private javax.swing.JPanel jPanel25;
-    private javax.swing.JPanel jPanel26;
-    private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,10 @@
  */
 package form;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+
 /**
  *
  * @author csld
@@ -15,7 +19,19 @@ public class ToggleList extends javax.swing.JFrame {
      */
     public ToggleList() {
         initComponents();
-        setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
+
+        // no exitting
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // redirect to main page instead of exiting
+                dispose(); // close current page
+                new StartingPage().setVisible(true); // go back home
+            }
+        });
     }
 
     /**
