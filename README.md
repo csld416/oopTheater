@@ -14,3 +14,20 @@ I added the Login page and the register page of the admin in this application, a
 
 I added the `dimmed layer` class so as to mimic the visual effect that it dims the current page if the user presses the panel of the `toggle list` in the top bar panel.
 
+Moreover, I also implemented the visual effect when the `toggle list` button is pressed, the page shows up and if the mouse press anywhere else than the popped up page, the list disappears.
+
+## 04/22
+
+I established the login/register for staff in the toggle list. Different from the user register, this register for admin requires lisence code, predefined, given by the supervisor.
+
+I created a public class for storing the public UI constants, and after the constuction of the app, the goal is to be robust to the window resizement.
+
+## 04/23
+
+I seperated the component in the `TopBarPanel` out, the goal here is to make everything reusable. As a package, if one may.
+
+I constructed the database for the Movie, and created the backstage page for the staff to load a movie or make modification with the existing movie. In which I first create another panel as a substrate, and mimic the logic when I was implementing the `Register` Page.
+
+Also, my partner `yichou` provided the logo of this cinema, which is a wombat. Well, cute, if you may.
+
+
