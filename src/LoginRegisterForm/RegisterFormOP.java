@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package form;
+package LoginRegisterForm;
 
 import connection.DatabaseConnection;
 import java.awt.BorderLayout;
@@ -67,6 +67,9 @@ public class RegisterFormOP {
 
     private String selectedImage;
     private BufferedImage profileImage;
+    
+    private JLabel licenseLabel;
+    private JTextField licenseField;
 
     private boolean isdragging = false;
     private Point mouseoffset;
@@ -282,6 +285,15 @@ public class RegisterFormOP {
         profilepictureImage.setBounds(270, 200, 130, 130);
         profilepictureImage.setBorder(new LineBorder(Color.GRAY, 1));
         contentPanel.add(profilepictureImage);
+        //=== License Label & Field
+        licenseLabel = new JLabel("License:");
+        licenseLabel.setBounds(30, 340, 120, 25);  // Adjust position as needed
+        contentPanel.add(licenseLabel);
+
+        licenseField = new JTextField();
+        licenseField.setBounds(150, 340, 150, 25);  // Shorter field
+        contentPanel.add(licenseField);
+
         //=== Button Register
         buttonRegister = new JButton("Register");
         buttonRegister.setBounds(225, 380, 170, 35);
@@ -324,7 +336,7 @@ public class RegisterFormOP {
 
         buttonLogin.addActionListener((e) -> {
             frame.dispose();
-            new LoginForm();
+            new LoginFormOP();
         });
 
         buttonLogin.addMouseListener(new MouseAdapter() {
@@ -395,13 +407,13 @@ public class RegisterFormOP {
 
     //oprn login form
     private void openLoginForm() {
-        new LoginForm();
+        new LoginFormOP();
     }
 
     //check exists
     private boolean existed(String username) {
         Connection connection = dbConnection.getConnection();
-        String query = "SELECT * FROM `users` WHERE `email` = ?";
+        String query = "SELECT * FROM `Operator` WHERE `email` = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, username);
@@ -423,6 +435,13 @@ public class RegisterFormOP {
         String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
         String phone = phoneField.getText().trim();
         String gender = maleRadioButton.isSelected() ? "Male" : "Female";
+        String license = licenseField.getText().trim();
+        String validLicense = "ADMIN-NTU-CSIE-0420";
+
+        if (license.trim().isEmpty() || !license.equals(validLicense)) {
+            showErrorMessage("Invalid license code. Please contact your supervisor.");
+            return;
+        }
 
         if (fullname.trim().isEmpty() || email.trim().isEmpty()
                 || password.trim().isEmpty() || confirmPassword.trim().isEmpty()
@@ -443,7 +462,7 @@ public class RegisterFormOP {
 
         try {
             Connection connection = dbConnection.getConnection();
-            String query = "INSERT INTO `users`(`fullname`, `email`, `password`, `phone`, `gender`, `picture`) VALUES (?,?,?,?,?,?)";
+            String query = "INSERT INTO `Operator`(`fullname`, `email`, `password`, `phone`, `gender`, `picture`) VALUES (?,?,?,?,?,?)";
             PreparedStatement prepareStatement = connection.prepareStatement(query);
 
             prepareStatement.setString(1, fullname);
@@ -472,7 +491,7 @@ public class RegisterFormOP {
             if (rowsAffected > 0) {
                 showSuccessMessage("Registration Successful!");
                 closeRegisterForm();
-                new LoginForm();
+                new LoginFormOP();
             } else {
                 showErrorMessage("Registration Failed!");
             }
