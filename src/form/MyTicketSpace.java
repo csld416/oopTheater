@@ -4,10 +4,12 @@
  */
 package form;
 
+import global.UIConstants;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
  *
@@ -20,6 +22,9 @@ public class MyTicketSpace extends javax.swing.JFrame {
      */
     public MyTicketSpace() {
         initComponents();
+        this.setTitle("最新消息");
+        this.setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         
         // no exitting
