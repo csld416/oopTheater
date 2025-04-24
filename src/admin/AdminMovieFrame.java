@@ -92,7 +92,7 @@ public class AdminMovieFrame extends JFrame {
         int rightPanelHeight = UIConstants.FRAME_HEIGHT - topOffset;
 
         rightPanel.setBounds(rightPanelX, rightPanelY, rightPanelWidth, rightPanelHeight);
-        rightPanel.setBackground(new Color(247, 244, 241)); // match MovieRegister
+        rightPanel.setBackground(new Color(247, 244, 241));
 
         add(rightPanel);
     }
@@ -103,7 +103,7 @@ public class AdminMovieFrame extends JFrame {
 
         // === Title Bar Panel ===
         JPanel registerTitleBar = new JPanel(null);
-        registerTitleBar.setBackground(new Color(169, 183, 198));
+        registerTitleBar.setBackground(new Color(204, 211, 218));
         registerTitleBar.setBounds(0, 0, rightPanel.getWidth(), 30);
 
         JLabel titleLabel = new JLabel("Movie Register Form", SwingConstants.CENTER);
