@@ -31,3 +31,10 @@ I constructed the database for the Movie, and created the backstage page for the
 Also, my partner `yichou` provided the logo of this cinema, which is a wombat. Well, cute, if you may.
 
 
+## 04/25
+
+Added the color gradient for the `TopBarPanel`. Also, I reconfigured the Panel Buttons into pure code implementation, where previously was formed using the Netbeans GUI designing feature.
+
+I realized that using pure code to design brings flexibility, whereas the GUI design gives more like a outline. Therefore, one should first design as primitive and intuitive as possible, later, we use mathematical model or other component that allows computation for accuracy and flexibility.
+
+Note: The next is the register for the movies in the `Backstages` of the staff.
