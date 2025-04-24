@@ -6,8 +6,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Date;
 
-public class MovieRegister extends JPanel {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import connection.DatabaseConnection;
+import global.*;
+
+public class MovieRegisterPanel extends JPanel {
 
     private JTextField titleField;
     private JTextField durationField;
@@ -22,7 +31,15 @@ public class MovieRegister extends JPanel {
 
     private String selectedPosterPath;
 
-    public MovieRegister() {
+    private Movie editingMovie = null;
+
+    public MovieRegisterPanel(Movie movie) {
+        this(); // call the default constructor
+        this.editingMovie = movie;
+        loadMovieData(movie); // pre-fill fields
+    }
+
+    public MovieRegisterPanel() {
         setLayout(null);
         setBackground(new Color(247, 244, 241));
 
@@ -113,6 +130,21 @@ public class MovieRegister extends JPanel {
         saveButton.setBorderPainted(false);
         saveButton.setOpaque(true);
         saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        saveButton.addActionListener((e) -> {
+            System.out.println("Movie Register button clicked!");
+            if (!validateFields()) {
+                return;
+            }
+            if (editingMovie != null && editingMovie.id != null) {
+                updateMovieInDatabase(editingMovie.id); // use the ID to target the row
+            } else {
+                insertMovieToDatabase();
+            }
+            Window window = SwingUtilities.getWindowAncestor(MovieRegisterPanel.this);
+            if (window instanceof AdminMovieFrame frame) {
+                frame.refreshMovieLeftPanel();
+            }
+        });
         saveButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -147,6 +179,24 @@ public class MovieRegister extends JPanel {
             }
         });
         formContainer.add(clearButton);
+        clearButton.addActionListener(e -> clearForm());
+    }
+
+    private void loadMovieData(Movie movie) {
+        if (movie == null) {
+            return;
+        }
+
+        titleField.setText(movie.getTitle());
+        durationField.setText(String.valueOf(movie.getDuration()));
+        descriptionArea.setText(movie.getDescription());
+        ratingComboBox.setSelectedItem(movie.getRating());
+
+        // Assuming releaseDate and removalDate are stored as java.util.Date
+        releaseDateSpinner.setValue(movie.getReleaseDate());
+        removalDateSpinner.setValue(movie.getRemovalDate());
+
+        posterPathField.setText(movie.getPosterPath());
     }
 
     private JLabel label(String text, int x, int y) {
@@ -174,4 +224,159 @@ public class MovieRegister extends JPanel {
             posterPathField.setText(selectedPosterPath);
         }
     }
+
+    private void insertMovieToDatabase() {
+        try {
+            // Get a connection to the database
+            Connection conn = new DatabaseConnection().getConnection();
+
+            // Define SQL insert statement (no triple quotes!)
+            String sql = "INSERT INTO Movies (title, duration, description, rating, release_date, removal_date, poster_path) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            // Create prepared statement
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, titleField.getText().trim());
+            stmt.setInt(2, Integer.parseInt(durationField.getText().trim()));
+            stmt.setString(3, descriptionArea.getText().trim());
+            stmt.setString(4, ratingComboBox.getSelectedItem().toString());
+            stmt.setDate(5, new java.sql.Date(((Date) releaseDateSpinner.getValue()).getTime()));
+            stmt.setDate(6, new java.sql.Date(((Date) removalDateSpinner.getValue()).getTime()));
+            stmt.setString(7, posterPathField.getText().trim());
+
+            // Execute and check result
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                showSuccessMessage("Movie added Succesfully");
+                clearForm();
+            } else {
+                showErrorMessage("Failed unexpectedly");
+            }
+
+            stmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            showErrorMessage("資料庫錯誤：" + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception ex) {
+            showErrorMessage("發生錯誤：" + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private boolean validateFields() {
+        if (titleField.getText().trim().isEmpty()
+                || durationField.getText().trim().isEmpty()
+                || descriptionArea.getText().trim().isEmpty()
+                || posterPathField.getText().trim().isEmpty()) {
+            showErrorMessage("請填寫所有欄位！");
+            return false;
+        }
+
+        // Duration must be numeric
+        try {
+            int duration = Integer.parseInt(durationField.getText().trim());
+            if (duration <= 0) {
+                showErrorMessage("電影長度必須為正整數！");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showErrorMessage("電影長度必須是數字！");
+            return false;
+        }
+
+        // Release date must be before removal date
+        Date release = (Date) releaseDateSpinner.getValue();
+        Date removal = (Date) removalDateSpinner.getValue();
+        if (!release.before(removal)) {
+            showErrorMessage("下檔日期必須晚於上映日期！");
+            return false;
+        }
+
+        try {
+            Connection conn = new DatabaseConnection().getConnection();
+            String sql = "SELECT COUNT(*) FROM Movies WHERE title = ? AND release_date = ? AND duration = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, titleField.getText().trim());
+            stmt.setDate(2, new java.sql.Date(release.getTime()));
+            stmt.setInt(3, Integer.parseInt(durationField.getText().trim()));
+
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            rs.close();
+            stmt.close();
+            conn.close();
+
+            if (count > 0 && (editingMovie == null || editingMovie.getId() == null)) {
+                showErrorMessage("此電影已存在於資料庫！");
+                return false;
+            }
+
+        } catch (Exception e) {
+            showErrorMessage("檢查重複時發生錯誤：" + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void updateMovieInDatabase(int movieId) {
+        try {
+            Connection conn = new DatabaseConnection().getConnection();
+            String sql = """
+            UPDATE Movies
+            SET title=?, duration=?, description=?, rating=?, release_date=?, removal_date=?, poster_path=?
+            WHERE id=?
+        """;
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, titleField.getText().trim());
+            stmt.setInt(2, Integer.parseInt(durationField.getText().trim()));
+            stmt.setString(3, descriptionArea.getText().trim());
+            stmt.setString(4, ratingComboBox.getSelectedItem().toString());
+            stmt.setDate(5, new java.sql.Date(((Date) releaseDateSpinner.getValue()).getTime()));
+            stmt.setDate(6, new java.sql.Date(((Date) removalDateSpinner.getValue()).getTime()));
+            stmt.setString(7, posterPathField.getText().trim());
+            stmt.setInt(8, movieId);
+
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                showSuccessMessage("電影更新成功！");
+            } else {
+                showErrorMessage("更新失敗，請確認資料或重試。");
+            }
+
+            stmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            showErrorMessage("資料庫錯誤：" + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception ex) {
+            showErrorMessage("發生錯誤：" + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private void clearForm() {
+        titleField.setText("");
+        durationField.setText("");
+        descriptionArea.setText("");
+        ratingComboBox.setSelectedIndex(0);
+        releaseDateSpinner.setValue(new java.util.Date());
+        removalDateSpinner.setValue(new java.util.Date());
+        posterPathField.setText("");
+    }
+
+    private void showErrorMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "欄位驗證錯誤", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showSuccessMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "成功", JOptionPane.INFORMATION_MESSAGE);
+    }
+
 }

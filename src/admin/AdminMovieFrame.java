@@ -1,7 +1,7 @@
 package admin;
 
 import form.TopBarPanel;
-import global.UIConstants;
+import global.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,22 +17,9 @@ public class AdminMovieFrame extends JFrame {
     private JPanel slotsPanel;
     private JButton addMovieButton;
 
+    private MovieLeftBarPanel movieLeftBarPanel;
+
     private final int leftPanelWidth = UIConstants.LEFT_PANEL_WIDTH;
-
-    public static class Movie {
-
-        public String title;
-        public String releaseDate;
-        public String removalDate;
-        public String posterFilePath;
-
-        public Movie(String title, String releaseDate, String removalDate, String posterFilePath) {
-            this.title = title;
-            this.releaseDate = releaseDate;
-            this.removalDate = removalDate;
-            this.posterFilePath = posterFilePath;
-        }
-    }
 
     private final List<Movie> movieList = new ArrayList<>();
 
@@ -57,30 +44,15 @@ public class AdminMovieFrame extends JFrame {
     }
 
     private void initLeftPanel() {
-        leftPanel = new JPanel(new BorderLayout());
         int topOffset = UIConstants.TOP_BAR_HEIGHT;
         int leftPanelHeight = UIConstants.FRAME_HEIGHT - topOffset;
-        leftPanel.setBounds(0, topOffset, leftPanelWidth, leftPanelHeight);
 
-        slotsPanel = new JPanel();
-        slotsPanel.setLayout(new BoxLayout(slotsPanel, BoxLayout.Y_AXIS));
-
-        scrollPane = new JScrollPane(slotsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        leftPanel.add(scrollPane, BorderLayout.CENTER);
-
-        addMovieButton = new JButton("+ Add Movie");
-        addMovieButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        addMovieButton.setMaximumSize(new Dimension(200, 40));
-        addMovieButton.addActionListener(e -> showNewMovieForm());
-
-        JPanel addButtonPanel = new JPanel();
-        addButtonPanel.setLayout(new BoxLayout(addButtonPanel, BoxLayout.Y_AXIS));
-        addButtonPanel.add(Box.createVerticalGlue());
-        addButtonPanel.add(addMovieButton);
-
-        scrollPane.setColumnHeaderView(addButtonPanel);
-
-        add(leftPanel);
+        movieLeftBarPanel = new MovieLeftBarPanel(v -> showNewMovieForm());
+        movieLeftBarPanel.setBounds(0, topOffset, UIConstants.LEFT_PANEL_WIDTH, leftPanelHeight);
+        this.leftPanel = movieLeftBarPanel;
+        this.scrollPane = (JScrollPane) movieLeftBarPanel.getComponent(0);
+        this.slotsPanel = movieLeftBarPanel.getSlotsPanel();
+        this.add(movieLeftBarPanel);
     }
 
     private void initRightPanel() {
@@ -115,7 +87,7 @@ public class AdminMovieFrame extends JFrame {
         rightPanel.add(registerTitleBar);
 
         // === Movie Register Panel ===
-        MovieRegister registerPanel = new MovieRegister();
+        MovieRegisterPanel registerPanel = new MovieRegisterPanel();
         int formWidth = 620;
         int formHeight = 430;
         int x = (rightPanel.getWidth() - formWidth) / 2;
@@ -127,6 +99,27 @@ public class AdminMovieFrame extends JFrame {
         rightPanel.revalidate();
         rightPanel.repaint();
     }
+
+    public void loadMovieEditor(Movie movie) {
+        rightPanel.removeAll();
+
+        MovieRegisterPanel registerPanel = new MovieRegisterPanel(movie); // overloaded constructor
+        int formWidth = 620;
+        int formHeight = 430;
+        int x = (rightPanel.getWidth() - formWidth) / 2;
+        int y = 40;
+
+        registerPanel.setBounds(x, y, formWidth, formHeight);
+        rightPanel.setLayout(null);
+        rightPanel.add(registerPanel);
+
+        rightPanel.revalidate();
+        rightPanel.repaint();
+    }
+
+    public void refreshMovieLeftPanel() {
+        movieLeftBarPanel.reloadMovieSlots();
+    }   
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(AdminMovieFrame::new);
