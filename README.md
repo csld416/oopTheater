@@ -31,10 +31,20 @@ I constructed the database for the Movie, and created the backstage page for the
 Also, my partner `yichou` provided the logo of this cinema, which is a wombat. Well, cute, if you may.
 
 
-## 04/25
+## 04/24
 
 Added the color gradient for the `TopBarPanel`. Also, I reconfigured the Panel Buttons into pure code implementation, where previously was formed using the Netbeans GUI designing feature.
 
 I realized that using pure code to design brings flexibility, whereas the GUI design gives more like a outline. Therefore, one should first design as primitive and intuitive as possible, later, we use mathematical model or other component that allows computation for accuracy and flexibility.
 
 Note: The next is the register for the movies in the `Backstages` of the staff.
+
+## 04/25
+
+I added the logic to add the movie to the database, also created the movie slot(card) so that when the user press that, the stored accoding value and the properties shows up accordingly to the right panel where the user can make further modifications.
+
+oh yeah and i also added the hover effect when the mouse enter the movie slot.
+
+problem: when modified, the code creates a new data in the data table, this should be prohibited.
+
+## 04/26
