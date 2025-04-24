@@ -1,6 +1,7 @@
 package global;
 
 public class UIConstants {
+
     // === Frame size
     public static final int FRAME_WIDTH = 946;
     public static final int FRAME_HEIGHT = 601;
@@ -19,8 +20,8 @@ public class UIConstants {
     public static final int ICON_PANEL_HEIGHT = 40;
 
     // === Logo
-    public static final int LOGO_WIDTH = 120;
-    public static final int LOGO_HEIGHT = 65;
+    public static final int LOGO_WIDTH = 158;
+    public static final int LOGO_HEIGHT = 90;
 
     // etc...
     public static final int LEFT_PANEL_WIDTH = 250;
