@@ -11,14 +11,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class TopBarPanel extends JPanel {
+
     public TopBarPanel() {
         setLayout(null);
         setPreferredSize(new Dimension(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT));
-        setBackground(new Color(235, 235, 235));
+        setBackground(new Color(169, 183, 198));
 
         // Logo Panel (redirects to StartingPage)
         LogoPanel logo = new LogoPanel();
-        logo.setBounds(20, 25, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
+        int verticalPadding = (UIConstants.TOP_BAR_HEIGHT - UIConstants.LOGO_HEIGHT) / 2;
+        logo.setBounds(30, verticalPadding, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
         logo.setCursor(new Cursor(Cursor.HAND_CURSOR));
         logo.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {

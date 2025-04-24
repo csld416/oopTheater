@@ -12,7 +12,6 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 
 /**
- *
  * @author csld
  */
 public class StartingPage extends javax.swing.JFrame {
