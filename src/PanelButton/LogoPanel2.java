@@ -14,11 +14,11 @@ import javax.swing.SwingConstants;
  *
  * @author csld
  */
-public class LogoPanel extends javax.swing.JPanel {
+public class LogoPanel2 extends javax.swing.JPanel {
 
     private JLabel logoLabel;
 
-    public LogoPanel() {
+    public LogoPanel2() {
         initComponents();
         loadLogo();
     }
@@ -31,7 +31,7 @@ public class LogoPanel extends javax.swing.JPanel {
         this.add(logoLabel, BorderLayout.CENTER);
 
         try {
-            ImageIcon icon = new ImageIcon("src/pngs/Asset1.png");
+            ImageIcon icon = new ImageIcon("src/pngs/Logo.png");
 
             // Only scale AFTER the component has a size
             this.addComponentListener(new java.awt.event.ComponentAdapter() {
