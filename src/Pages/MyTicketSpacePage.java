@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package form;
+package Pages;
 
+import MainPage.StartingPage;
+import MainPage.TopBarPanel;
 import global.UIConstants;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
@@ -15,12 +17,12 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  *
  * @author csld
  */
-public class MyTicketSpace extends javax.swing.JFrame {
+public class MyTicketSpacePage extends javax.swing.JFrame {
 
     /**
      * Creates new form MyTicketSpace
      */
-    public MyTicketSpace() {
+    public MyTicketSpacePage() {
         initComponents();
         this.setTitle("最新消息");
         this.setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
@@ -115,20 +117,21 @@ public class MyTicketSpace extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MyTicketSpace.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyTicketSpacePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MyTicketSpace.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyTicketSpacePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MyTicketSpace.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyTicketSpacePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MyTicketSpace.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyTicketSpacePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MyTicketSpace().setVisible(true);
+                new MyTicketSpacePage().setVisible(true);
             }
         });
     }

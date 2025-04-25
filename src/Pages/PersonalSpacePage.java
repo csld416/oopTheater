@@ -2,20 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package form;
+package Pages;
 
+import MainPage.TopBarPanel;
 import java.awt.BorderLayout;
 
 /**
  *
  * @author csld
  */
-public class PersonalSpace extends javax.swing.JFrame {
+public class PersonalSpacePage extends javax.swing.JFrame {
 
     /**
      * Creates new form PersonalSpace
      */
-    public PersonalSpace() {
+    public PersonalSpacePage() {
         initComponents();
         this.setLocationRelativeTo(null);
         TopBarPanel topBar = new TopBarPanel();
@@ -36,7 +37,6 @@ public class PersonalSpace extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(950, 600));
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel2.setToolTipText("hello");
@@ -99,20 +99,21 @@ public class PersonalSpace extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PersonalSpace.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PersonalSpacePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PersonalSpace.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PersonalSpacePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PersonalSpace.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PersonalSpacePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PersonalSpace.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PersonalSpacePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PersonalSpace().setVisible(true);
+                new PersonalSpacePage().setVisible(true);
             }
         });
     }
