@@ -2,7 +2,7 @@ package admin;
 
 import global.UIConstants;
 import global.Movie;
-import MainPage.TopBarPanel;
+import PanelButton.TopBarPanel;
 
 import javax.swing.*;
 import java.awt.*;
