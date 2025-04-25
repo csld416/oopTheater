@@ -68,20 +68,4 @@ public class MoviePanel extends JPanel {
         revalidate();
         repaint();
     }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        if (getComponentCount() <= 1) return;
-
-        Component leftCard = getComponent(1); // skip spacer
-        Component rightCard = getComponent(getComponentCount() - 1);
-
-        int leftGap = leftCard.getX();
-        int rightGap = getWidth() - (rightCard.getX() + rightCard.getWidth());
-
-        System.out.println("Left gap: " + leftGap + "px");
-        System.out.println("Right gap: " + rightGap + "px");
-    }
 }
