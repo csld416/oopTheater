@@ -1,10 +1,11 @@
-package form;
+package MainPage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import global.*;
 
 public class MovieCardPanel extends JPanel {
 
@@ -15,7 +16,7 @@ public class MovieCardPanel extends JPanel {
     private JButton bookButton;
 
     public MovieCardPanel(String title, String releaseDate, String imagePath) {
-        setPreferredSize(new Dimension(200, 340));
+        setPreferredSize(new Dimension(200, 400));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
@@ -29,10 +30,9 @@ public class MovieCardPanel extends JPanel {
         // === Title
         titleLabel = new JLabel(title, SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Keep this for BoxLayout
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER); // Align within the label
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-
         add(titleLabel);
 
         // === Date
@@ -42,34 +42,23 @@ public class MovieCardPanel extends JPanel {
         dateLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(dateLabel);
 
-        // === Button container
+        // === Button container using custom Hover panels
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setOpaque(false);
 
-        introButton = createStyledButton("電影介紹", new Color(255, 153, 51));
-        bookButton = createStyledButton("線上訂票", new Color(0, 120, 215));
+        HoverButtonPanel introPanel = new HoverButtonPanel("電影介紹", new Color(157, 170, 179), new Color(135, 148, 158));
+        HoverButtonPanel bookPanel = new HoverButtonPanel("線上訂票", new Color(180, 142, 135), new Color(159, 120, 112));
 
-        buttonPanel.add(introButton);
-        buttonPanel.add(bookButton);
+        buttonPanel.add(introPanel);
+        buttonPanel.add(bookPanel);
         add(buttonPanel);
-    }
-
-    private JButton createStyledButton(String text, Color bgColor) {
-        JButton btn = new JButton(text);
-        btn.setFocusPainted(false);
-        btn.setBackground(bgColor);
-        btn.setForeground(Color.WHITE);
-        btn.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 12));
-        return btn;
     }
 
     private void setPosterImage(String path) {
         try {
             BufferedImage img = ImageIO.read(new File(path));
-            int targetWidth = 180;
-            int targetHeight = 240;
+            int targetWidth = UIConstants.MOVIE_CARD_WIDTH;
+            int targetHeight = UIConstants.MOVIE_CARD_WIDTH * 3 / 2;
             Image scaled = img.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             posterLabel.setIcon(new ImageIcon(scaled));
             posterLabel.setPreferredSize(new Dimension(targetWidth, targetHeight));

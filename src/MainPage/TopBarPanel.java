@@ -1,7 +1,9 @@
-package form;
+package MainPage;
 
-import global.UIConstants;
-import global.SessionManager;
+import Pages.MyTicketSpacePage;
+import Pages.PersonalSpacePage;
+import Pages.LatestNews;
+import global.*;
 import PanelButton.*;
 import LoginRegisterForm.*;
 
@@ -49,7 +51,7 @@ public class TopBarPanel extends JPanel {
                 DimLayer dim = new DimLayer(frame);
                 frame.setGlassPane(dim);
                 dim.setVisible(true);
-                new ToggleList(frame);
+                new ToggleListPage(frame);
             }
         });
         add(toggle);
@@ -63,10 +65,10 @@ public class TopBarPanel extends JPanel {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(TopBarPanel.this);
                 if (!SessionManager.isLoggedIn()) {
                     SessionManager.returnAfterLogin = frame;
-                    SessionManager.redirectTargetPage = () -> new PersonalSpace().setVisible(true);
+                    SessionManager.redirectTargetPage = () -> new PersonalSpacePage().setVisible(true);
                     new LoginForm();
                 } else {
-                    new PersonalSpace().setVisible(true);
+                    new PersonalSpacePage().setVisible(true);
                 }
                 frame.dispose();
             }
@@ -82,10 +84,10 @@ public class TopBarPanel extends JPanel {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(TopBarPanel.this);
                 if (!SessionManager.isLoggedIn()) {
                     SessionManager.returnAfterLogin = frame;
-                    SessionManager.redirectTargetPage = () -> new MyTicketSpace().setVisible(true);
+                    SessionManager.redirectTargetPage = () -> new MyTicketSpacePage().setVisible(true);
                     new LoginForm();
                 } else {
-                    new MyTicketSpace().setVisible(true);
+                    new MyTicketSpacePage().setVisible(true);
                 }
                 frame.dispose();
             }

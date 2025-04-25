@@ -2,12 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package form;
+package MainPage;
 
-import admin.DashBoardForm;
+import Pages.MyTicketSpacePage;
+import Pages.PersonalSpacePage;
+import adminn.DashBoardForm;
 import LoginRegisterForm.LoginForm;
 import LoginRegisterForm.LoginFormOP;
-import global.SessionManager;
+import admin.AdminMovieFrame;
+import global.*;
 import java.awt.AWTEvent;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
@@ -19,20 +22,20 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import form.StartingPage;
+import MainPage.StartingPage;
 
 /**
  *
  * @author csld
  */
-public class ToggleList extends javax.swing.JFrame {
+public class ToggleListPage extends javax.swing.JFrame {
 
     private JFrame SubstrateFrame;
 
     /**
      * Creates new form ToggleList
      */
-    public ToggleList(JFrame mainFrame) {
+    public ToggleListPage(JFrame mainFrame) {
         this.SubstrateFrame = mainFrame;
         this.setUndecorated(true);
         initComponents();
@@ -45,7 +48,7 @@ public class ToggleList extends javax.swing.JFrame {
             public void eventDispatched(AWTEvent event) {
                 if (event instanceof MouseEvent && ((MouseEvent) event).getID() == MouseEvent.MOUSE_PRESSED) {
                     Window focusedWindow = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
-                    if (focusedWindow != ToggleList.this) {
+                    if (focusedWindow != ToggleListPage.this) {
                         dispose();
                         mainFrame.getGlassPane().setVisible(false);
                         Toolkit.getDefaultToolkit().removeAWTEventListener(this);
@@ -453,7 +456,7 @@ public class ToggleList extends javax.swing.JFrame {
         if (!SessionManager.isLoggedIn()) {
             // Store return path
             SessionManager.returnAfterLogin = SubstrateFrame;
-            SessionManager.redirectTargetPage = () -> new PersonalSpace().setVisible(true);
+            SessionManager.redirectTargetPage = () -> new PersonalSpacePage().setVisible(true);
             SubstrateFrame.dispose();
             this.dispose(); // close ToggleList
             new LoginForm(); // login will decide next steps
@@ -462,7 +465,7 @@ public class ToggleList extends javax.swing.JFrame {
             this.dispose(); // close ToggleList
             SubstrateFrame.getGlassPane().setVisible(false); // remove dim
             SubstrateFrame.dispose();
-            new PersonalSpace().setVisible(true); // open personal page
+            new PersonalSpacePage().setVisible(true); // open personal page
         }
     }//GEN-LAST:event_jPanel29MousePressed
 
@@ -470,7 +473,7 @@ public class ToggleList extends javax.swing.JFrame {
         if (!SessionManager.isLoggedIn()) {
             // Store return path
             SessionManager.returnAfterLogin = SubstrateFrame;
-            SessionManager.redirectTargetPage = () -> new MyTicketSpace().setVisible(true);
+            SessionManager.redirectTargetPage = () -> new MyTicketSpacePage().setVisible(true);
             SubstrateFrame.dispose();
             this.dispose();
             new LoginForm();
@@ -478,7 +481,7 @@ public class ToggleList extends javax.swing.JFrame {
             this.dispose(); // close ToggleList
             SubstrateFrame.getGlassPane().setVisible(false); // remove dim
             SubstrateFrame.dispose();
-            new MyTicketSpace().setVisible(true); // open personal page
+            new MyTicketSpacePage().setVisible(true); // open personal page
         }
     }//GEN-LAST:event_jPanel19MousePressed
 
@@ -495,7 +498,7 @@ public class ToggleList extends javax.swing.JFrame {
 
     private void jPanel20MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel20MousePressed
         SessionManager.returnAfterLogin = SubstrateFrame;
-        SessionManager.redirectTargetPage = () -> new DashBoardForm();
+        SessionManager.redirectTargetPage = () -> new AdminMovieFrame();
         this.dispose(); // close ToggleList
         SubstrateFrame.getGlassPane().setVisible(false); // remove dim
         SubstrateFrame.dispose();
@@ -515,17 +518,13 @@ public class ToggleList extends javax.swing.JFrame {
             mainFrame.setVisible(true);
 
             // Now create the ToggleList frame and pass the mainFrame in
-            new ToggleList(mainFrame);
+            new ToggleListPage(mainFrame);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -538,14 +537,6 @@ public class ToggleList extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
-    private javax.swing.JPanel jPanel31;
-    private javax.swing.JPanel jPanel32;
-    private javax.swing.JPanel jPanel33;
-    private javax.swing.JPanel jPanel34;
-    private javax.swing.JPanel jPanel35;
-    private javax.swing.JPanel jPanel36;
-    private javax.swing.JPanel jPanel37;
-    private javax.swing.JPanel jPanel38;
     private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel40;
     private javax.swing.JPanel jPanel41;
