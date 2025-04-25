@@ -1,7 +1,8 @@
 package admin;
 
-import form.TopBarPanel;
-import global.*;
+import global.UIConstants;
+import global.Movie;
+import MainPage.TopBarPanel;
 
 import javax.swing.*;
 import java.awt.*;

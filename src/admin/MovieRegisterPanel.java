@@ -1,5 +1,6 @@
 package admin;
 
+import global.Movie;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -13,8 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 import connection.DatabaseConnection;
-import global.*;
 
 public class MovieRegisterPanel extends JPanel {
 
