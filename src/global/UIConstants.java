@@ -3,8 +3,8 @@ package global;
 public class UIConstants {
 
     // === Frame size
-    public static final int FRAME_WIDTH = 946;
-    public static final int FRAME_HEIGHT = 601;
+    public static final int FRAME_WIDTH = 950;
+    public static final int FRAME_HEIGHT = 700;
 
     // === Top Bar
     public static final int TOP_BAR_HEIGHT = 120;
@@ -23,6 +23,9 @@ public class UIConstants {
     public static final int LOGO_WIDTH = 158;
     public static final int LOGO_HEIGHT = 90;
 
-    // etc...
+    // MovieFrame(admin)
     public static final int LEFT_PANEL_WIDTH = 250;
+    
+    //MainPage
+    public static final int GAP_BETWEEN = 80;
 }
