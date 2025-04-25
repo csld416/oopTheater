@@ -7,12 +7,17 @@ package LoginRegisterForm;
 import global.SessionManager;
 import connection.DatabaseConnection;
 import MainPage.StartingPage;
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.AWTEventListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
@@ -21,7 +26,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import java.sql.Connection;
@@ -55,15 +59,23 @@ public class LoginForm {
     private Point mouseoffset;
 
     // db connection
-    private DatabaseConnection dbConnection;
+    private final DatabaseConnection dbConnection;
 
-    public LoginForm() {
+    private JFrame substrateFrame;
+
+    private static final int W = 420;
+    private static final int H = 250;
+    private boolean isRegistering = false;
+    private boolean isLoggin = false;
+
+    public LoginForm(JFrame SubstrateFrame) {
+        this.substrateFrame = SubstrateFrame;
         //=== Frame
         frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(420, 250);
-        frame.setLocationRelativeTo(null);
+        frame.setSize(W, H);
+        frame.setLocationRelativeTo(substrateFrame);
         frame.setUndecorated(true);
+        frame.setAlwaysOnTop(true);
         // Title Bar
         titleBar = new JPanel();
         titleBar.setLayout(null);
@@ -76,63 +88,19 @@ public class LoginForm {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setBounds(10, 0, 200, 30);
         titleBar.add(titleLabel);
-        //=== Close Label
-        closeLabel = new JLabel("X");
-        closeLabel.setForeground(Color.BLACK);
-        closeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        closeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        closeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        closeLabel.setBounds(frame.getWidth() - 30, 0, 30, 30);
 
-        closeLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SessionManager.returnAfterLogin != null) {
-                    SessionManager.returnAfterLogin.setVisible(true);
-                    SessionManager.returnAfterLogin = null; // reset after use
-                } else {
-                    new StartingPage().setVisible(true); // fallback
+        Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+            public void eventDispatched(AWTEvent event) {
+                if (event instanceof MouseEvent && ((MouseEvent) event).getID() == MouseEvent.MOUSE_PRESSED) {
+                    Window focusedWindow = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+                    if (!isLoggin && !isRegistering && focusedWindow != frame) {
+                        frame.dispose();
+                        substrateFrame.getGlassPane().setVisible(false);
+                        Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+                    }
                 }
-                frame.dispose();
             }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                closeLabel.setForeground(Color.red);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                closeLabel.setForeground(Color.BLACK);
-
-            }
-        });
-        titleBar.add(closeLabel);
-        //===
-        minimizeLabel = new JLabel("-");
-        minimizeLabel.setForeground(Color.BLACK);
-        minimizeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        minimizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        minimizeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        minimizeLabel.setBounds(frame.getWidth() - 60, 0, 30, 30);
-
-        minimizeLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                frame.setState(JFrame.ICONIFIED);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                minimizeLabel.setForeground(Color.red);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                minimizeLabel.setForeground(Color.BLACK);
-            }
-        });
-        titleBar.add(minimizeLabel);
+        }, AWTEvent.MOUSE_EVENT_MASK);
         //=== Content Panel
         contentPanel = new JPanel();
         contentPanel.setLayout(null);
@@ -167,27 +135,6 @@ public class LoginForm {
         buttonLogin.setOpaque(true);
         buttonLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        buttonLogin.addActionListener((e) -> {
-            String username = usernameField.getText();
-            String password = String.valueOf(passwordField.getPassword());
-            if (checkLogin(username, password)) {
-                frame.dispose();
-                SessionManager.currentUserEmail = userEmail;
-                if (SessionManager.redirectTargetPage != null) {
-                    SessionManager.redirectTargetPage.run();
-                    SessionManager.redirectTargetPage = null;
-                } else if (SessionManager.returnAfterLogin != null) {
-                    SessionManager.returnAfterLogin.setVisible(true);
-                    SessionManager.returnAfterLogin = null;
-                } else {
-                    new StartingPage().setVisible(true); // fallback
-                }
-                // open main page
-            } else {
-                JOptionPane.showMessageDialog(frame, "Invalid username or password", "Invalid Data", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
         buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -197,6 +144,31 @@ public class LoginForm {
             @Override
             public void mouseExited(MouseEvent e) {
                 buttonLogin.setBackground(new Color(255, 102, 0));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                isLoggin = true;
+                String username = usernameField.getText();
+                String password = String.valueOf(passwordField.getPassword());
+                if (checkLogin(username, password)) {
+                    frame.dispose();
+                    substrateFrame.dispose();
+                    SessionManager.currentUserEmail = userEmail;
+                    if (SessionManager.redirectTargetPage != null) {
+                        SessionManager.redirectTargetPage.run();
+                        SessionManager.redirectTargetPage = null;
+                    } else if (SessionManager.returnAfterLogin != null) {
+                        SessionManager.returnAfterLogin.setVisible(true);
+                        SessionManager.returnAfterLogin = null;
+                    } else {
+                        new StartingPage().setVisible(true); // fallback
+                    }
+                    // open main page
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Invalid username or password", "Invalid Data", JOptionPane.ERROR_MESSAGE);
+                    isLoggin = false;
+                }
             }
 
         });
@@ -212,11 +184,6 @@ public class LoginForm {
         buttonRegister.setOpaque(true);
         buttonRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        buttonRegister.addActionListener((e) -> {
-            frame.dispose();
-            new RegisterForm();
-        });
-
         buttonRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -226,6 +193,13 @@ public class LoginForm {
             @Override
             public void mouseExited(MouseEvent e) {
                 buttonRegister.setBackground(new Color(0, 102, 255));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                isRegistering = true;
+                frame.dispose();
+                new RegisterForm(substrateFrame);
             }
 
         });
@@ -281,7 +255,12 @@ public class LoginForm {
     }
 
     public static void main(String[] args) {
-        new LoginForm();
+        JFrame dummyFrame = new JFrame();
+        dummyFrame.setSize(W, H);
+        dummyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        dummyFrame.setVisible(true);
+
+        new LoginForm(dummyFrame);
     }
 
 }

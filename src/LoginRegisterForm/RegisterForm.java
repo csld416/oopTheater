@@ -5,13 +5,18 @@
 package LoginRegisterForm;
 
 import connection.DatabaseConnection;
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.AWTEventListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -74,11 +79,20 @@ public class RegisterForm {
     // the database variable
     private DatabaseConnection dbConnection;
 
-    public RegisterForm() {
+    private JFrame substrateFrame;
+
+    private static final int W = 450;
+    private static final int H = 500;
+    
+    private boolean isLoggin = false;
+    private boolean isRegistering = false;
+
+    public RegisterForm(JFrame SubstrateFrame) {
+        this.substrateFrame = SubstrateFrame;
         //=== Frame
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(450, 500);
+        frame.setSize(W, H);
         frame.setLocationRelativeTo(null);
         frame.setUndecorated(true);
         // Title Bar
@@ -100,57 +114,19 @@ public class RegisterForm {
         contentPanel.setBorder(new LineBorder(new Color(216, 200, 196), 0));
         contentPanel.setBounds(10, 30, frame.getWidth() - 10, frame.getHeight() - 40);
         frame.add(contentPanel);
-        //=== Close Label
-        closeLabel = new JLabel("X");
-        closeLabel.setForeground(Color.BLACK);
-        closeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        closeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        closeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        closeLabel.setBounds(frame.getWidth() - 30, 0, 30, 30);
 
-        closeLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.exit(0);
+        Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+            public void eventDispatched(AWTEvent event) {
+                if (event instanceof MouseEvent && ((MouseEvent) event).getID() == MouseEvent.MOUSE_PRESSED) {
+                    Window focusedWindow = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+                    if (!isRegistering && !isLoggin && focusedWindow != frame) {
+                        frame.dispose();
+                        substrateFrame.getGlassPane().setVisible(false);
+                        Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+                    }
+                }
             }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                closeLabel.setForeground(Color.red);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                closeLabel.setForeground(Color.BLACK);
-
-            }
-        });
-        titleBar.add(closeLabel);
-        //===
-        minimizeLabel = new JLabel("-");
-        minimizeLabel.setForeground(Color.BLACK);
-        minimizeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        minimizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        minimizeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        minimizeLabel.setBounds(frame.getWidth() - 60, 0, 30, 30);
-
-        minimizeLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                frame.setState(JFrame.ICONIFIED);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                minimizeLabel.setForeground(Color.red);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                minimizeLabel.setForeground(Color.BLACK);
-            }
-        });
-        titleBar.add(minimizeLabel);
+        }, AWTEvent.MOUSE_EVENT_MASK);
         //=== Fullname (Label & Field)
         JLabel fullnameLabel = new JLabel("Full name:");
         fullnameLabel.setBounds(30, 20, 120, 25);
@@ -293,11 +269,6 @@ public class RegisterForm {
         buttonRegister.setOpaque(true);
         buttonRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        buttonRegister.addActionListener((e) -> {
-            System.out.println("Register button clicked!");
-            registerUser();
-        });
-
         buttonRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -307,6 +278,14 @@ public class RegisterForm {
             @Override
             public void mouseExited(MouseEvent e) {
                 buttonRegister.setBackground(new Color(189, 170, 165));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Register button clicked!");
+                isRegistering = true;
+                registerUser();
+                isRegistering = true;
             }
 
         });
@@ -322,11 +301,6 @@ public class RegisterForm {
         buttonLogin.setOpaque(true);
         buttonLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        buttonLogin.addActionListener((e) -> {
-            frame.dispose();
-            new LoginForm();
-        });
-
         buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -336,6 +310,13 @@ public class RegisterForm {
             @Override
             public void mouseExited(MouseEvent e) {
                 buttonLogin.setBackground(new Color(107, 123, 140));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                isLoggin = true;
+                frame.dispose();
+                new LoginForm(substrateFrame);
             }
 
         });
@@ -395,7 +376,7 @@ public class RegisterForm {
 
     //oprn login form
     private void openLoginForm() {
-        new LoginForm();
+        new LoginForm(substrateFrame);
     }
 
     //check exists
@@ -472,7 +453,7 @@ public class RegisterForm {
             if (rowsAffected > 0) {
                 showSuccessMessage("Registration Successful!");
                 closeRegisterForm();
-                new LoginForm();
+                new LoginForm(substrateFrame);
             } else {
                 showErrorMessage("Registration Failed!");
             }
@@ -486,7 +467,12 @@ public class RegisterForm {
         }
     }
 
-    public static void main(String args[]) {
-        new RegisterForm();
+    public static void main(String[] args) {
+        JFrame dummyFrame = new JFrame();
+        dummyFrame.setSize(W, H);
+        dummyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        dummyFrame.setVisible(true);
+
+        new LoginForm(dummyFrame);
     }
 }

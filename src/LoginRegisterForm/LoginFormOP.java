@@ -56,6 +56,7 @@ public class LoginFormOP {
 
     // db connection
     private DatabaseConnection dbConnection;
+    
 
     public LoginFormOP() {
         //=== Frame
@@ -214,7 +215,7 @@ public class LoginFormOP {
 
         buttonRegister.addActionListener((e) -> {
             frame.dispose();
-            new RegisterForm();
+            new RegisterFormOP();
         });
 
         buttonRegister.addMouseListener(new MouseAdapter() {
