@@ -5,7 +5,7 @@
 package Pages;
 
 import MainPage.StartingPage;
-import MainPage.TopBarPanel;
+import PanelButton.TopBarPanel;
 import global.UIConstants;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;

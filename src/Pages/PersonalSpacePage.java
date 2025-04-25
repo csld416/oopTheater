@@ -4,7 +4,7 @@
  */
 package Pages;
 
-import MainPage.TopBarPanel;
+import PanelButton.TopBarPanel;
 import java.awt.BorderLayout;
 
 /**

@@ -4,7 +4,7 @@
  */
 package Pages;
 
-import MainPage.TopBarPanel;
+import PanelButton.TopBarPanel;
 import global.UIConstants;
 
 import java.awt.BorderLayout;
@@ -18,14 +18,14 @@ import javax.swing.SwingConstants;
  *
  * @author csld
  */
-public class LatestNews extends javax.swing.JFrame {
+public class LatestNewsPage extends javax.swing.JFrame {
 
     /**
      * Creates new form LatestNews
      */
     private JPanel jPanel1;
     
-    public LatestNews() {
+    public LatestNewsPage() {
         this.setTitle("最新消息");
         this.setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -100,20 +100,21 @@ public class LatestNews extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LatestNews.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LatestNewsPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LatestNews.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LatestNewsPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LatestNews.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LatestNewsPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LatestNews.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LatestNewsPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LatestNews().setVisible(true);
+                new LatestNewsPage().setVisible(true);
             }
         });
     }
