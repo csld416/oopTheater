@@ -1,6 +1,12 @@
 package global;
 
+import java.awt.Color;
+
 public class UIConstants {
+
+    //main color
+    public static final Color COLOR_MAIN_DARK = new Color(169, 183, 198);
+    public static final Color COLOR_MAIN_LIGHT = new Color(169, 183, 198);
 
     // === Frame size
     public static final int FRAME_WIDTH = 950;
@@ -25,7 +31,11 @@ public class UIConstants {
 
     // MovieFrame(admin)
     public static final int LEFT_PANEL_WIDTH = 250;
-    
+
     //MainPage
     public static final int GAP_BETWEEN = 80;
+
+    //toggle list page 
+    public static final int TOGGLE_PAGE_WIDTH = 620;
+    public static final int TOGGLE_PAGE_HEIGHT = 380;
 }
