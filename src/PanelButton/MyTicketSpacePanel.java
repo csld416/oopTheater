@@ -7,11 +7,13 @@ import java.awt.*;
 
 public class MyTicketSpacePanel extends JPanel {
 
+    private JLabel textLabel;
+
     public MyTicketSpacePanel() {
         setLayout(null);
         setPreferredSize(new Dimension(UIConstants.ICON_PANEL_WIDTH, UIConstants.ICON_PANEL_HEIGHT));
         setBackground(new Color(169, 183, 198));
-        //setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        // setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         int iconSize = UIConstants.ICON_PANEL_HEIGHT - 10;
 
@@ -24,10 +26,14 @@ public class MyTicketSpacePanel extends JPanel {
         add(iconLabel);
 
         // Text
-        JLabel textLabel = new JLabel("我的票夾");
+        textLabel = new JLabel("我的票夾");
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         textLabel.setBounds(iconSize + 20, 0, UIConstants.ICON_PANEL_WIDTH - iconSize - 10, UIConstants.ICON_PANEL_HEIGHT);
         textLabel.setVerticalAlignment(SwingConstants.CENTER);
         add(textLabel);
+    }
+
+    public JLabel getLabel() {
+        return textLabel;
     }
 }

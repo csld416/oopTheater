@@ -5,6 +5,10 @@ import global.UIConstants;
 import javax.swing.*;
 import java.awt.*;
 
+import MainPage.StartingPage;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class LogoPanel extends JPanel {
 
     public LogoPanel() {
@@ -23,7 +27,7 @@ public class LogoPanel extends JPanel {
                 Image.SCALE_SMOOTH
         );
         logoLabel.setIcon(new ImageIcon(scaledImage));
-
+        
         add(logoLabel);
     }
 }

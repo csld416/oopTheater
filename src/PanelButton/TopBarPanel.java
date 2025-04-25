@@ -1,11 +1,12 @@
-package MainPage;
+package PanelButton;
 
 import Pages.MyTicketSpacePage;
 import Pages.PersonalSpacePage;
-import Pages.LatestNews;
+import Pages.LatestNewsPage;
 import global.*;
-import PanelButton.*;
 import LoginRegisterForm.*;
+import MainPage.StartingPage;
+import MainPage.ToggleListPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,14 +24,6 @@ public class TopBarPanel extends JPanel {
         LogoPanel logo = new LogoPanel();
         int verticalPadding = (UIConstants.TOP_BAR_HEIGHT - UIConstants.LOGO_HEIGHT) / 2;
         logo.setBounds(30, verticalPadding, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
-        logo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        logo.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(TopBarPanel.this);
-                frame.dispose();
-                new StartingPage().setVisible(true);
-            }
-        });
         add(logo);
 
         // Function Panels from right to left
@@ -66,11 +59,14 @@ public class TopBarPanel extends JPanel {
                 if (!SessionManager.isLoggedIn()) {
                     SessionManager.returnAfterLogin = frame;
                     SessionManager.redirectTargetPage = () -> new PersonalSpacePage().setVisible(true);
-                    new LoginForm();
+                    DimLayer dim = new DimLayer(frame);
+                    frame.setGlassPane(dim);
+                    dim.setVisible(true);
+                    new LoginForm(frame);
                 } else {
+                    frame.dispose();
                     new PersonalSpacePage().setVisible(true);
                 }
-                frame.dispose();
             }
         });
         add(personal);
@@ -85,7 +81,7 @@ public class TopBarPanel extends JPanel {
                 if (!SessionManager.isLoggedIn()) {
                     SessionManager.returnAfterLogin = frame;
                     SessionManager.redirectTargetPage = () -> new MyTicketSpacePage().setVisible(true);
-                    new LoginForm();
+                    new LoginForm(frame);
                 } else {
                     new MyTicketSpacePage().setVisible(true);
                 }
@@ -102,7 +98,7 @@ public class TopBarPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(TopBarPanel.this);
                 frame.dispose();
-                new LatestNews().setVisible(true);
+                new LatestNewsPage().setVisible(true);
             }
         });
         add(news);

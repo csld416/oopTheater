@@ -7,6 +7,8 @@ import java.awt.*;
 
 public class PersonalSpacePanel extends JPanel {
 
+    private JLabel textLabel;
+
     public PersonalSpacePanel() {
         setLayout(null);
         setPreferredSize(new Dimension(UIConstants.ICON_PANEL_WIDTH, UIConstants.ICON_PANEL_HEIGHT));
@@ -26,11 +28,15 @@ public class PersonalSpacePanel extends JPanel {
         add(iconLabel);
 
         // === Label (Right)
-        JLabel textLabel = new JLabel("個人專區");
+        textLabel = new JLabel("個人專區");
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         textLabel.setBounds(iconSize + 20, 0, UIConstants.ICON_PANEL_WIDTH - iconSize - 10, UIConstants.ICON_PANEL_HEIGHT);
         textLabel.setVerticalAlignment(SwingConstants.CENTER);
 
         add(textLabel);
+    }
+
+    public JLabel getLabel() {
+        return textLabel;
     }
 }

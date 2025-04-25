@@ -5,31 +5,34 @@ import global.UIConstants;
 import javax.swing.*;
 import java.awt.*;
 
-public class LatestNewsPanel extends JPanel {
+public class LogoutPanel extends JPanel {
 
     private JLabel textLabel;
 
-    public LatestNewsPanel() {
+    public LogoutPanel() {
         setLayout(null);
         setPreferredSize(new Dimension(UIConstants.ICON_PANEL_WIDTH, UIConstants.ICON_PANEL_HEIGHT));
-        setBackground(new Color(169, 183, 198));
+        setBackground(UIConstants.COLOR_MAIN_DARK);
         // setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        int iconSize = UIConstants.ICON_PANEL_HEIGHT - 10;
+        int iconSize = UIConstants.ICON_PANEL_HEIGHT - 10; // e.g. 30px for padding
 
-        // Icon
+        // === Icon (Left)
         JLabel iconLabel = new JLabel();
-        iconLabel.setBounds(10, 5, iconSize, iconSize);
-        ImageIcon icon = new ImageIcon(getClass().getResource("/pngs/newspaper.png"));
+        iconLabel.setBounds(10, 5, iconSize, iconSize); // slight padding
+
+        ImageIcon icon = new ImageIcon(getClass().getResource("/pngs/Logout.png"));
         Image scaled = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
         iconLabel.setIcon(new ImageIcon(scaled));
+
         add(iconLabel);
 
-        // Text
-        textLabel = new JLabel("最新消息");
+        // === Label (Right)
+        textLabel = new JLabel("登入/登出");
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         textLabel.setBounds(iconSize + 20, 0, UIConstants.ICON_PANEL_WIDTH - iconSize - 10, UIConstants.ICON_PANEL_HEIGHT);
         textLabel.setVerticalAlignment(SwingConstants.CENTER);
+
         add(textLabel);
     }
 
