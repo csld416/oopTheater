@@ -21,7 +21,7 @@ public class PersonalSpacePanel extends JPanel {
         JLabel iconLabel = new JLabel();
         iconLabel.setBounds(10, 5, iconSize, iconSize); // slight padding
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/pngs/profile.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/profile.png"));
         Image scaled = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
         iconLabel.setIcon(new ImageIcon(scaled));
 

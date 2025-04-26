@@ -21,7 +21,7 @@ public class OnShelfMoviePanel extends JPanel {
         JLabel iconLabel = new JLabel();
         iconLabel.setBounds(10, 5, iconSize, iconSize); // slight padding
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/pngs/Video.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/Video.png"));
         Image scaled = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
         iconLabel.setIcon(new ImageIcon(scaled));
         add(iconLabel);

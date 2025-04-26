@@ -20,7 +20,7 @@ public class LatestNewsPanel extends JPanel {
         // Icon
         JLabel iconLabel = new JLabel();
         iconLabel.setBounds(10, 5, iconSize, iconSize);
-        ImageIcon icon = new ImageIcon(getClass().getResource("/pngs/newspaper.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/newspaper.png"));
         Image scaled = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
         iconLabel.setIcon(new ImageIcon(scaled));
         add(iconLabel);

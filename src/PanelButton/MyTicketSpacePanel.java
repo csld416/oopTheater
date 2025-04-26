@@ -20,7 +20,7 @@ public class MyTicketSpacePanel extends JPanel {
         // Icon
         JLabel iconLabel = new JLabel();
         iconLabel.setBounds(10, 5, iconSize, iconSize);
-        ImageIcon icon = new ImageIcon(getClass().getResource("/pngs/ticket.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/ticket.png"));
         Image scaled = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
         iconLabel.setIcon(new ImageIcon(scaled));
         add(iconLabel);

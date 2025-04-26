@@ -93,7 +93,7 @@ public class RegisterForm {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(W, H);
-        frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(substrateFrame);
         frame.setUndecorated(true);
         // Title Bar
         titleBar = new JPanel();
@@ -345,7 +345,7 @@ public class RegisterForm {
             }
         });
         // Default image icon
-        ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/form/resources/profile-icon.jpg"));
+        ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/icons/profile-icon.jpg"));
         int width = 130, height = 130;
         Image scaledImage = defaultIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         profilepictureImage = new JLabel(new ImageIcon(scaledImage));
@@ -437,7 +437,7 @@ public class RegisterForm {
             if (selectedImage != null) {
                 profilePictureFile = new File(selectedImage);
             } else {
-                profilePictureFile = new File("src/form/resources/profile-icon.jpg"); // Default profile picture
+                profilePictureFile = new File("src/icons/profile-icon.jpg"); // Default profile picture
             }
 
             if (!profilePictureFile.exists()) {

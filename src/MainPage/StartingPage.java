@@ -4,7 +4,7 @@
  */
 package MainPage;
 
-import PanelButton.TopBarPanel;
+import global.TopBarPanel;
 import connection.DatabaseConnection;
 import global.Movie;
 import global.UIConstants;
@@ -32,6 +32,7 @@ public class StartingPage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null); // Absolute layout for precise positioning
+        setResizable(false);
 
         initTopBarSlot();
         initGapSlot();
@@ -123,7 +124,7 @@ public class StartingPage extends JFrame {
         // Add up to 4 cards from currentStartIndex
         for (int i = currentStartIndex; i < Math.min(currentStartIndex + MOVIES_PER_PAGE, allMovies.size()); i++) {
             Movie m = allMovies.get(i);
-            MovieCardPanel card = new MovieCardPanel(m.getTitle(), m.getReleaseDate().toString(), m.getPosterPath());
+            MovieCardPanel card = new MovieCardPanel(m);
             moviePanel.add(card);
         }
 

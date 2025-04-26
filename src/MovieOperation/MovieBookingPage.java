@@ -5,20 +5,20 @@ import global.*;
 import javax.swing.*;
 import java.awt.*;
 
-public class LatestNewsPage extends JFrame {
+public class MovieBookingPage extends JFrame {
 
     private JPanel topBarSlot;
     private JPanel contentPanel;
 
-    public LatestNewsPage() {
-        setTitle("Latest News Page");
+    public MovieBookingPage(Movie movie) {
+        setTitle("Online Booking - " + movie.getTitle());
         setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null); // Absolute layout
 
         initTopBar();
-        initContent();
+        initContent(movie);
 
         setVisible(true);
     }
@@ -34,23 +34,24 @@ public class LatestNewsPage extends JFrame {
         add(topBarSlot);
     }
 
-    private void initContent() {
+    private void initContent(Movie movie) {
         int y = UIConstants.TOP_BAR_HEIGHT;
         int height = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
 
         contentPanel = new JPanel();
         contentPanel.setBounds(0, y, UIConstants.FRAME_WIDTH, height);
         contentPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
-        contentPanel.setLayout(new GridBagLayout()); // to center the label
+        contentPanel.setLayout(new GridBagLayout()); // center alignment
 
-        JLabel label = new JLabel("LatestNews");
+        JLabel label = new JLabel("Booking for: " + movie.getTitle());
         label.setFont(new Font("SansSerif", Font.BOLD, 28));
         contentPanel.add(label);
 
         add(contentPanel);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(LatestNewsPage::new);
-    }
+    // ❗ Because now the constructor needs Movie param, we don't use main anymore
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(MovieBookingPage::new);
+//    }
 }

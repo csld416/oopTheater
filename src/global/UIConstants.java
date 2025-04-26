@@ -6,7 +6,7 @@ public class UIConstants {
 
     //main color
     public static final Color COLOR_MAIN_DARK = new Color(169, 183, 198);
-    public static final Color COLOR_MAIN_LIGHT = new Color(169, 183, 198);
+    public static final Color COLOR_MAIN_LIGHT = new Color(247, 244, 241);
 
     // === Frame size
     public static final int FRAME_WIDTH = 950;
@@ -25,6 +25,9 @@ public class UIConstants {
     public static final int ICON_PANEL_WIDTH = 120;
     public static final int ICON_PANEL_HEIGHT = 40;
 
+    //toggle
+    public static final int TOGGLE_ICON_WIDTH = 40;
+
     // === Logo
     public static final int LOGO_WIDTH = 158;
     public static final int LOGO_HEIGHT = 90;
@@ -38,4 +41,5 @@ public class UIConstants {
     //toggle list page 
     public static final int TOGGLE_PAGE_WIDTH = 620;
     public static final int TOGGLE_PAGE_HEIGHT = 380;
+
 }

@@ -1,22 +1,29 @@
 package MainPage;
 
+import Pages.MovieBookingPage;
+import MovieOperation.MovieInfoPage;
+import global.Movie;
+import global.UIConstants;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import global.*;
 
 public class MovieCardPanel extends JPanel {
 
-    private JLabel posterLabel;
-    private JLabel titleLabel;
-    private JLabel dateLabel;
-    private JButton introButton;
-    private JButton bookButton;
+    private final JLabel posterLabel;
+    private final JLabel titleLabel;
+    private final JLabel dateLabel;
+    private final Movie movie;  // store the movie object
 
-    public MovieCardPanel(String title, String releaseDate, String imagePath) {
-        setPreferredSize(new Dimension(200, 400));
+    public MovieCardPanel(Movie movie) {
+        this.movie = movie;
+
+        setPreferredSize(new Dimension(UIConstants.MOVIE_CARD_WIDTH, UIConstants.MOVIE_CARD_HEIGHT + 60));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
@@ -24,30 +31,50 @@ public class MovieCardPanel extends JPanel {
         // === Poster
         posterLabel = new JLabel();
         posterLabel.setAlignmentX(CENTER_ALIGNMENT);
-        setPosterImage(imagePath);
+        setPosterImage(movie.getPosterPath());
         add(posterLabel);
 
         // === Title
-        titleLabel = new JLabel(title, SwingConstants.CENTER);
+        titleLabel = new JLabel(movie.getTitle(), SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         add(titleLabel);
 
-        // === Date
-        dateLabel = new JLabel("Release Date: " + releaseDate);
+        // === Release Date
+        dateLabel = new JLabel("Release Date: " + movie.getReleaseDate());
         dateLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         dateLabel.setForeground(new Color(120, 120, 120));
-        dateLabel.setAlignmentX(CENTER_ALIGNMENT);
+        dateLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(dateLabel);
 
-        // === Button container using custom Hover panels
+        // === Button Container using custom Hover panels
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setOpaque(false);
 
         HoverButtonPanel introPanel = new HoverButtonPanel("電影介紹", new Color(157, 170, 179), new Color(135, 148, 158));
         HoverButtonPanel bookPanel = new HoverButtonPanel("線上訂票", new Color(180, 142, 135), new Color(159, 120, 112));
+
+        // === Info Button (電影介紹)
+        introPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(introPanel);
+                frame.dispose();
+                new MovieInfoPage(movie); // pass this movie to MovieInfoPage
+            }
+        });
+
+        // === Book Button (線上訂票)
+        bookPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(bookPanel);
+                frame.dispose();
+                new MovieBookingPage(movie); // pass this movie to MovieBookingPage
+            }
+        });
 
         buttonPanel.add(introPanel);
         buttonPanel.add(bookPanel);

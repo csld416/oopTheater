@@ -154,7 +154,7 @@ public class LoginForm {
                 if (checkLogin(username, password)) {
                     frame.dispose();
                     substrateFrame.dispose();
-                    SessionManager.currentUserEmail = userEmail;
+                    SessionManager.currentUserPhone = username;
                     if (SessionManager.redirectTargetPage != null) {
                         SessionManager.redirectTargetPage.run();
                         SessionManager.redirectTargetPage = null;

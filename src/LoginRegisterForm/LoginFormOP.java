@@ -173,7 +173,7 @@ public class LoginFormOP {
             String password = String.valueOf(passwordField.getPassword());
             if (checkLogin(username, password)) {
                 frame.dispose();
-                SessionManager.currentUserEmail = userEmail;
+                SessionManager.currentUserPhone = userEmail;
                 if (SessionManager.redirectTargetPage != null) {
                     SessionManager.redirectTargetPage.run();
                     SessionManager.redirectTargetPage = null;

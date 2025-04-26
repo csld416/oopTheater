@@ -20,7 +20,7 @@ public class LogoPanel extends JPanel {
         logoLabel.setBounds(0, 0, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
 
         // Load and scale the logo image
-        ImageIcon icon = new ImageIcon(getClass().getResource("/pngs/Logo.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/Logo.png"));
         Image scaledImage = icon.getImage().getScaledInstance(
                 UIConstants.LOGO_WIDTH,
                 UIConstants.LOGO_HEIGHT,

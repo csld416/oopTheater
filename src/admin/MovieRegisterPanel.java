@@ -136,8 +136,8 @@ public class MovieRegisterPanel extends JPanel {
             if (!validateFields()) {
                 return;
             }
-            if (editingMovie != null && editingMovie.id != null) {
-                updateMovieInDatabase(editingMovie.id); // use the ID to target the row
+            if (editingMovie != null && editingMovie.getId() != null) {
+                updateMovieInDatabase(editingMovie.getId()); // use the ID to target the row
             } else {
                 insertMovieToDatabase();
             }

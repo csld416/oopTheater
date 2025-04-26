@@ -21,7 +21,7 @@ public class LogoutPanel extends JPanel {
         JLabel iconLabel = new JLabel();
         iconLabel.setBounds(10, 5, iconSize, iconSize); // slight padding
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/pngs/Logout.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/Logout.png"));
         Image scaled = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
         iconLabel.setIcon(new ImageIcon(scaled));
 

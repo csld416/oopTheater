@@ -1,12 +1,12 @@
-package PanelButton;
+package global;
 
-import Pages.MyTicketSpacePage;
-import Pages.PersonalSpacePage;
-import Pages.LatestNewsPage;
-import global.*;
+import UserSpace.PersonalSpacePage;
+import Pages.*;
 import LoginRegisterForm.*;
 import MainPage.StartingPage;
 import MainPage.ToggleListPage;
+import Pages.LatestNewsPage;
+import PanelButton.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,19 +24,37 @@ public class TopBarPanel extends JPanel {
         LogoPanel logo = new LogoPanel();
         int verticalPadding = (UIConstants.TOP_BAR_HEIGHT - UIConstants.LOGO_HEIGHT) / 2;
         logo.setBounds(30, verticalPadding, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
+        logo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logo.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(TopBarPanel.this);
+                frame.dispose();
+                new StartingPage().setVisible(true);
+            }
+        });
         add(logo);
 
         // Function Panels from right to left
         int panelWidth = UIConstants.ICON_PANEL_WIDTH;
         int panelHeight = UIConstants.ICON_PANEL_HEIGHT;
         int spacing = 10;
-        int toggleWidth = 40;
+        int toggleWidth = UIConstants.TOGGLE_ICON_WIDTH;
         int edgePadding = 35;
         int startX = UIConstants.FRAME_WIDTH - edgePadding - toggleWidth;
 
         // Toggle List Panel
         ToggleListPanel toggle = new ToggleListPanel();
-        toggle.setBounds(startX, 40, toggleWidth, 40);
+        toggle.setBounds(startX, 35, toggleWidth, 40);
         toggle.setCursor(new Cursor(Cursor.HAND_CURSOR));
         toggle.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -81,11 +99,14 @@ public class TopBarPanel extends JPanel {
                 if (!SessionManager.isLoggedIn()) {
                     SessionManager.returnAfterLogin = frame;
                     SessionManager.redirectTargetPage = () -> new MyTicketSpacePage().setVisible(true);
+                    DimLayer dim = new DimLayer(frame);
+                    frame.setGlassPane(dim);
+                    dim.setVisible(true);
                     new LoginForm(frame);
                 } else {
+                    frame.dispose();
                     new MyTicketSpacePage().setVisible(true);
                 }
-                frame.dispose();
             }
         });
         add(tickets);
