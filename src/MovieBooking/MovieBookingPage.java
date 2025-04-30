@@ -1,4 +1,4 @@
-package Pages;
+package MovieBooking;
 
 import global.*;
 

@@ -1,15 +1,17 @@
 package admin;
 
+import admin.movieRegisterhelp.MovieRegisterPanel;
+import admin.movieRegisterhelp.MovieLeftBarPanel;
+import admin.topBar.AdminTopBarPanel;
 import global.UIConstants;
 import global.Movie;
-import global.TopBarPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminMovieFrame extends JFrame {
+public class MovieInfoPage extends JFrame {
 
     private JPanel topPanel;
     private JPanel leftPanel;
@@ -24,7 +26,7 @@ public class AdminMovieFrame extends JFrame {
 
     private final List<Movie> movieList = new ArrayList<>();
 
-    public AdminMovieFrame() {
+    public MovieInfoPage() {
         setTitle("Admin Movie Panel");
         setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,7 +41,7 @@ public class AdminMovieFrame extends JFrame {
     }
 
     private void initTopPanel() {
-        topPanel = new TopBarPanel();
+        topPanel = new AdminTopBarPanel();
         topPanel.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
         add(topPanel);
     }
@@ -123,6 +125,6 @@ public class AdminMovieFrame extends JFrame {
     }   
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(AdminMovieFrame::new);
+        SwingUtilities.invokeLater(MovieInfoPage::new);
     }
 }

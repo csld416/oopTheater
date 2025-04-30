@@ -1,6 +1,6 @@
 package MainPage;
 
-import Pages.MovieBookingPage;
+import MovieBooking.MovieBookingPage;
 import MovieOperation.MovieInfoPage;
 import global.Movie;
 import global.UIConstants;

@@ -1,4 +1,4 @@
-package admin;
+package admin.movieRegisterhelp;
 
 import connection.DatabaseConnection;
 import global.Movie;

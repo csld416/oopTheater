@@ -12,6 +12,7 @@ import javax.swing.JFrame;
  */
 public class SessionManager {
     public static String currentUserPhone = null;
+    public static String AdminString = null;
     public static JFrame returnAfterLogin = null;
     public static Runnable redirectTargetPage = null; // 👈 next page intent
 

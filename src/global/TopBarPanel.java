@@ -4,7 +4,7 @@ import UserSpace.PersonalSpacePage;
 import Pages.*;
 import LoginRegisterForm.*;
 import MainPage.StartingPage;
-import MainPage.ToggleListPage;
+import Pages.ToggleListPage;
 import Pages.LatestNewsPage;
 import PanelButton.*;
 

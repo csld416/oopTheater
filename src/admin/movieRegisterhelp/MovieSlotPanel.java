@@ -1,5 +1,6 @@
-package admin;
+package admin.movieRegisterhelp;
 
+import admin.MovieInfoPage;
 import global.Movie;
 
 import javax.swing.*;
@@ -43,7 +44,7 @@ public class MovieSlotPanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 Container topLevel = SwingUtilities.getWindowAncestor(MovieSlotPanel.this);
-                if (topLevel instanceof AdminMovieFrame frame) {
+                if (topLevel instanceof MovieInfoPage frame) {
                     frame.loadMovieEditor(movie); // ✅ now valid
                 }
             }

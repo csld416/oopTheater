@@ -1,5 +1,6 @@
-package admin;
+package admin.movieRegisterhelp;
 
+import admin.MovieInfoPage;
 import global.Movie;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -13,8 +14,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-
 import connection.DatabaseConnection;
 
 public class MovieRegisterPanel extends JPanel {
@@ -142,7 +141,7 @@ public class MovieRegisterPanel extends JPanel {
                 insertMovieToDatabase();
             }
             Window window = SwingUtilities.getWindowAncestor(MovieRegisterPanel.this);
-            if (window instanceof AdminMovieFrame frame) {
+            if (window instanceof MovieInfoPage frame) {
                 frame.refreshMovieLeftPanel();
             }
         });
