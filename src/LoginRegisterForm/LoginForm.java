@@ -6,7 +6,7 @@ package LoginRegisterForm;
 
 import global.SessionManager;
 import connection.DatabaseConnection;
-import MainPage.StartingPage;
+import Main.StartingPage;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;

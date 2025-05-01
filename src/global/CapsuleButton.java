@@ -11,11 +11,17 @@ public class CapsuleButton extends JPanel {
     private Color defaultColor;
     private Color hoverColor;
     private boolean isHovered = false;
+    private int fontSize = 18; // default size
 
     public CapsuleButton(String text, Color defaultColor, Color hoverColor, Dimension preferredSize) {
+        this(text, defaultColor, hoverColor, preferredSize, 18); // default font size
+    }
+
+    public CapsuleButton(String text, Color defaultColor, Color hoverColor, Dimension preferredSize, int fontSize) {
         this.text = text;
         this.defaultColor = defaultColor;
         this.hoverColor = hoverColor;
+        this.fontSize = fontSize;
 
         setOpaque(false);
         setPreferredSize(preferredSize);
@@ -46,17 +52,14 @@ public class CapsuleButton extends JPanel {
         int height = getHeight();
         int arc = height;
 
-        // Background Color (change if hover)
         g2.setColor(isHovered ? hoverColor : defaultColor);
         g2.fillRoundRect(0, 0, width, height, arc, arc);
 
-        // Draw Text
-        g2.setColor(Color.WHITE); // Text color (fixed as white here, can make adjustable later)
-        Font font = new Font("SansSerif", Font.BOLD, 18);
+        g2.setColor(Color.WHITE);
+        Font font = new Font("SansSerif", Font.BOLD, fontSize);
         g2.setFont(font);
         FontMetrics fm = g2.getFontMetrics();
         int textWidth = fm.stringWidth(text);
-        int textHeight = fm.getAscent();
         int textX = (width - textWidth) / 2;
         int textY = (height - fm.getHeight()) / 2 + fm.getAscent();
         g2.drawString(text, textX, textY);

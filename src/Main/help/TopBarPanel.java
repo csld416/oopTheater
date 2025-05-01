@@ -1,12 +1,15 @@
-package global;
+package Main.help;
 
 import UserSpace.PersonalSpacePage;
 import Pages.*;
 import LoginRegisterForm.*;
-import MainPage.StartingPage;
+import Main.StartingPage;
 import Pages.ToggleListPage;
 import Pages.LatestNewsPage;
 import PanelButton.*;
+import global.DimLayer;
+import global.SessionManager;
+import global.UIConstants;
 
 import javax.swing.*;
 import java.awt.*;

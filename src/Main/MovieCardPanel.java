@@ -1,4 +1,4 @@
-package MainPage;
+package Main;
 
 import MovieBooking.MovieBookingPage;
 import MovieOperation.MovieInfoPage;

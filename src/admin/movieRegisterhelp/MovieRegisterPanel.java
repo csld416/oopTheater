@@ -1,6 +1,6 @@
 package admin.movieRegisterhelp;
 
-import admin.MovieInfoPage;
+import admin.MovieRegisterPage;
 import global.Movie;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -15,10 +15,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import connection.DatabaseConnection;
+import global.UIConstants;
 
 public class MovieRegisterPanel extends JPanel {
 
-    private JTextField titleField;
+   private JTextField titleField;
     private JTextField durationField;
     private JTextArea descriptionArea;
     private JComboBox<String> ratingComboBox;
@@ -28,27 +29,52 @@ public class MovieRegisterPanel extends JPanel {
     private JButton browseButton;
     private JButton saveButton;
     private JButton clearButton;
+    private JLabel titleBar;
 
     private String selectedPosterPath;
 
     private Movie editingMovie = null;
 
+    private int WIDTH = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
+    private int HEIGHT = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+
     public MovieRegisterPanel(Movie movie) {
-        this(); // call the default constructor
+        this();
         this.editingMovie = movie;
-        loadMovieData(movie); // pre-fill fields
+        loadMovieData(movie);
+        titleBar.setText("Editing: " + movie.getTitle());
     }
 
     public MovieRegisterPanel() {
         setLayout(null);
-        setBackground(new Color(247, 244, 241));
+        setBackground(UIConstants.COLOR_MAIN_LIGHT);
 
         JPanel formContainer = new JPanel(null);
-        formContainer.setBounds(30, 10, 620, 480);
+        formContainer.setBounds(0, 0, WIDTH, HEIGHT);
         formContainer.setBackground(new Color(247, 244, 241));
         add(formContainer);
 
-        int labelX = 30, fieldX = 150, width = 420, height = 25, y = 10, gap = 35;
+        titleBar = new JLabel("Movie Register Page", SwingConstants.CENTER);
+        titleBar.setFont(new Font("Arial", Font.BOLD, 18));
+        titleBar.setOpaque(true);
+        titleBar.setBackground(new Color(68, 149, 145));
+        titleBar.setForeground(Color.WHITE);
+        titleBar.setBounds(0, 0, WIDTH, 40);
+        formContainer.add(titleBar);
+
+        int labelWidth = 120;
+        int fieldWidth = 420;
+        int spacing = 10;
+
+        int formTotalWidth = labelWidth + spacing + fieldWidth;
+        int startX = (WIDTH - formTotalWidth) / 2;
+
+        int labelX = startX;
+        int fieldX = startX + labelWidth + spacing;
+        int height = 25;
+        int width = fieldWidth;
+        int gap = 35;
+        int y = 60;
 
         formContainer.add(label("Title:", labelX, y));
         titleField = field(fieldX, y, width);
@@ -89,7 +115,7 @@ public class MovieRegisterPanel extends JPanel {
         int browseWidth = 100;
         int pathFieldWidth = width - browseWidth - 10;
 
-        y += (gap);
+        y += gap;
         formContainer.add(label("Poster Path:", labelX, y));
 
         posterPathField = new JTextField();
@@ -110,7 +136,6 @@ public class MovieRegisterPanel extends JPanel {
             public void mouseEntered(MouseEvent e) {
                 browseButton.setBackground(new Color(158, 171, 184));
             }
-
             @Override
             public void mouseExited(MouseEvent e) {
                 browseButton.setBackground(new Color(182, 193, 201));
@@ -132,16 +157,14 @@ public class MovieRegisterPanel extends JPanel {
         saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         saveButton.addActionListener((e) -> {
             System.out.println("Movie Register button clicked!");
-            if (!validateFields()) {
-                return;
-            }
+            if (!validateFields()) return;
             if (editingMovie != null && editingMovie.getId() != null) {
-                updateMovieInDatabase(editingMovie.getId()); // use the ID to target the row
+                updateMovieInDatabase(editingMovie.getId());
             } else {
                 insertMovieToDatabase();
             }
             Window window = SwingUtilities.getWindowAncestor(MovieRegisterPanel.this);
-            if (window instanceof MovieInfoPage frame) {
+            if (window instanceof MovieRegisterPage frame) {
                 frame.refreshMovieLeftPanel();
             }
         });
@@ -150,7 +173,6 @@ public class MovieRegisterPanel extends JPanel {
             public void mouseEntered(MouseEvent e) {
                 saveButton.setBackground(new Color(68, 149, 145));
             }
-
             @Override
             public void mouseExited(MouseEvent e) {
                 saveButton.setBackground(new Color(189, 170, 165));
@@ -172,14 +194,13 @@ public class MovieRegisterPanel extends JPanel {
             public void mouseEntered(MouseEvent e) {
                 clearButton.setBackground(new Color(90, 107, 122));
             }
-
             @Override
             public void mouseExited(MouseEvent e) {
                 clearButton.setBackground(new Color(107, 123, 140));
             }
         });
-        formContainer.add(clearButton);
         clearButton.addActionListener(e -> clearForm());
+        formContainer.add(clearButton);
     }
 
     private void loadMovieData(Movie movie) {
@@ -378,5 +399,4 @@ public class MovieRegisterPanel extends JPanel {
     private void showSuccessMessage(String msg) {
         JOptionPane.showMessageDialog(this, msg, "成功", JOptionPane.INFORMATION_MESSAGE);
     }
-
 }

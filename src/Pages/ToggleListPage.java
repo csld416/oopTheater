@@ -12,8 +12,8 @@ import java.awt.event.MouseEvent;
 import PanelButton.*;
 import Pages.*;
 import LoginRegisterForm.*;
-import MainPage.StartingPage;
-import admin.MovieInfoPage;
+import Main.StartingPage;
+import admin.MovieRegisterPage;
 import global.SessionManager;
 
 public class ToggleListPage extends JFrame {
@@ -171,7 +171,7 @@ public class ToggleListPage extends JFrame {
                 substrateFrame.getGlassPane().setVisible(false);
                 substrateFrame.dispose();
                 SessionManager.returnAfterLogin = substrateFrame;
-                SessionManager.redirectTargetPage = () -> new MovieInfoPage();
+                SessionManager.redirectTargetPage = () -> new MovieRegisterPage();
                 new LoginFormOP();
             }
         });

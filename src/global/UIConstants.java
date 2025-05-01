@@ -34,6 +34,7 @@ public class UIConstants {
 
     // MovieFrame(admin)
     public static final int LEFT_PANEL_WIDTH = 250;
+    public static final int RIGHT_PANEL_WIDTH = FRAME_WIDTH - LEFT_PANEL_WIDTH;
 
     //MainPage
     public static final int GAP_BETWEEN = 80;
@@ -41,5 +42,8 @@ public class UIConstants {
     //toggle list page 
     public static final int TOGGLE_PAGE_WIDTH = 620;
     public static final int TOGGLE_PAGE_HEIGHT = 380;
+    
+    public static final int ENTRY_WIDTH = RIGHT_PANEL_WIDTH - 60;
+    public static final int ENTRY_HEIGHT = 60;
 
 }

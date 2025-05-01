@@ -1,4 +1,4 @@
-package MainPage;
+package Main;
 
 import global.*;
 import javax.swing.*;

@@ -1,6 +1,7 @@
 package UserSpace;
 
-import MainPage.StartingPage;
+import Main.help.TopBarPanel;
+import Main.StartingPage;
 import UserSpace.Panels.*;
 import UserSpace.Buttons.*;
 import global.*;

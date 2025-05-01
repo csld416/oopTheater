@@ -50,7 +50,7 @@ public class AdminMainPage extends JFrame {
             public void mousePressed(MouseEvent e) {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(btn1);
                 frame.dispose(); // close current AdminMainPage
-                new MovieInfoPage(); // open movie management panel
+                new MovieRegisterPage(); // open movie management panel
             }
         });
 

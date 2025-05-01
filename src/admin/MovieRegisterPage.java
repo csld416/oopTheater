@@ -1,10 +1,8 @@
 package admin;
 
+import admin.movieRegisterhelp.MovieRegisterPanel;
 import admin.movieRegisterhelp.MovieSlotPanel;
-import admin.showtimehelp.ShowtimeFormPanel;
-import admin.showtimehelp.ShowtimeListPanel;
 import admin.topBar.AdminTopBarPanel;
-import connection.DatabaseConnection;
 import global.CapsuleButton;
 import global.Movie;
 import global.UIConstants;
@@ -13,12 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 
-public class ShowtimePage extends JFrame {
+public class MovieRegisterPage extends JFrame {
 
     private static final int SPACING = 20;
 
@@ -29,8 +24,8 @@ public class ShowtimePage extends JFrame {
     private JPanel slotsPanel;
     private JScrollPane scrollPane;
 
-    public ShowtimePage() {
-        setTitle("Movie Itinerary Registration");
+    public MovieRegisterPage() {
+        setTitle("Admin Movie Panel");
         setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -58,17 +53,26 @@ public class ShowtimePage extends JFrame {
         leftPanel.setBackground(Color.WHITE);
         add(leftPanel);
 
-        CapsuleButton upBtn = new CapsuleButton("\u2B06", new Color(180, 180, 180), new Color(140, 140, 140), new Dimension(40, 40));
-        CapsuleButton downBtn = new CapsuleButton("\u2B07", new Color(180, 180, 180), new Color(140, 140, 140), new Dimension(40, 40));
+        CapsuleButton addBtn = new CapsuleButton("+ Add Movie",
+                new Color(80, 140, 160), new Color(100, 160, 180), new Dimension(120, 35));
 
-        buttonRow = new JPanel(null);
-        buttonRow.setBounds((UIConstants.LEFT_PANEL_WIDTH - 80) / 2, SPACING, 80, 45);
+        CapsuleButton upBtn = new CapsuleButton("\u2B06",
+                new Color(180, 180, 180), new Color(140, 140, 140), new Dimension(40, 40));
+
+        CapsuleButton downBtn = new CapsuleButton("\u2B07",
+                new Color(180, 180, 180), new Color(140, 140, 140), new Dimension(40, 40));
+
+        buttonRow = new JPanel();
+        buttonRow.setLayout(null);
+        buttonRow.setBounds((UIConstants.LEFT_PANEL_WIDTH - 220) / 2, SPACING, 220, 45);
         buttonRow.setOpaque(false);
 
         upBtn.setBounds(0, 0, 40, 40);
-        downBtn.setBounds(40, 0, 40, 40);
+        addBtn.setBounds(50, 5, 120, 35);
+        downBtn.setBounds(180, 0, 40, 40);
 
         buttonRow.add(upBtn);
+        buttonRow.add(addBtn);
         buttonRow.add(downBtn);
         leftPanel.add(buttonRow);
 
@@ -81,6 +85,13 @@ public class ShowtimePage extends JFrame {
         scrollPane.setBorder(null);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         leftPanel.add(scrollPane);
+
+        addBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                showNewMovieForm();
+            }
+        });
 
         upBtn.addMouseListener(new MouseAdapter() {
             @Override
@@ -120,7 +131,7 @@ public class ShowtimePage extends JFrame {
             slot.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    setSelectedMovie(movie);
+                    loadMovieEditor(movie);
                 }
             });
             slotsPanel.add(slot);
@@ -130,18 +141,33 @@ public class ShowtimePage extends JFrame {
         slotsPanel.repaint();
     }
 
-    private void setSelectedMovie(Movie movie) {
+    private void showNewMovieForm() {
         rightPanel.removeAll();
-
-        ShowtimeListPanel listPanel = new ShowtimeListPanel(movie);
-        listPanel.setBounds(0, 0, rightPanel.getWidth(), rightPanel.getHeight() - 320);
-        rightPanel.add(listPanel);
-
-        rightPanel.revalidate();
+        MovieRegisterPanel panel = new MovieRegisterPanel();
+        int w = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
+        int h = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        panel.setBounds(0, 0, w, h);
+        rightPanel.add(panel);
         rightPanel.repaint();
+        rightPanel.revalidate();
+    }
+
+    public void loadMovieEditor(Movie movie) {
+        rightPanel.removeAll();
+        MovieRegisterPanel panel = new MovieRegisterPanel(movie);
+        int w = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
+        int h = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        panel.setBounds(0, 0, w, h);
+        rightPanel.add(panel);
+        rightPanel.repaint();
+        rightPanel.revalidate();
+    }
+
+    public void refreshMovieLeftPanel() {
+        loadMovieSlots(); // Reload the slots from database
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(ShowtimePage::new);
+        SwingUtilities.invokeLater(MovieRegisterPage::new);
     }
 }

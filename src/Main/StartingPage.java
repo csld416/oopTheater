@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package MainPage;
+package Main;
 
-import global.TopBarPanel;
+import Main.help.TopBarPanel;
 import connection.DatabaseConnection;
 import global.Movie;
 import global.UIConstants;

@@ -5,7 +5,7 @@ import global.UIConstants;
 import javax.swing.*;
 import java.awt.*;
 
-import MainPage.StartingPage;
+import Main.StartingPage;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
