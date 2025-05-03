@@ -1,4 +1,4 @@
-package MovieBooking;
+package MovieBooking.help;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +37,7 @@ public class RoundedSeatPanel extends JPanel {
         this.touchable = touchable;
         this.currentColor = defaultColor;
 
-        int scaledSize = (int)(BASE_SIZE * SCALE);
+        int scaledSize = (int) (BASE_SIZE * SCALE);
         setPreferredSize(new Dimension(scaledSize, scaledSize));
         setOpaque(false);
 
@@ -61,6 +61,7 @@ public class RoundedSeatPanel extends JPanel {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
+                    if (!touchable) return;
                     isSelected = !isSelected;
                     currentColor = isSelected ? pressedColor : defaultColor;
                     repaint();
@@ -103,6 +104,16 @@ public class RoundedSeatPanel extends JPanel {
         isSelected = false;
         currentColor = defaultColor;
         repaint();
+    }
+
+    public void setSelectedState(boolean selected) {
+        this.isSelected = selected;
+        this.currentColor = selected ? pressedColor : defaultColor;
+        repaint();
+    }
+
+    public boolean isTouchable() {
+        return touchable;
     }
 
     public String getText() {

@@ -7,6 +7,8 @@ public class UIConstants {
     //main color
     public static final Color COLOR_MAIN_DARK = new Color(169, 183, 198);
     public static final Color COLOR_MAIN_LIGHT = new Color(247, 244, 241);
+    public static final Color COLOR_MAIN_GREEN = new Color(68, 149, 145);
+    public static final Color COLOR_TITLE = new Color(209, 202, 202);
 
     // === Frame size
     public static final int FRAME_WIDTH = 950;

@@ -1,7 +1,11 @@
-package MovieBooking;
+package MovieBooking.help;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BigRoomSeatPanel extends JPanel {
 
@@ -16,11 +20,16 @@ public class BigRoomSeatPanel extends JPanel {
     private static final Color TEXT_COLOR = Color.WHITE;
     private static final Color BACKGROUND_COLOR = Color.WHITE;
 
+    private Runnable onSeatSelectionChange;
+
+    private final ArrayList<String> selectedSeats = new ArrayList<>();
+
     public BigRoomSeatPanel() {
         setLayout(new BorderLayout());
 
         JPanel screenPanel = new JPanel();
         screenPanel.setPreferredSize(new Dimension(COLS * (CELL_SIZE + 2), 30));
+        screenPanel.setMaximumSize(new Dimension(928, 412));
         screenPanel.setBackground(Color.LIGHT_GRAY);
         JLabel screenLabel = new JLabel("銀SCREEN幕", SwingConstants.CENTER);
         screenLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
@@ -130,7 +139,7 @@ public class BigRoomSeatPanel extends JPanel {
                 }
 
                 String rowLabel = "";
-                if(row == 14){
+                if (row == 14) {
                     rowLabel = "L";
                 }
                 if (isSeatRow) {
@@ -154,11 +163,38 @@ public class BigRoomSeatPanel extends JPanel {
                         isTouchable
                 );
                 seat.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
+                if (isTouchable) {
+                    seat.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+                            String seatId = seat.getSeat();
+                            if (selectedSeats.contains(seatId)) {
+                                selectedSeats.remove(seatId);
+                                seat.setSelectedState(false);
+                            } else {
+                                selectedSeats.add(seatId);
+                                seat.setSelectedState(true);
+                            }
+
+                            if (onSeatSelectionChange != null) {
+                                onSeatSelectionChange.run();
+                            }
+                        }
+                    });
+                }
                 gridPanel.add(seat);
             }
         }
 
         add(gridPanel, BorderLayout.CENTER);
+    }
+
+    public void setOnSeatSelectionChange(Runnable callback) {
+        this.onSeatSelectionChange = callback;
+    }
+
+    public List<String> getSeatList() {
+        return new ArrayList<>(selectedSeats);
     }
 
     public static void main(String[] args) {
@@ -168,5 +204,7 @@ public class BigRoomSeatPanel extends JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        System.out.println(frame.getWidth());
+        System.out.println(frame.getHeight());
     }
 }

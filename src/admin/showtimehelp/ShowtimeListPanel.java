@@ -2,7 +2,6 @@ package admin.showtimehelp;
 
 import connection.DatabaseConnection;
 import global.CapsuleButton;
-import global.DimLayer;
 import global.Movie;
 import global.Showtime;
 import global.UIConstants;
@@ -14,13 +13,12 @@ import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 
 public class ShowtimeListPanel extends JPanel {
 
     private final Movie movie;
     private final JPanel listContainer;
-    private static final int GAP = 20;
+    private static final int GAP = 15;
 
     private final Color NEW_COLOR = new Color(157, 175, 158);
     private final Color NEW_COLOR_HOVOR = new Color(137, 154, 138);
@@ -52,9 +50,7 @@ public class ShowtimeListPanel extends JPanel {
         addButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(ShowtimeListPanel.this);
-                Container parent = ShowtimeListPanel.this.getParent(); // usually the rightPanel
-
+                Container parent = ShowtimeListPanel.this.getParent();
                 if (parent != null) {
                     parent.removeAll();
                     ShowtimeRegister register = new ShowtimeRegister(movie);
@@ -67,15 +63,10 @@ public class ShowtimeListPanel extends JPanel {
         });
         container.add(addButton);
 
-        listContainer = new JPanel();
-        listContainer.setLayout(new BoxLayout(listContainer, BoxLayout.Y_AXIS));
+        listContainer = new JPanel(null);
         listContainer.setBackground(new Color(250, 245, 240));
-
-        JScrollPane scrollPane = new JScrollPane(listContainer);
-        scrollPane.setBounds(30, 70, panelWidth - 60, panelHeight - 100);
-        scrollPane.setBorder(null);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        container.add(scrollPane);
+        listContainer.setBounds(0, 90, panelWidth, panelHeight - 70);
+        container.add(listContainer);
 
         loadShowtimes();
     }
@@ -85,13 +76,14 @@ public class ShowtimeListPanel extends JPanel {
 
         try {
             Connection conn = new DatabaseConnection().getConnection();
-            String sql = "SELECT s.id, s.movies_id, s.theater_id, s.start_time, s.end_time, s.is_canceled, t.room_num "
-                    + "FROM Showtimes s JOIN Theaters t ON s.theater_id = t.id "
-                    + "WHERE s.movies_id = ? AND s.is_canceled = 0 ORDER BY s.start_time ASC";
+            String sql = "SELECT s.id, s.movies_id, s.theater_id, s.start_time, s.end_time, s.is_canceled, t.room_num " +
+                    "FROM Showtimes s JOIN Theaters t ON s.theater_id = t.id " +
+                    "WHERE s.movies_id = ? AND s.is_canceled = 0 ORDER BY s.start_time ASC";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, movie.getId());
             ResultSet rs = stmt.executeQuery();
 
+            int y = 0;
             while (rs.next()) {
                 Showtime showtime = new Showtime(
                         rs.getInt("id"),
@@ -102,16 +94,10 @@ public class ShowtimeListPanel extends JPanel {
                         rs.getBoolean("is_canceled")
                 );
 
-                JPanel slotPanel = new JPanel(null);
-                slotPanel.setPreferredSize(new Dimension(UIConstants.ENTRY_WIDTH, UIConstants.ENTRY_HEIGHT));
-                slotPanel.setBackground(new Color(250, 245, 240));
-
                 ShowtimeEntryPanel entry = new ShowtimeEntryPanel(showtime);
-                entry.setBounds(0, 0, UIConstants.ENTRY_WIDTH, UIConstants.ENTRY_HEIGHT);
-                slotPanel.add(entry);
-
-                listContainer.add(Box.createVerticalStrut(GAP));
-                listContainer.add(slotPanel);
+                entry.setBounds(30, y, UIConstants.ENTRY_WIDTH, UIConstants.ENTRY_HEIGHT);
+                listContainer.add(entry);
+                y += UIConstants.ENTRY_HEIGHT + GAP;
             }
 
             rs.close();
@@ -125,4 +111,4 @@ public class ShowtimeListPanel extends JPanel {
         listContainer.revalidate();
         listContainer.repaint();
     }
-}
+} 

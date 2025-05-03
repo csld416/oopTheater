@@ -13,10 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class ShowtimePage extends JFrame {
 
@@ -134,7 +130,7 @@ public class ShowtimePage extends JFrame {
         rightPanel.removeAll();
 
         ShowtimeListPanel listPanel = new ShowtimeListPanel(movie);
-        listPanel.setBounds(0, 0, rightPanel.getWidth(), rightPanel.getHeight() - 320);
+        listPanel.setBounds(0, 0, rightPanel.getWidth(), rightPanel.getHeight()); // REMOVE "-320"
         rightPanel.add(listPanel);
 
         rightPanel.revalidate();

@@ -1,7 +1,11 @@
-package MovieBooking;
+package MovieBooking.help;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SmallRoomSeatPanel extends JPanel {
 
@@ -15,6 +19,10 @@ public class SmallRoomSeatPanel extends JPanel {
     private static final Color PRESSED_COLOR = Color.GREEN;
     private static final Color TEXT_COLOR = Color.WHITE;
     private static final Color BACKGROUND_COLOR = Color.WHITE;
+
+    private Runnable onSeatSelectionChange;
+
+    private final ArrayList<String> selectedSeats = new ArrayList<>();
 
     public SmallRoomSeatPanel() {
         setLayout(new BorderLayout());
@@ -81,11 +89,44 @@ public class SmallRoomSeatPanel extends JPanel {
                         isTouchable
                 );
                 seat.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
+
+                if (isTouchable) {
+                    seat.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+                            String seatId = seat.getSeat();
+                            if (selectedSeats.contains(seatId)) {
+                                selectedSeats.remove(seatId);
+                                seat.setSelectedState(false);
+                            } else {
+                                selectedSeats.add(seatId);
+                                seat.setSelectedState(true);
+                            }
+                            if (onSeatSelectionChange != null) {
+                                onSeatSelectionChange.run();
+                            }
+                        }
+                    });
+                }
+
                 gridPanel.add(seat);
             }
         }
-
         add(gridPanel, BorderLayout.CENTER);
+        // Spacer panel to add 10px bottom margin
+        JPanel spacer = new JPanel();
+        spacer.setPreferredSize(new Dimension(1, 10));
+        spacer.setOpaque(true);
+        spacer.setBackground(Color.WHITE);
+        add(spacer, BorderLayout.SOUTH);
+    }
+
+    public void setOnSeatSelectionChange(Runnable callback) {
+        this.onSeatSelectionChange = callback;
+    }
+
+    public List<String> getSeatList() {
+        return new ArrayList<>(selectedSeats);
     }
 
     public static void main(String[] args) {

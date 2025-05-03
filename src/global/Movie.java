@@ -24,7 +24,7 @@ public class Movie {
     // === Global Shared Movie List ===
     public static ArrayList<Movie> allMovies = null;
     public static Movie dummyMovie = new Movie(1, "500 Days of Summer", 95, "Boy meets girl. Boy falls in love. Girl doesn't.", "PG-13", 
-                                         java.sql.Date.valueOf("2009-08-07"), java.sql.Date.valueOf("2009-12-07"), "src/MoviePosters/sample.jpg");
+                                         java.sql.Date.valueOf("2009-08-07"), java.sql.Date.valueOf("2009-12-07"), "src/MoviePosters/500DaysOfSummer.jpg");
 
     // === Constructor ===
     public Movie(Integer id, String title, int duration, String description, String rating,
