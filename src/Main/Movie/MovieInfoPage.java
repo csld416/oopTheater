@@ -1,5 +1,6 @@
-package MovieOperation;
+package Main.Movie;
 
+import Data.Movie;
 import Main.help.TopBarPanel;
 import global.*;
 

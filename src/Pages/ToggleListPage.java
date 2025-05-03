@@ -10,10 +10,11 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
 import PanelButton.*;
-import Pages.*;
 import LoginRegisterForm.*;
 import Main.StartingPage;
+import Main.help.TopBarPanel;
 import admin.MovieRegisterPage;
+import global.DimLayer;
 import global.SessionManager;
 
 public class ToggleListPage extends JFrame {
@@ -26,6 +27,8 @@ public class ToggleListPage extends JFrame {
     private final Color HoverColor = new Color(143, 121, 102);
 
     private JFrame substrateFrame;
+
+    private boolean shouldDismiss = true;
 
     public ToggleListPage(JFrame substrateFrame) {
         this.substrateFrame = substrateFrame;
@@ -44,11 +47,16 @@ public class ToggleListPage extends JFrame {
         Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
             public void eventDispatched(AWTEvent event) {
                 if (event instanceof MouseEvent && ((MouseEvent) event).getID() == MouseEvent.MOUSE_PRESSED) {
-                    Window focusedWindow = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
-                    if (focusedWindow != ToggleListPage.this) {
-                        dispose();
-                        substrateFrame.getGlassPane().setVisible(false);
-                        Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+                    if (shouldDismiss) {
+                        Window focusedWindow = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+                        if (focusedWindow != ToggleListPage.this) {
+                            dispose();
+                            substrateFrame.getGlassPane().setVisible(false);
+                            Toolkit.getDefaultToolkit().removeAWTEventListener(this);
+                        }
+                    } else {
+                        // reset the flag for future clicks
+                        shouldDismiss = true;
                     }
                 }
             }
@@ -111,10 +119,20 @@ public class ToggleListPage extends JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
+                shouldDismiss = false;  // prevent premature dismissal
+
+                JFrame frame = substrateFrame;
                 dispose();
-                substrateFrame.getGlassPane().setVisible(false);
-                substrateFrame.dispose();
-                new PersonalSpacePage().setVisible(true);
+                if (!SessionManager.isLoggedIn()) {
+                    SessionManager.returnAfterLogin = frame;
+                    SessionManager.redirectTargetPage = () -> new PersonalSpacePage().setVisible(true);
+
+                    new LoginForm(frame);
+                } else {
+                    frame.getGlassPane().setVisible(false);
+                    frame.dispose();
+                    new PersonalSpacePage().setVisible(true);
+                }
             }
         });
         add(personalSpacePanel);
@@ -139,10 +157,20 @@ public class ToggleListPage extends JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
+                shouldDismiss = false;  // prevent premature dismissal
+
+                JFrame frame = substrateFrame;
                 dispose();
-                substrateFrame.getGlassPane().setVisible(false);
-                substrateFrame.dispose();
-                new MyTicketSpacePage().setVisible(true);
+                if (!SessionManager.isLoggedIn()) {
+                    SessionManager.returnAfterLogin = frame;
+                    SessionManager.redirectTargetPage = () -> new MyTicketSpacePage().setVisible(true);
+
+                    new LoginForm(frame);
+                } else {
+                    frame.getGlassPane().setVisible(false);
+                    frame.dispose();
+                    new MyTicketSpacePage().setVisible(true);
+                }
             }
         });
         add(myTicketsPanel);

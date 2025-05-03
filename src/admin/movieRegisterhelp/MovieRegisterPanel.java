@@ -1,7 +1,7 @@
 package admin.movieRegisterhelp;
 
 import admin.MovieRegisterPage;
-import global.Movie;
+import Data.Movie;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;

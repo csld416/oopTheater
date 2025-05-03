@@ -78,6 +78,19 @@ public class AdminMainPage extends JFrame {
                 new Color(220, 20, 60), new Color(255, 69, 0), new Dimension(buttonWidth, buttonHeight));
         btn5.setBounds(centerX, startY + 4 * (buttonHeight + spacingY), buttonWidth, buttonHeight);
 
+        CapsuleButton btn6 = new CapsuleButton("影廳管理",
+                new Color(139, 69, 19), new Color(160, 82, 45), new Dimension(buttonWidth, buttonHeight));
+        btn6.setBounds(centerX, startY + 5 * (buttonHeight + spacingY), buttonWidth, buttonHeight);
+        btn6.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(btn6);
+                frame.dispose(); // close current AdminMainPage
+                new TheaterManagePage(); // navigate to your theater management page
+            }
+        });
+        centerPanel.add(btn6);
+
         centerPanel.add(btn1);
         centerPanel.add(btn2);
         centerPanel.add(btn3);

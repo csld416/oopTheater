@@ -2,7 +2,7 @@ package admin.showtimehelp;
 
 import connection.DatabaseConnection;
 import global.CapsuleButton;
-import global.Movie;
+import Data.Movie;
 import global.UIConstants;
 
 import javax.swing.*;

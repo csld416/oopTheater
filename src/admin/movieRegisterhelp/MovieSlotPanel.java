@@ -1,7 +1,7 @@
 package admin.movieRegisterhelp;
 
 import admin.MovieRegisterPage;
-import global.Movie;
+import Data.Movie;
 import global.UIConstants;
 
 import javax.swing.*;

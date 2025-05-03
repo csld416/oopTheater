@@ -1,6 +1,6 @@
 package MovieBooking.help;
 
-import global.Showtime;
+import Data.Showtime;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +65,16 @@ public class UserShowtimeEntryPanel extends JPanel {
         String startTime = timeFmt.format(showtime.getStartTime());
         String endTime = timeFmt.format(showtime.getEndTime());
 
-        String theaterText = "B廳";
+        String theaterText = switch (showtime.getTheaterId()) {
+            case 1 ->
+                "A廳";
+            case 2 ->
+                "B廳";
+            case 3 ->
+                "C廳";
+            default ->
+                "未知廳";
+        };
         String seatText = "剩98座位";
 
         int x = 30;

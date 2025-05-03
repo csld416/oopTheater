@@ -4,9 +4,10 @@
  */
 package Main;
 
+import Main.Movie.MovieCardPanel;
 import Main.help.TopBarPanel;
 import connection.DatabaseConnection;
-import global.Movie;
+import Data.Movie;
 import global.UIConstants;
 import java.awt.Dimension;
 

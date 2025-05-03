@@ -1,7 +1,7 @@
 package admin.showtimehelp;
 
 import global.CapsuleButton;
-import global.Showtime;
+import Data.Showtime;
 import global.UIConstants;
 
 import javax.swing.*;

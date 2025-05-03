@@ -3,7 +3,6 @@ package Main.help;
 import UserSpace.PersonalSpacePage;
 import Pages.*;
 import LoginRegisterForm.*;
-import Main.StartingPage;
 import Pages.ToggleListPage;
 import Pages.LatestNewsPage;
 import PanelButton.*;
@@ -27,24 +26,6 @@ public class TopBarPanel extends JPanel {
         LogoPanel logo = new LogoPanel();
         int verticalPadding = (UIConstants.TOP_BAR_HEIGHT - UIConstants.LOGO_HEIGHT) / 2;
         logo.setBounds(30, verticalPadding, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
-        logo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                logo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                logo.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(TopBarPanel.this);
-                frame.dispose();
-                new StartingPage().setVisible(true);
-            }
-        });
         add(logo);
 
         // Function Panels from right to left

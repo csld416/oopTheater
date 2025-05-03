@@ -27,7 +27,31 @@ public class LogoPanel extends JPanel {
                 Image.SCALE_SMOOTH
         );
         logoLabel.setIcon(new ImageIcon(scaledImage));
-        
+
+        // === Mouse Listener ===
+        logoLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logoLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logoLabel.setCursor(Cursor.getDefaultCursor());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // Find and dispose the top-level JFrame
+                Window window = SwingUtilities.getWindowAncestor(LogoPanel.this);
+                if (window instanceof JFrame) {
+                    window.dispose();
+                }
+                // Launch StartingPage
+                SwingUtilities.invokeLater(StartingPage::new);
+            }
+        });
+
         add(logoLabel);
     }
 }

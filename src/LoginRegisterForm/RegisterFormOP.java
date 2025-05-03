@@ -376,7 +376,7 @@ public class RegisterFormOP {
             }
         });
         // Default image icon
-        ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/form/resources/profile-icon.jpg"));
+        ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/icons/profile-icon.jpg"));
         int width = 130, height = 130;
         Image scaledImage = defaultIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         profilepictureImage = new JLabel(new ImageIcon(scaledImage));

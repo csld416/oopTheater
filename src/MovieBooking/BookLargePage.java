@@ -1,5 +1,7 @@
 package MovieBooking;
 
+import Data.Showtime;
+import Data.Movie;
 import Main.help.TopBarPanel;
 import MovieBooking.help.BigRoomSeatPanel;
 import global.*;

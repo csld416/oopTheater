@@ -1,5 +1,7 @@
 package Main;
 
+import Data.Movie;
+import Main.Movie.MovieCardPanel;
 import global.*;
 import javax.swing.*;
 import java.awt.*;

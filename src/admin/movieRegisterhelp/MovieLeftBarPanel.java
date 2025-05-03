@@ -1,7 +1,7 @@
 package admin.movieRegisterhelp;
 
 import connection.DatabaseConnection;
-import global.Movie;
+import Data.Movie;
 import global.UIConstants;
 import javax.swing.*;
 import java.awt.*;

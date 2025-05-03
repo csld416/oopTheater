@@ -4,7 +4,7 @@ import admin.movieRegisterhelp.MovieRegisterPanel;
 import admin.movieRegisterhelp.MovieSlotPanel;
 import admin.topBar.AdminTopBarPanel;
 import global.CapsuleButton;
-import global.Movie;
+import Data.Movie;
 import global.UIConstants;
 
 import javax.swing.*;

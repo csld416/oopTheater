@@ -1,8 +1,8 @@
-package Main;
+package Main.Movie;
 
+import Main.HoverButtonPanel;
 import MovieBooking.MovieBookingPage;
-import MovieOperation.MovieInfoPage;
-import global.Movie;
+import Data.Movie;
 import global.UIConstants;
 
 import javax.swing.*;

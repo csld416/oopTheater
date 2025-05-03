@@ -1,4 +1,4 @@
-package global;
+package Data;
 
 import java.sql.Connection;
 import java.sql.Date;
