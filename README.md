@@ -48,3 +48,89 @@ oh yeah and i also added the hover effect when the mouse enter the movie slot.
 problem: when modified, the code creates a new data in the data table, this should be prohibited.
 
 ## 04/26
+
+Note: problem fixed, now the version is good. Also added a feature to detect if the movie to be inserted has a duplicate in the current database and the bar for evaluation is the title, duration, and the description.
+
+Now that these are done, I am thinking of adding a `display` button in the movie slot as a mini button for enabling or disabling the display in the `StartingPage`.
+
+I added the `StartingPage` from the GUI design into a pure code-based design, mimicing the process I created the MovieFrame class, I first initilized the top bar slot and the down panel for the movie cards container. Later, I updated the `MovieCardPanel` class, resize the movie posters in order to make the resolution higher. By the way I created a ButtonPanel class as a reusable object where the constructor takes in the displaying text and two differnt colors as a default and the hover color. 
+
+Currently, the layout of the application seems decent. However, I would like to further add the arrow buttons so as to traverse between the movie lists. Furthermore, I will add a sorting or filter like the one in `Notion`, to increase flexibility of the user interface and fast searching.
+
+Lastly, I added a python file just to count the lines of code that I have dedicated myself into this.
+
+## 04/27
+
+Many things that I did today, first things first I changed the Login and the Register in the user mode to act just like the toggle list, where the frame appears and disappears it the user click elsewhere from the popping frame. Note that I added auxiliary boolean variable so as to act as a lock to prevent the frame from disposing.
+
+Secondly, I updated the `ToggleList` class in pure code instead of using builtin GUI. With the intention of this, I updated all the panel buttons with the pure code, the proper images and the color and bounding logic.
+
+Big work, i must say, UI is a pretty tough field to get involved.
+
+I started working on the user space scope, where the user are able to modify the data of the personal peripherals. That includes purchasing record, change of password, and change of data, and log out button.
+
+jesus this hurts my brain, pretty much. FUCK.
+
+Oh yeah I also seperated the constants for this user scope, there are even packages under packages, jesus chirst.
+
+yeah I think I've been working on this shit for so long, jesus chirst we arent even in the purchase yet, and the database for the ticket and the revenue? 💀 come on.
+
+But I always figure it out, I always do, gotta have faith.
+
+the next, and probably the final stage: purchase. oh, ho ho ho. this is where things get really interested, isnt it? It all started with the "book online" from the moviecardpanel.
+As we presses the very button, we open a gate that leads to the circulation of the assets. This is where the things gets relaly escalated and hard. Hope I survive from this.
+
+## 04/30
+
+Took some days off, (for the OS assignment)
+
+ok, today i created the panel for the big theater.
+and the small one.
+
+established the database of the rooms, the showtime, the ticket.
+tons of work. FUCK YOU. I need to take more days off, come on.
+all of this for what? does this even get appreciated?
+
+started to create the whole interface for the admin part, like the users.
+
+a admin main page and a variant of topbar that directly links back to that, also in the mainpage we have a bunch of buttons that leads to everywhere in the admin pages, so as you can see it becames united, good.
+
+
+OK, and um, most of the work is at the SHOWTIME establishment, this is god pain in the ass, I have to link between the data tables, then i have to seperate the conditions and create a bunch of instances that calls on forth to one another, fucking jesus chirst.
+
+I give myself today a 2/10, fucking awful, but as I know i always return with a better mental state, stay tuned, I'll come back.
+
+## 05/01
+
+JEEEEEZ, I want this to end, like, really fast.
+
+Anyways, I established the `Showtime` class, and the register for the Showtime, seperate the panel of the show showtime list and the regisration.
+
+FUCK, BoxLayout is the most pure piece of shit I've ever seen in my life.
+
+the logic of the validation needs to be patched, there are more logical flaws that needs correction.
+
+## 05/02
+
+I designed the page for the booking large room.
+
+## 05/03
+
+Designed the booking page for the small room, integrate the big room and the small room to the booking feature.
+I created the entry class for storing the Showtime of the movies that it has in the database.
+
+Another 6 hour passes, the FUCK.
+
+## 05/04
+
+Added the page for theater management. and updated the database relationship of the seats and the theaters, as well as the showtimes.
+
+patched the logic of the showtime entry in the movie booking section, fucking SQL. The next should be the patching of the seat chosen to the booking stage. Also verify if the seat is actually booked, the layout would change the color of that.
+
+## 05/06
+
+Since we are working on the food part, we need to implement the food register part first in order for the necessary goods to appear on the client side.
+
+created the food entry, admin page, and the register.
+
+next is the image of that.
