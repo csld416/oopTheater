@@ -11,9 +11,12 @@ public class Showtime {
     private int id;
     private int movieId;
     private int theaterId;
+    private String theaterName = null;
     private Timestamp startTime;
     private Timestamp endTime;
     private boolean isCanceled;
+    private boolean theaterTypeIsBig = false;
+    private boolean theaterTypeIsBigSet = false;
 
     // === Shared List Cache ===
     public static ArrayList<Showtime> allShowtimes = null;
@@ -81,6 +84,30 @@ public class Showtime {
 
     public void setCanceled(boolean canceled) {
         isCanceled = canceled;
+    }
+
+    public String getTheaterName() {
+        if (theaterName == null) {
+            for (Theater t : Theater.fetchTheaterList()) {
+                if (t.getId() == theaterId) {
+                    theaterName = t.getName();
+                }
+            }
+        }
+        return theaterName;
+    }
+
+    public boolean getTheaterTypeIsBig() {
+        if (!theaterTypeIsBigSet) {
+            for (Theater t : Theater.fetchTheaterList()) {
+                if (t.getId() == theaterId) {
+                    theaterTypeIsBig = "大廳".equals(t.getType());  // or use "Big" if your DB uses English
+                    theaterTypeIsBigSet = true;
+                    break;
+                }
+            }
+        }
+        return theaterTypeIsBig;
     }
 
     // === Lazy Fetch Method ===

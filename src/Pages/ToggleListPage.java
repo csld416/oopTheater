@@ -1,20 +1,24 @@
 package Pages;
 
+import Main.help.topbarPanel.MyTicketSpacePanel;
+import Main.help.topbarPanel.LatestNewsPanel;
+import Main.help.topbarPanel.PersonalSpacePanel;
+import Main.help.topbarPanel.LogoutPanel;
+import Main.help.topbarPanel.OnShelfMoviePanel;
+import Main.help.topbarPanel.StaffPanel;
 import UserSpace.PersonalSpacePage;
 import global.UIConstants;
-import PanelButton.LogoPanel;
+import Main.help.topbarPanel.LogoPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
-import PanelButton.*;
 import LoginRegisterForm.*;
 import Main.StartingPage;
-import Main.help.TopBarPanel;
+import admin.AdminMainPage;
 import admin.MovieRegisterPage;
-import global.DimLayer;
 import global.SessionManager;
 
 public class ToggleListPage extends JFrame {
@@ -199,7 +203,7 @@ public class ToggleListPage extends JFrame {
                 substrateFrame.getGlassPane().setVisible(false);
                 substrateFrame.dispose();
                 SessionManager.returnAfterLogin = substrateFrame;
-                SessionManager.redirectTargetPage = () -> new MovieRegisterPage();
+                SessionManager.redirectTargetPage = () -> new AdminMainPage();
                 new LoginFormOP();
             }
         });

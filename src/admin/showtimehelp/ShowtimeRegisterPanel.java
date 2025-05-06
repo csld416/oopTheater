@@ -13,9 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ShowtimeRegister extends JPanel {
+public class ShowtimeRegisterPanel extends JPanel {
 
-    public ShowtimeRegister(Movie movie) {
+    public ShowtimeRegisterPanel(Movie movie) {
         setLayout(null);
         setBackground(UIConstants.COLOR_MAIN_LIGHT);
         setBounds(0, 0, UIConstants.RIGHT_PANEL_WIDTH, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT);
@@ -42,7 +42,18 @@ public class ShowtimeRegister extends JPanel {
         roomLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(roomLabel);
 
-        JComboBox<String> roomSelect = new JComboBox<>(new String[]{"Room A", "Room B", "Room C"});
+        // Ensure list is loaded
+        if (Data.Theater.theaterList == null) {
+            Data.Theater.fetchTheaterList();
+        }
+
+        // Extract names into array
+        String[] theaterNames = Data.Theater.theaterList.stream()
+                .map(Data.Theater::getName)
+                .toArray(String[]::new);
+
+        // Create combo box with real theater names
+        JComboBox<String> roomSelect = new JComboBox<>(theaterNames);
         roomSelect.setBounds(leftX, y, fieldWidth, 30);
         add(roomSelect);
 
@@ -65,8 +76,8 @@ public class ShowtimeRegister extends JPanel {
         cancelButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
-                Container parent = ShowtimeRegister.this.getParent();
-                parent.remove(ShowtimeRegister.this);
+                Container parent = ShowtimeRegisterPanel.this.getParent();
+                parent.remove(ShowtimeRegisterPanel.this);
                 ShowtimeListPanel listPanel = new ShowtimeListPanel(movie);
                 listPanel.setBounds(0, 0, parent.getWidth(), parent.getHeight());
                 parent.add(listPanel);
@@ -86,19 +97,19 @@ public class ShowtimeRegister extends JPanel {
                 String startTimeText = startField.getText().trim();
 
                 if (!isValid(startTimeText)) {
-                    JOptionPane.showMessageDialog(ShowtimeRegister.this, "請輸入正確的時間格式：yyyy-MM-dd HH:mm", "格式錯誤", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(ShowtimeRegisterPanel.this, "請輸入正確的時間格式：yyyy-MM-dd HH:mm", "格式錯誤", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 boolean success = insertShowtime(movie, selectedRoom, startTimeText);
                 if (!success) {
-                    JOptionPane.showMessageDialog(ShowtimeRegister.this, "新增場次失敗，請重試或檢查資料庫", "錯誤", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(ShowtimeRegisterPanel.this, "新增場次失敗，請重試或檢查資料庫", "錯誤", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 // If successful, return to list
-                Container parent = ShowtimeRegister.this.getParent();
-                parent.remove(ShowtimeRegister.this);
+                Container parent = ShowtimeRegisterPanel.this.getParent();
+                parent.remove(ShowtimeRegisterPanel.this);
                 ShowtimeListPanel listPanel = new ShowtimeListPanel(movie);
                 listPanel.setBounds(0, 0, parent.getWidth(), parent.getHeight());
                 parent.add(listPanel);
@@ -122,7 +133,7 @@ public class ShowtimeRegister extends JPanel {
             Connection conn = new DatabaseConnection().getConnection();
 
             // 1. Get theater_id from name
-            String theaterSql = "SELECT id FROM Theaters WHERE room_num = ?";
+            String theaterSql = "SELECT id FROM Theaters WHERE name = ?";
             PreparedStatement theaterStmt = conn.prepareStatement(theaterSql);
             theaterStmt.setString(1, roomName);
             ResultSet rs = theaterStmt.executeQuery();

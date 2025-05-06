@@ -1,4 +1,4 @@
-package PanelButton;
+package Main.help.topbarPanel;
 
 import global.UIConstants;
 

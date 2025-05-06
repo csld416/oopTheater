@@ -2,6 +2,7 @@ package admin.showtimehelp;
 
 import global.CapsuleButton;
 import Data.Showtime;
+import Data.Theater;
 import global.UIConstants;
 
 import javax.swing.*;
@@ -19,14 +20,14 @@ public class ShowtimeEntryPanel extends JPanel {
 
     private final int WIDTH = UIConstants.ENTRY_WIDTH;
     private final int HEIGHT = UIConstants.ENTRY_HEIGHT;
-    
+
     private final Dimension d = new Dimension(45, 20);
-    
+
     private final Color EDITColor = new Color(166, 161, 178);
     private final Color EDITColor_hover = new Color(146, 140, 160);
     private final Color DELETEColor = new Color(198, 143, 124);
     private final Color DELETEColor_hover = new Color(178, 123, 104);
-    
+
     private final int sz = 16;
 
     public ShowtimeEntryPanel(Showtime showtime) {
@@ -40,7 +41,14 @@ public class ShowtimeEntryPanel extends JPanel {
         int y = 15;
 
         // Room label
-        JLabel roomLabel = new JLabel("Room " + showtime.getTheaterId());
+        String s = "";
+        int theaterId = showtime.getTheaterId();
+        for (Theater t : Theater.fetchTheaterList()) {
+            if (t.getId() == theaterId) {
+                s = t.getName();
+            }
+        }
+        JLabel roomLabel = new JLabel("Room " + s);
         roomLabel.setFont(new Font("Arial", Font.BOLD, 16));
         roomLabel.setBounds(x, y, 120, 30);
         add(roomLabel);
@@ -52,7 +60,7 @@ public class ShowtimeEntryPanel extends JPanel {
         timeLabel.setFont(new Font("Arial", Font.PLAIN, 15));
         timeLabel.setBounds(x, y, 200, 30);
         add(timeLabel);
-        
+
         x += 200;
         // Edit button
         CapsuleButton editButton = new CapsuleButton("修改", EDITColor, EDITColor_hover, d, sz);
@@ -64,7 +72,7 @@ public class ShowtimeEntryPanel extends JPanel {
             }
         });
         add(editButton);
-        
+
         x += 90;
         // Delete button
         CapsuleButton deleteButton = new CapsuleButton("刪除", DELETEColor, DELETEColor_hover, d, sz);
@@ -117,4 +125,5 @@ public class ShowtimeEntryPanel extends JPanel {
             frame.setVisible(true);
         });
     }
+
 }

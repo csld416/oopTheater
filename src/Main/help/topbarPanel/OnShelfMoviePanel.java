@@ -1,15 +1,15 @@
-package PanelButton;
+package Main.help.topbarPanel;
 
 import global.UIConstants;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class LogoutPanel extends JPanel {
+public class OnShelfMoviePanel extends JPanel {
 
     private JLabel textLabel;
 
-    public LogoutPanel() {
+    public OnShelfMoviePanel() {
         setLayout(null);
         setPreferredSize(new Dimension(UIConstants.ICON_PANEL_WIDTH, UIConstants.ICON_PANEL_HEIGHT));
         setBackground(UIConstants.COLOR_MAIN_DARK);
@@ -21,18 +21,16 @@ public class LogoutPanel extends JPanel {
         JLabel iconLabel = new JLabel();
         iconLabel.setBounds(10, 5, iconSize, iconSize); // slight padding
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/Logout.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/Video.png"));
         Image scaled = icon.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
         iconLabel.setIcon(new ImageIcon(scaled));
-
         add(iconLabel);
 
         // === Label (Right)
-        textLabel = new JLabel("登入/登出");
+        textLabel = new JLabel("上映電影");
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         textLabel.setBounds(iconSize + 20, 0, UIConstants.ICON_PANEL_WIDTH - iconSize - 10, UIConstants.ICON_PANEL_HEIGHT);
         textLabel.setVerticalAlignment(SwingConstants.CENTER);
-
         add(textLabel);
     }
 

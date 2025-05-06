@@ -53,7 +53,7 @@ public class ShowtimeListPanel extends JPanel {
                 Container parent = ShowtimeListPanel.this.getParent();
                 if (parent != null) {
                     parent.removeAll();
-                    ShowtimeRegister register = new ShowtimeRegister(movie);
+                    ShowtimeRegisterPanel register = new ShowtimeRegisterPanel(movie);
                     register.setBounds(0, 0, parent.getWidth(), parent.getHeight());
                     parent.add(register);
                     parent.revalidate();
@@ -76,7 +76,7 @@ public class ShowtimeListPanel extends JPanel {
 
         try {
             Connection conn = new DatabaseConnection().getConnection();
-            String sql = "SELECT s.id, s.movies_id, s.theater_id, s.start_time, s.end_time, s.is_canceled, t.room_num " +
+            String sql = "SELECT s.id, s.movies_id, s.theater_id, s.start_time, s.end_time, s.is_canceled, t.name " +
                     "FROM Showtimes s JOIN Theaters t ON s.theater_id = t.id " +
                     "WHERE s.movies_id = ? AND s.is_canceled = 0 ORDER BY s.start_time ASC";
             PreparedStatement stmt = conn.prepareStatement(sql);

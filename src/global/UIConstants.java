@@ -47,5 +47,9 @@ public class UIConstants {
     
     public static final int ENTRY_WIDTH = RIGHT_PANEL_WIDTH - 60;
     public static final int ENTRY_HEIGHT = 60;
+    
+    //FOOD
+    public static final int FOOD_PANEL_HEIGHT = FRAME_HEIGHT - TOP_BAR_HEIGHT - 50 - 30;
+    public static final int FOOD_PANEL_WIDTH = FRAME_WIDTH / 2;
 
 }

@@ -14,7 +14,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ShowtimePage extends JFrame {
+public class ShowtimeRegister extends JFrame {
 
     private static final int SPACING = 20;
 
@@ -25,7 +25,7 @@ public class ShowtimePage extends JFrame {
     private JPanel slotsPanel;
     private JScrollPane scrollPane;
 
-    public ShowtimePage() {
+    public ShowtimeRegister() {
         setTitle("Movie Itinerary Registration");
         setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -138,6 +138,6 @@ public class ShowtimePage extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(ShowtimePage::new);
+        SwingUtilities.invokeLater(ShowtimeRegister::new);
     }
 }

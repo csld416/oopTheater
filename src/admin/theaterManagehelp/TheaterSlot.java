@@ -72,7 +72,7 @@ public class TheaterSlot extends JPanel {
     }
 
     public boolean isActive() {
-        return toggleButton.isToggled();
+        return toggleButton.isOn();
     }
 
     public void setOnClick(Runnable onClick) {

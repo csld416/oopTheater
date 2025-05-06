@@ -12,6 +12,12 @@ import java.awt.geom.RoundRectangle2D;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import connection.DatabaseConnection;
+
 public class UserShowtimeEntryPanel extends JPanel {
 
     private final Showtime showtime;
@@ -29,7 +35,7 @@ public class UserShowtimeEntryPanel extends JPanel {
     public UserShowtimeEntryPanel(Showtime showtime) {
         this.showtime = showtime;
         setLayout(null);
-        setOpaque(false); // allow transparent corners
+        setOpaque(false);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
 
@@ -38,14 +44,14 @@ public class UserShowtimeEntryPanel extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 currentBgColor = hoverColor;
-                setCursor(new Cursor(Cursor.HAND_CURSOR)); // 👈 hand cursor
+                setCursor(new Cursor(Cursor.HAND_CURSOR));
                 repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 currentBgColor = defaultColor;
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // 👈 default cursor
+                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 repaint();
             }
 
@@ -57,7 +63,7 @@ public class UserShowtimeEntryPanel extends JPanel {
             }
         });
 
-        // Format elements
+        // Format times
         SimpleDateFormat dateFmt = new SimpleDateFormat("M月d日 EEEE", Locale.TAIWAN);
         SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm");
 
@@ -65,26 +71,20 @@ public class UserShowtimeEntryPanel extends JPanel {
         String startTime = timeFmt.format(showtime.getStartTime());
         String endTime = timeFmt.format(showtime.getEndTime());
 
-        String theaterText = switch (showtime.getTheaterId()) {
-            case 1 ->
-                "A廳";
-            case 2 ->
-                "B廳";
-            case 3 ->
-                "C廳";
-            default ->
-                "未知廳";
-        };
-        String seatText = "剩98座位";
+        // === Info Strings ===
+        String theaterText = showtime.getTheaterName() != null ? showtime.getTheaterName() : "未知廳";
+        String seatText = "剩" + getRemainingSeats(showtime) + "座位";
 
         int x = 30;
         int y = 15;
 
+        // === Date Label ===
         JLabel dateLabel = new JLabel(dateText);
         dateLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
         dateLabel.setBounds(x, y, 200, 25);
         add(dateLabel);
 
+        // === Time Panel ===
         JPanel timePanel = new JPanel();
         timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.Y_AXIS));
         timePanel.setBackground(currentBgColor);
@@ -104,11 +104,13 @@ public class UserShowtimeEntryPanel extends JPanel {
         timePanel.add(endLabel);
         add(timePanel);
 
+        // === Room Label ===
         JLabel roomLabel = new JLabel(theaterText);
         roomLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         roomLabel.setBounds(x + 370, y + 3, 60, 30);
         add(roomLabel);
 
+        // === Seat Label ===
         JLabel seatLabel = new JLabel(seatText);
         seatLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         seatLabel.setBounds(x + 450, y + 3, 100, 30);
@@ -138,27 +140,28 @@ public class UserShowtimeEntryPanel extends JPanel {
         this.clickListener = listener;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Showtime dummy = new Showtime(
-                    1,
-                    2,
-                    3,
-                    java.sql.Timestamp.valueOf("2025-05-16 21:30:00"),
-                    java.sql.Timestamp.valueOf("2025-05-16 23:21:00"),
-                    false
-            );
+    // === Dummy seat fetch ===
+    private int getRemainingSeats(Showtime s) {
+        int totalSeats = s.getTheaterTypeIsBig() ? 407 : 144;
+        int booked = 0;
 
-            JFrame frame = new JFrame("User Showtime Entry Panel");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(850, 200);
-            frame.setLayout(new FlowLayout());
-            frame.getContentPane().setBackground(new Color(245, 245, 245));
+        try {
+            Connection conn = new DatabaseConnection().getConnection();
+            String sql = "SELECT COUNT(*) FROM BookedSeat WHERE showtime_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, s.getId());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                booked = rs.getInt(1);
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1; // show error state
+        }
 
-            UserShowtimeEntryPanel panel = new UserShowtimeEntryPanel(dummy);
-            frame.add(panel);
-
-            frame.setVisible(true);
-        });
+        return Math.max(0, totalSeats - booked);
     }
 }

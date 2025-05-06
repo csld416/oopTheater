@@ -1,11 +1,15 @@
 package Main.help;
 
+import Main.help.topbarPanel.MyTicketSpacePanel;
+import Main.help.topbarPanel.ToggleListPanel;
+import Main.help.topbarPanel.LogoPanel;
+import Main.help.topbarPanel.LatestNewsPanel;
+import Main.help.topbarPanel.PersonalSpacePanel;
 import UserSpace.PersonalSpacePage;
 import Pages.*;
 import LoginRegisterForm.*;
 import Pages.ToggleListPage;
 import Pages.LatestNewsPage;
-import PanelButton.*;
 import global.DimLayer;
 import global.SessionManager;
 import global.UIConstants;

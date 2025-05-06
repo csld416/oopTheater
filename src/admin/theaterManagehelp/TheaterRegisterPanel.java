@@ -85,7 +85,7 @@ public class TheaterRegisterPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 String name = nameField.getText().trim();
                 String type = (String) typeBox.getSelectedItem();
-                int capacity = type.equals("小廳") ? 144 : 366;
+                int capacity = type.equals("小廳") ? 144 : 407;
                 boolean isActive = true; // default to true (can be modified if you later expose a toggle)
 
                 if (name.isEmpty()) {

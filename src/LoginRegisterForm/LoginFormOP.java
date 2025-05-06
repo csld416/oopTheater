@@ -183,7 +183,6 @@ public class LoginFormOP {
                 } else {
                     new StartingPage().setVisible(true); // fallback
                 }
-                // open main page
             } else {
                 JOptionPane.showMessageDialog(frame, "Invalid username or password", "Invalid Data", JOptionPane.ERROR_MESSAGE);
             }

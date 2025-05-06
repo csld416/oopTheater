@@ -139,8 +139,7 @@ public class MovieBookingPage extends JFrame {
                 int x = (rightWidth - entryWidth) / 2;
                 entry.setBounds(x, yy, entryWidth, entryHeight);
                 entry.setClickListener(e -> {
-                    int theaterId = s.getTheaterId();
-                    if (theaterId == 1 || theaterId == 2) {
+                    if (s.getTheaterTypeIsBig()) {
                         new BookLargePage(movie, s);
                     } else {
                         new BookSmallPage(movie, s);

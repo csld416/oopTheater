@@ -68,7 +68,7 @@ public class ToggleButtonPanel extends JPanel {
         g2.dispose();
     }
 
-    public boolean isToggled() {
+    public boolean isOn() {
         return isOn;
     }
 
