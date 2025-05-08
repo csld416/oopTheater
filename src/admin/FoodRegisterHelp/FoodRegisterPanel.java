@@ -157,7 +157,7 @@ public class FoodRegisterPanel extends JPanel {
 
         try {
             Connection conn = new DatabaseConnection().getConnection();
-            String sql = "SELECT COUNT(*) FROM food WHERE name = ? AND category = ?";
+            String sql = "SELECT COUNT(*) FROM foods WHERE name = ? AND category = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, name);
             stmt.setInt(2, categoryCombo.getSelectedIndex());
@@ -186,7 +186,7 @@ public class FoodRegisterPanel extends JPanel {
         try {
             Connection conn = new DatabaseConnection().getConnection();
 
-            String sql = "INSERT INTO food (name, price, category, valid, image_path) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO foods (name, price, category, is_valid, image_path) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, nameField.getText().trim());
             stmt.setInt(2, Integer.parseInt(priceField.getText().trim()));

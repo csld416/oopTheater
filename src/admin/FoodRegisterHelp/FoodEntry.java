@@ -15,14 +15,16 @@ public class FoodEntry extends JPanel {
 
     public FoodEntry(Food food) {
         setPreferredSize(new Dimension(500, 80));
+        setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         setLayout(null);
 
         // === Image ===
         x = 10;
-        ImageIcon icon = new ImageIcon(food.getImagePath());
-        JLabel imageLabel = new JLabel(icon);
+        ImageIcon rawIcon = new ImageIcon(food.getImagePath());
+        Image scaledImg = rawIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+        JLabel imageLabel = new JLabel(new ImageIcon(scaledImg));
         imageLabel.setBounds(x, 10, 60, 60);
         add(imageLabel);
 
