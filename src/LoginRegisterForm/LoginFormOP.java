@@ -4,7 +4,7 @@
  */
 package LoginRegisterForm;
 
-import global.SessionManager;
+import Data.SessionManager;
 import connection.DatabaseConnection;
 import Main.StartingPage;
 import java.awt.BorderLayout;

@@ -1,8 +1,9 @@
 package Main.Movie;
 
 import Main.HoverButtonPanel;
-import MovieBooking.MovieBookingPage;
+import MovieBooking.ShowtimeChoosePage;
 import Data.Movie;
+import Data.Order;
 import global.UIConstants;
 
 import javax.swing.*;
@@ -72,7 +73,9 @@ public class MovieCardPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(bookPanel);
                 frame.dispose();
-                new MovieBookingPage(movie); // pass this movie to MovieBookingPage
+                Order order = new Order();
+                order.setMovie(movie);
+                new ShowtimeChoosePage(order); // pass this movie to MovieBookingPage
             }
         });
 

@@ -2,6 +2,7 @@ package MovieBooking;
 
 import Data.Showtime;
 import Data.Movie;
+import Data.Order;
 import Main.help.TopBarPanel;
 import MovieBooking.help.UserShowtimeEntryPanel;
 import global.*;
@@ -11,7 +12,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MovieBookingPage extends JFrame {
+public class ShowtimeChoosePage extends JFrame {
 
     private JPanel topBarSlot;
     private JLabel titleLabel;
@@ -21,8 +22,13 @@ public class MovieBookingPage extends JFrame {
     private static final int LEFT_WIDTH = 300;
     private static final int GAP_Y = 10;
     private static final int ENTRY_WIDTH = 600;
+    
+    private final Movie movie;
+    private final Order order;
 
-    public MovieBookingPage(Movie movie) {
+    public ShowtimeChoosePage(Order order) {
+        this.order = order;
+        this.movie = order.getMovie();
         setTitle("Online Booking - " + movie.getTitle());
         setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -140,7 +146,8 @@ public class MovieBookingPage extends JFrame {
                 entry.setBounds(x, yy, entryWidth, entryHeight);
                 entry.setClickListener(e -> {
                     if (s.getTheaterTypeIsBig()) {
-                        new BookLargePage(movie, s);
+                        order.setShowtime(s);
+                        new BookLargePage(order);
                     } else {
                         new BookSmallPage(movie, s);
                     }
@@ -158,7 +165,7 @@ public class MovieBookingPage extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new MovieBookingPage(Movie.dummyMovie);
+            new ShowtimeChoosePage(Order.dummyOrder);
         });
     }
 }

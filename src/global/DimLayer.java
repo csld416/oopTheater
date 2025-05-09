@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -20,6 +21,7 @@ import javax.swing.SwingUtilities;
  * @author csld
  */
 public class DimLayer extends JPanel {
+
     public DimLayer(JFrame frame) {
         setOpaque(false);  // Crucial for transparency
         setLayout(null);
@@ -49,5 +51,3 @@ public class DimLayer extends JPanel {
         g2d.dispose();
     }
 }
-
-

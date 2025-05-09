@@ -1,5 +1,6 @@
 package UserSpace;
 
+import Data.SessionManager;
 import Main.help.TopBarPanel;
 import Main.StartingPage;
 import UserSpace.Panels.*;

@@ -2,7 +2,7 @@ package UserSpace.Panels;
 
 import connection.DatabaseConnection;
 import global.CapsuleButton;
-import global.SessionManager;
+import Data.SessionManager;
 import global.UIConstants;
 
 import javax.swing.*;

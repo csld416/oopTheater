@@ -4,7 +4,7 @@
  */
 package LoginRegisterForm;
 
-import global.SessionManager;
+import Data.SessionManager;
 import connection.DatabaseConnection;
 import Main.StartingPage;
 import java.awt.AWTEvent;
@@ -259,6 +259,8 @@ public class LoginForm {
         dummyFrame.setSize(W, H);
         dummyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         dummyFrame.setVisible(true);
+        
+        
 
         new LoginForm(dummyFrame);
     }

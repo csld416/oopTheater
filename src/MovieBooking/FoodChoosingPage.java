@@ -3,6 +3,7 @@ package MovieBooking;
 import Data.Food;
 import Data.Showtime;
 import Data.Movie;
+import Data.Order;
 import Data.Seat;
 import Main.help.TopBarPanel;
 import MovieBooking.foodPanels.FoodEntry;
@@ -10,9 +11,10 @@ import global.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import javax.swing.border.LineBorder;
 
 public class FoodChoosingPage extends JFrame {
 
@@ -36,22 +38,26 @@ public class FoodChoosingPage extends JFrame {
 
     private final Color GRAY = new Color(245, 245, 245);
 
+    private Movie movie;
     private Showtime showtime;
     private ArrayList<Seat> seatList;
+    private ArrayList<AbstractMap.SimpleEntry<Food, Integer>> selectedFoods = new ArrayList<>();
+    private Order order;
 
     private JPanel foodContentPanel;
     private final int FOOD_PANEL_HEIGHT = UIConstants.FOOD_PANEL_HEIGHT;
     private final int FOOD_PANEL_WIDTH = UIConstants.FRAME_WIDTH / 2;
     private final int FOOD_PANEL_Y = gap10 * 2 + 40;
 
-    private ArrayList<AbstractMap.SimpleEntry<Food, Integer>> selectedFoods = new ArrayList<>();
     private int total = 0;
     private JPanel selectedFoodDisplayArea;
     private JLabel headingLabel;
 
-    public FoodChoosingPage(Movie movie, Showtime showtime, ArrayList<Seat> selectedSeats) {
-        this.showtime = showtime;
-        this.seatList = selectedSeats;
+    public FoodChoosingPage(Order order) {
+        this.order = order;
+        this.movie = order.getMovie();
+        this.showtime = order.getShowtime();
+        this.seatList = order.getSeatList();
 
         setTitle("Online Booking - " + movie.getTitle());
         setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
@@ -252,6 +258,14 @@ public class FoodChoosingPage extends JFrame {
 
         CapsuleButton confirmBtn = new CapsuleButton("開始訂位", BOOK_color, BOOK_color_hover, new Dimension(130, 40));
         confirmBtn.setBounds(250, y, 130, 40);
+        confirmBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                order.setFoodList(selectedFoods);
+                new ConfirmOrderPage(order);
+                dispose(); // optional: close current window
+            }
+        });
         rightPanel.add(confirmBtn);
 
         CapsuleButton backBtn = new CapsuleButton("回上頁", BACK_color, BACK_color_hover, new Dimension(130, 40));
@@ -352,7 +366,7 @@ public class FoodChoosingPage extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             ArrayList<Seat> dummySeats = Seat.dummySeats;
-            new FoodChoosingPage(Movie.dummyMovie, Showtime.dummyShowtime, dummySeats);
+            new FoodChoosingPage(Order.dummyOrder);
         });
     }
 }

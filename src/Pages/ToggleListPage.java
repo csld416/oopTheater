@@ -19,7 +19,7 @@ import LoginRegisterForm.*;
 import Main.StartingPage;
 import admin.AdminMainPage;
 import admin.MovieRegisterPage;
-import global.SessionManager;
+import Data.SessionManager;
 
 public class ToggleListPage extends JFrame {
 

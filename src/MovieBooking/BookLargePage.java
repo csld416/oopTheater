@@ -1,13 +1,19 @@
 package MovieBooking;
 
+import Data.SessionManager;
 import Data.Showtime;
 import Data.Movie;
+import Data.Order;
+import Data.Seat;
+import Data.User;
+import LoginRegisterForm.LoginForm;
 import Main.help.TopBarPanel;
 import MovieBooking.help.BigRoomSeatPanel;
 import global.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookLargePage extends JFrame {
@@ -24,10 +30,14 @@ public class BookLargePage extends JFrame {
     private final Color BOOK_color = new Color(185, 128, 109);
     private final Color BOOK_color_hover = new Color(163, 109, 93);
 
-    private Showtime showtime;
+    private final Movie movie;
+    private final Showtime showtime;
+    private final Order order;
 
-    public BookLargePage(Movie movie, Showtime showtime) {
-        this.showtime = showtime;
+    public BookLargePage(Order order) {
+        this.order = order;
+        this.movie = order.getMovie();
+        this.showtime = order.getShowtime();
         setTitle("Online Booking - " + movie.getTitle());
         setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,10 +109,40 @@ public class BookLargePage extends JFrame {
 
         CapsuleButton confirmBtn = new CapsuleButton("開始訂位", BOOK_color, BOOK_color_hover, new Dimension(130, 40));
         confirmBtn.setBounds(750, buttonY, 130, 40);
+        confirmBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                List<String> selectedSeatLabels = seatPanel.getSeatList();
+                ArrayList<Seat> selectedSeats = new ArrayList<>();
+                for (String label : selectedSeatLabels) {
+                    selectedSeats.add(new Seat(label));
+                }
+                order.setSeatList(selectedSeats);
+                if (order.getUser() == null) {
+                    JFrame frame = BookLargePage.this;
+                    DimLayer dim = new DimLayer(frame);
+                    frame.setGlassPane(dim);
+                    dim.setVisible(true);
+                    SessionManager.returnAfterLogin = frame;
+                    SessionManager.redirectTargetPage = () -> new ConfirmOrderPage(order).setVisible(true);
+                    new LoginForm(frame);
+                } else {
+                    new FoodChoosingPage(order);
+                    BookLargePage.this.dispose();
+                }
+            }
+        });
         bottomPanel.add(confirmBtn);
 
         CapsuleButton backBtn = new CapsuleButton("回上頁", BACK_color, BACK_color_hover, new Dimension(130, 40));
         backBtn.setBounds(750 - 150, buttonY, 130, 40); // 150 px gap from confirm button
+        backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                new ShowtimeChoosePage(order);
+                dispose();
+            }
+        });
         bottomPanel.add(backBtn);
 
         add(contentPanel);
@@ -125,7 +165,7 @@ public class BookLargePage extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new BookLargePage(Movie.dummyMovie, Showtime.dummyShowtime);
+            new BookLargePage(Order.dummyOrder);
         });
     }
 }

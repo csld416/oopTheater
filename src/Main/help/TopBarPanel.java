@@ -11,7 +11,7 @@ import LoginRegisterForm.*;
 import Pages.ToggleListPage;
 import Pages.LatestNewsPage;
 import global.DimLayer;
-import global.SessionManager;
+import Data.SessionManager;
 import global.UIConstants;
 
 import javax.swing.*;
