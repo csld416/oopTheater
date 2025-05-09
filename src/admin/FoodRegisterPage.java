@@ -3,7 +3,7 @@ package admin;
 import admin.FoodRegisterHelp.FoodEntry;
 import admin.topBar.AdminTopBarPanel;
 import global.CapsuleButton;
-import global.UIConstants;
+import GlobalConst.Const;
 import Data.Food;
 
 import javax.swing.*;
@@ -28,7 +28,7 @@ public class FoodRegisterPage extends JFrame {
 
     public FoodRegisterPage() {
         setTitle("餐點管理");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setLocationRelativeTo(null);
@@ -42,17 +42,17 @@ public class FoodRegisterPage extends JFrame {
 
     private void initTopPanel() {
         topPanel = new JPanel(null);
-        topPanel.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topPanel.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         add(topPanel);
 
         AdminTopBarPanel topBar = new AdminTopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topPanel.add(topBar);
     }
 
     private void initMiddlePanel() {
         middlePanel = new JPanel(null);
-        middlePanel.setBounds(0, UIConstants.TOP_BAR_HEIGHT, UIConstants.FRAME_WIDTH, MIDDLE_HEIGHT);
+        middlePanel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH, MIDDLE_HEIGHT);
         middlePanel.setBackground(Color.WHITE);
         add(middlePanel);
 
@@ -64,7 +64,7 @@ public class FoodRegisterPage extends JFrame {
         int labelHeight = CATEGORY_HEIGHT;
 
         Font font = new Font("SansSerif", Font.PLAIN, 14);
-        int x = (UIConstants.FRAME_WIDTH - CATEGORY_WIDTH) / 2;
+        int x = (Const.FRAME_WIDTH - CATEGORY_WIDTH) / 2;
         int y = (MIDDLE_HEIGHT - CATEGORY_HEIGHT) / 2;
 
         for (int i = 0; i < categories.length; i++) {
@@ -135,16 +135,16 @@ public class FoodRegisterPage extends JFrame {
 
     private void initBottomPanel() {
         bottomPanel = new JPanel(null);
-        bottomPanel.setBounds(0, UIConstants.TOP_BAR_HEIGHT + MIDDLE_HEIGHT, UIConstants.FRAME_WIDTH,
-                UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT - MIDDLE_HEIGHT);
-        bottomPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        bottomPanel.setBounds(0, Const.TOP_BAR_HEIGHT + MIDDLE_HEIGHT, Const.FRAME_WIDTH,
+                Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT - MIDDLE_HEIGHT);
+        bottomPanel.setBackground(Const.COLOR_MAIN_LIGHT);
         add(bottomPanel);  // ← add bottomPanel to the JFrame directly
 
         foodEntryScrollPane = new JScrollPane();
-        foodEntryScrollPane.setBounds(UIConstants.FRAME_WIDTH / 2 - 250, 0, 500,
+        foodEntryScrollPane.setBounds(Const.FRAME_WIDTH / 2 - 250, 0, 500,
                 bottomPanel.getHeight());
         foodEntryScrollPane.getVerticalScrollBar().setUnitIncrement(12);
-        foodEntryScrollPane.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        foodEntryScrollPane.setBackground(Const.COLOR_MAIN_LIGHT);
 
         foodEntryScrollPane.setBorder(null);
         foodEntryScrollPane.setViewportBorder(null);
@@ -157,7 +157,7 @@ public class FoodRegisterPage extends JFrame {
         ArrayList<Food> all = Food.getAllFoods();
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        container.setBackground(Const.COLOR_MAIN_LIGHT);
 
         int count = 0;
         for (Food f : all) {

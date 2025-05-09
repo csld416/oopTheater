@@ -4,7 +4,7 @@ import connection.DatabaseConnection;
 import global.CapsuleButton;
 import Data.Movie;
 import Data.Showtime;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +23,7 @@ public class ShowtimeListPanel extends JPanel {
     private final Color NEW_COLOR = new Color(157, 175, 158);
     private final Color NEW_COLOR_HOVOR = new Color(137, 154, 138);
 
-    private final int ADD_X = UIConstants.RIGHT_PANEL_WIDTH - 180;
+    private final int ADD_X = Const.RIGHT_PANEL_WIDTH - 180;
     private final int ADD_Y = 30;
 
     public ShowtimeListPanel(Movie movie) {
@@ -31,8 +31,8 @@ public class ShowtimeListPanel extends JPanel {
         setLayout(null);
         setBackground(Color.WHITE);
 
-        int panelWidth = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
-        int panelHeight = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int panelWidth = Const.FRAME_WIDTH - Const.LEFT_PANEL_WIDTH;
+        int panelHeight = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         JPanel container = new JPanel(null);
         container.setBounds(0, 0, panelWidth, panelHeight);
@@ -95,9 +95,9 @@ public class ShowtimeListPanel extends JPanel {
                 );
 
                 ShowtimeEntryPanel entry = new ShowtimeEntryPanel(showtime);
-                entry.setBounds(30, y, UIConstants.ENTRY_WIDTH, UIConstants.ENTRY_HEIGHT);
+                entry.setBounds(30, y, Const.ENTRY_WIDTH, Const.ENTRY_HEIGHT);
                 listContainer.add(entry);
-                y += UIConstants.ENTRY_HEIGHT + GAP;
+                y += Const.ENTRY_HEIGHT + GAP;
             }
 
             rs.close();

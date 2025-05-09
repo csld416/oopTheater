@@ -1,7 +1,7 @@
 package admin;
 
 import admin.topBar.AdminTopBarPanel;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,7 +15,7 @@ public class RevenuePage extends JFrame {
 
     public RevenuePage() {
         setTitle("Revenue Dashboard");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);  // absolute layout to position top bar and main manually
@@ -28,7 +28,7 @@ public class RevenuePage extends JFrame {
 
     private void initTop() {
         AdminTopBarPanel topBar = new AdminTopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         add(topBar);
     }
 
@@ -37,8 +37,8 @@ public class RevenuePage extends JFrame {
         dashboardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         dashboardPanel.setBackground(new Color(240, 240, 240));
 
-        int topOffset = UIConstants.TOP_BAR_HEIGHT;
-        dashboardPanel.setBounds(0, topOffset, UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT - topOffset);
+        int topOffset = Const.TOP_BAR_HEIGHT;
+        dashboardPanel.setBounds(0, topOffset, Const.FRAME_WIDTH, Const.FRAME_HEIGHT - topOffset);
         add(dashboardPanel);
 
         addDataPanel("Sales", "$500k");

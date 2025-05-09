@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import connection.DatabaseConnection;
-import global.UIConstants;
+import GlobalConst.Const;
 
 public class MovieRegisterPanel extends JPanel {
 
@@ -35,8 +35,8 @@ public class MovieRegisterPanel extends JPanel {
 
     private Movie editingMovie = null;
 
-    private int WIDTH = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
-    private int HEIGHT = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+    private int WIDTH = Const.FRAME_WIDTH - Const.LEFT_PANEL_WIDTH;
+    private int HEIGHT = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
     public MovieRegisterPanel(Movie movie) {
         this();
@@ -47,7 +47,7 @@ public class MovieRegisterPanel extends JPanel {
 
     public MovieRegisterPanel() {
         setLayout(null);
-        setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        setBackground(Const.COLOR_MAIN_LIGHT);
 
         JPanel formContainer = new JPanel(null);
         formContainer.setBounds(0, 0, WIDTH, HEIGHT);

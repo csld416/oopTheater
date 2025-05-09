@@ -2,7 +2,7 @@ package admin.movieRegisterhelp;
 
 import connection.DatabaseConnection;
 import Data.Movie;
-import global.UIConstants;
+import GlobalConst.Const;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
@@ -19,7 +19,7 @@ public class MovieLeftBarPanel extends JPanel {
         this.onAddMovieClicked = onAddMovieClicked;
 
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(UIConstants.LEFT_PANEL_WIDTH, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT));
+        setPreferredSize(new Dimension(Const.LEFT_PANEL_WIDTH, Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT));
 
         // === Panel for listing movie slots ===
         slotsPanel = new JPanel();

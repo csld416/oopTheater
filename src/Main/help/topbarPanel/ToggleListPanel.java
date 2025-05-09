@@ -1,6 +1,6 @@
 package Main.help.topbarPanel;
 
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +9,11 @@ public class ToggleListPanel extends JPanel {
 
     public ToggleListPanel() {
         setLayout(null);
-        setPreferredSize(new Dimension(UIConstants.TOGGLE_ICON_WIDTH, UIConstants.TOGGLE_ICON_WIDTH));
-        setBackground(UIConstants.COLOR_MAIN_DARK);
+        setPreferredSize(new Dimension(Const.TOGGLE_ICON_WIDTH, Const.TOGGLE_ICON_WIDTH));
+        setBackground(Const.COLOR_MAIN_DARK);
         // setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        int iconSize = UIConstants.TOGGLE_ICON_WIDTH; // e.g. 30px for padding
+        int iconSize = Const.TOGGLE_ICON_WIDTH; // e.g. 30px for padding
 
         // === Icon (Left)
         JLabel iconLabel = new JLabel();

@@ -3,7 +3,7 @@ package UserSpace.Panels;
 import connection.DatabaseConnection;
 import global.CapsuleButton;
 import Data.SessionManager;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -38,12 +38,12 @@ public class InfoChange_Panel extends JPanel {
     private final int TITLE_Y = 30;
     private final int FORM_START_Y = 100;
 
-    private final int rightPanelWidth = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
+    private final int rightPanelWidth = Const.FRAME_WIDTH - Const.LEFT_PANEL_WIDTH;
     private final int START_X = (rightPanelWidth - (LABEL_WIDTH + FIELD_WIDTH)) / 2;
 
     public InfoChange_Panel() {
         setLayout(null);
-        setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        setBackground(Const.COLOR_MAIN_LIGHT);
 
         // ====== Title ======
         JLabel titleLabel = new JLabel("修改個人資訊", SwingConstants.CENTER);
@@ -96,12 +96,12 @@ public class InfoChange_Panel extends JPanel {
 
         maleRadioButton = new JRadioButton("男");
         maleRadioButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        maleRadioButton.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        maleRadioButton.setBackground(Const.COLOR_MAIN_LIGHT);
         maleRadioButton.setBounds(START_X + LABEL_WIDTH, FORM_START_Y + FIELD_SPACING_Y * 3, 80, FIELD_HEIGHT);
 
         femaleRadioButton = new JRadioButton("女");
         femaleRadioButton.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        femaleRadioButton.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        femaleRadioButton.setBackground(Const.COLOR_MAIN_LIGHT);
         femaleRadioButton.setBounds(START_X + LABEL_WIDTH + 100, FORM_START_Y + FIELD_SPACING_Y * 3, 80, FIELD_HEIGHT);
 
         genderGroup = new ButtonGroup();

@@ -1,6 +1,8 @@
-package Main;
+package Main.Movie;
 
+import GlobalConst.Const;
 import Data.Movie;
+import Main.Movie.MovieCardPanel;
 import Main.Movie.MovieCardPanel;
 import global.*;
 import javax.swing.*;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 public class MoviePanel extends JPanel {
 
     public MoviePanel() {
-        setLayout(new FlowLayout(FlowLayout.LEFT, UIConstants.MOVIE_CARD_HGAP, UIConstants.MOVIE_CARD_VGAP));
+        setLayout(new FlowLayout(FlowLayout.LEFT, Const.MOVIE_CARD_HGAP, Const.MOVIE_CARD_VGAP));
         setBackground(Color.WHITE);
 
         // Left spacer to create visual centering

@@ -1,8 +1,10 @@
-package Main;
+package Main.help;
 
+import Main.StartingPage;
+import Main.help.ArrowPanel;
 import javax.swing.*;
 import java.awt.*;
-import global.UIConstants;
+import GlobalConst.Const;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -14,15 +16,15 @@ public class GapPanel extends JPanel {
     public GapPanel() {
         setLayout(null); // Manual layout
         setOpaque(false); // Transparent background
-        setPreferredSize(new Dimension(UIConstants.FRAME_WIDTH, UIConstants.GAP_BETWEEN));
+        setPreferredSize(new Dimension(Const.FRAME_WIDTH, Const.GAP_BETWEEN));
 
         // Dimensions and spacing
         int diameter = 40;
         int spacing = 20;
 
         // Absolute positions
-        int y = (UIConstants.GAP_BETWEEN - diameter) / 2;
-        int rightX = UIConstants.FRAME_WIDTH - diameter - 70;
+        int y = (Const.GAP_BETWEEN - diameter) / 2;
+        int rightX = Const.FRAME_WIDTH - diameter - 70;
         int leftX = rightX - diameter - spacing;
 
         // Create arrows

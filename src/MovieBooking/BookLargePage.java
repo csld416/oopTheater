@@ -1,5 +1,6 @@
 package MovieBooking;
 
+import GlobalConst.Const;
 import Data.SessionManager;
 import Data.Showtime;
 import Data.Movie;
@@ -7,7 +8,7 @@ import Data.Order;
 import Data.Seat;
 import Data.User;
 import LoginRegisterForm.LoginForm;
-import Main.help.TopBarPanel;
+import Main.TopBarPanel;
 import MovieBooking.help.BigRoomSeatPanel;
 import global.*;
 
@@ -39,7 +40,7 @@ public class BookLargePage extends JFrame {
         this.movie = order.getMovie();
         this.showtime = order.getShowtime();
         setTitle("Online Booking - " + movie.getTitle());
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null); // Absolute layout
@@ -52,36 +53,36 @@ public class BookLargePage extends JFrame {
 
     private void initTopBar() {
         topBarSlot = new JPanel(null);
-        topBarSlot.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBarSlot.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
 
         TopBarPanel topBar = new TopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topBarSlot.add(topBar);
 
         add(topBarSlot);
     }
 
     private void initContent(Movie movie) {
-        int y = UIConstants.TOP_BAR_HEIGHT;
-        int height = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int y = Const.TOP_BAR_HEIGHT;
+        int height = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         contentPanel = new JPanel();
-        contentPanel.setBounds(0, y, UIConstants.FRAME_WIDTH, height);
-        contentPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        contentPanel.setBounds(0, y, Const.FRAME_WIDTH, height);
+        contentPanel.setBackground(Const.COLOR_MAIN_LIGHT);
         contentPanel.setLayout(null);
 
         // === Title Label ===
         JLabel titleLabel = new JLabel("Booking for: " + movie.getTitle(), SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        titleLabel.setForeground(UIConstants.COLOR_MAIN_LIGHT);
+        titleLabel.setForeground(Const.COLOR_MAIN_LIGHT);
         titleLabel.setOpaque(true);
         titleLabel.setBackground(new Color(68, 149, 145));
-        titleLabel.setBounds(0, 0, UIConstants.FRAME_WIDTH, 30);
+        titleLabel.setBounds(0, 0, Const.FRAME_WIDTH, 30);
         contentPanel.add(titleLabel);
 
         // === Seat Panel ===
         seatPanel = new BigRoomSeatPanel();
-        seatPanel.setBounds((UIConstants.FRAME_WIDTH - 928) / 2, 30, 928, 412);
+        seatPanel.setBounds((Const.FRAME_WIDTH - 928) / 2, 30, 928, 412);
         seatPanel.setOnSeatSelectionChange(this::refreshSeatList);
         contentPanel.add(seatPanel);
 
@@ -89,8 +90,8 @@ public class BookLargePage extends JFrame {
         int belowY = 30 + 412;
 
         JPanel bottomPanel = new JPanel(null);
-        bottomPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
-        bottomPanel.setBounds((UIConstants.FRAME_WIDTH - 928) / 2, belowY, 928, 150);
+        bottomPanel.setBackground(Const.COLOR_MAIN_LIGHT);
+        bottomPanel.setBounds((Const.FRAME_WIDTH - 928) / 2, belowY, 928, 150);
         contentPanel.add(bottomPanel);
 
         // --- Left Section ---
@@ -102,7 +103,7 @@ public class BookLargePage extends JFrame {
         selectedSeatDisplay = new JPanel();
         selectedSeatDisplay.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         selectedSeatDisplay.setBounds(15, 40, 500, 70);
-        selectedSeatDisplay.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        selectedSeatDisplay.setBackground(Const.COLOR_MAIN_LIGHT);
         bottomPanel.add(selectedSeatDisplay);
 
         int buttonY = 30;
@@ -124,9 +125,13 @@ public class BookLargePage extends JFrame {
                     frame.setGlassPane(dim);
                     dim.setVisible(true);
                     SessionManager.returnAfterLogin = frame;
-                    SessionManager.redirectTargetPage = () -> new ConfirmOrderPage(order).setVisible(true);
+                    SessionManager.redirectTargetPage = () -> {
+                        order.setUser(SessionManager.currentUser);
+                        new FoodChoosingPage(order).setVisible(true);
+                    };
                     new LoginForm(frame);
                 } else {
+                    order.setUser(SessionManager.currentUser);
                     new FoodChoosingPage(order);
                     BookLargePage.this.dispose();
                 }

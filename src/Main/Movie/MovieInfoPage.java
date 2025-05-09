@@ -1,7 +1,8 @@
 package Main.Movie;
 
+import GlobalConst.Const;
 import Data.Movie;
-import Main.help.TopBarPanel;
+import Main.TopBarPanel;
 import global.*;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class MovieInfoPage extends JFrame {
         this.movie = movie;
 
         setTitle("Movie Info Page");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -35,22 +36,22 @@ public class MovieInfoPage extends JFrame {
 
     private void initTopBar() {
         topBarSlot = new JPanel(null);
-        topBarSlot.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBarSlot.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
 
         TopBarPanel topBar = new TopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topBarSlot.add(topBar);
 
         add(topBarSlot);
     }
 
     private void initContent() {
-        int y = UIConstants.TOP_BAR_HEIGHT;
-        int height = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int y = Const.TOP_BAR_HEIGHT;
+        int height = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         contentPanel = new JPanel(null);
-        contentPanel.setBounds(0, y, UIConstants.FRAME_WIDTH, height);
-        contentPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        contentPanel.setBounds(0, y, Const.FRAME_WIDTH, height);
+        contentPanel.setBackground(Const.COLOR_MAIN_LIGHT);
 
         // === Poster ===
         int posterX = 60;
@@ -71,11 +72,11 @@ public class MovieInfoPage extends JFrame {
         // === Info ===
         int gapX = 80;
         int infoX = posterX + POSTER_WIDTH + gapX;
-        int infoWidth = UIConstants.FRAME_WIDTH - infoX - 60;
+        int infoWidth = Const.FRAME_WIDTH - infoX - 60;
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        infoPanel.setBackground(Const.COLOR_MAIN_LIGHT);
         infoPanel.setBounds(infoX, posterY, infoWidth, POSTER_HEIGHT);
 
         JLabel titleLabel = new JLabel(movie.getTitle());
@@ -95,7 +96,7 @@ public class MovieInfoPage extends JFrame {
         JTextPane descriptionPane = new JTextPane();
         descriptionPane.setText(movie.getDescription());
         descriptionPane.setEditable(false);
-        descriptionPane.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        descriptionPane.setBackground(Const.COLOR_MAIN_LIGHT);
         descriptionPane.setFont(new Font("SansSerif", Font.PLAIN, 16));
         descriptionPane.setForeground(Color.BLACK);
         descriptionPane.setBorder(null);

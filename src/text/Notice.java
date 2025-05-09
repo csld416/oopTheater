@@ -1,6 +1,6 @@
 package text;
 
-import global.UIConstants;
+import GlobalConst.Const;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -49,7 +49,7 @@ public class Notice extends JFrame {
 
     public static void main(String[] args) {
         JFrame dummyFrame = new JFrame();
-        dummyFrame.setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        dummyFrame.setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         dummyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         dummyFrame.setVisible(true);
         dummyFrame.setLocationRelativeTo(null);

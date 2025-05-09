@@ -1,6 +1,6 @@
 package UserSpace.Panels;
 
-import global.UIConstants;
+import GlobalConst.Const;
 import global.CapsuleButton;
 
 import javax.swing.*;
@@ -21,9 +21,9 @@ public class ChangePassword_Panel extends JPanel {
 
     public ChangePassword_Panel() {
         setLayout(null);
-        setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        setBackground(Const.COLOR_MAIN_LIGHT);
 
-        int availableWidth = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
+        int availableWidth = Const.FRAME_WIDTH - Const.LEFT_PANEL_WIDTH;
 
         int fieldWidth = 300;
         int fieldHeight = 40;

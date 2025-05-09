@@ -3,10 +3,10 @@ package admin.topBar;
 import Main.help.topbarPanel.ToggleListPanel;
 import Main.help.topbarPanel.LogoPanel;
 import Main.help.topbarPanel.StaffPanel;
-import Pages.ToggleListPage;
+import Main.ToggleListPage;
 import admin.AdminMainPage;
 import global.DimLayer;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,23 +17,23 @@ public class AdminTopBarPanel extends JPanel {
 
     public AdminTopBarPanel() {
         setLayout(null);
-        setPreferredSize(new Dimension(UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT));
+        setPreferredSize(new Dimension(Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT));
         setBackground(new Color(169, 183, 198));
 
         // === Logo ===
         LogoPanel logo = new LogoPanel();
-        int verticalPadding = (UIConstants.TOP_BAR_HEIGHT - UIConstants.LOGO_HEIGHT) / 2;
-        logo.setBounds(30, verticalPadding, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
+        int verticalPadding = (Const.TOP_BAR_HEIGHT - Const.LOGO_HEIGHT) / 2;
+        logo.setBounds(30, verticalPadding, Const.LOGO_WIDTH, Const.LOGO_HEIGHT);
         logo.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(logo);
 
         // === Right-side Panels ===
-        int panelWidth = UIConstants.ICON_PANEL_WIDTH;
-        int panelHeight = UIConstants.ICON_PANEL_HEIGHT;
+        int panelWidth = Const.ICON_PANEL_WIDTH;
+        int panelHeight = Const.ICON_PANEL_HEIGHT;
         int spacing = 10;
         int edgePadding = 35;
-        int toggleWidth = UIConstants.TOGGLE_ICON_WIDTH;
-        int startX = UIConstants.FRAME_WIDTH - edgePadding - toggleWidth;
+        int toggleWidth = Const.TOGGLE_ICON_WIDTH;
+        int startX = Const.FRAME_WIDTH - edgePadding - toggleWidth;
 
         // Toggle List Panel
         ToggleListPanel toggle = new ToggleListPanel();

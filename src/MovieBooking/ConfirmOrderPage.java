@@ -1,11 +1,12 @@
 package MovieBooking;
 
+import GlobalConst.Const;
 import Data.Food;
 import Data.Movie;
 import Data.Order;
 import Data.Seat;
 import Data.Showtime;
-import Main.help.TopBarPanel;
+import Main.TopBarPanel;
 import global.*;
 
 import javax.swing.*;
@@ -24,7 +25,7 @@ public class ConfirmOrderPage extends JFrame {
     private JPanel leftPanel;
     private JPanel rightPanel;
 
-    private final Color PRIMARY = UIConstants.COLOR_MAIN_GREEN;
+    private final Color PRIMARY = Const.COLOR_MAIN_GREEN;
     private final Color PRIMARY_HOVER = new Color(60, 130, 125);
     private final Color BACK = new Color(183, 181, 175);
     private final Color BACK_HOVER = new Color(163, 159, 152);
@@ -44,7 +45,7 @@ public class ConfirmOrderPage extends JFrame {
         this.seatList = order.getSeatList();
         this.foodList = order.getFoodList();
         setTitle("付款頁面");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -58,10 +59,10 @@ public class ConfirmOrderPage extends JFrame {
 
     private void initTopBar() {
         topBarPanel = new JPanel(null);
-        topBarPanel.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBarPanel.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
 
         TopBarPanel topBar = new TopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topBarPanel.add(topBar);
 
         add(topBarPanel);
@@ -69,8 +70,8 @@ public class ConfirmOrderPage extends JFrame {
 
     private void initLeft() {
         leftPanel = new JPanel(null);
-        leftPanel.setBounds(0, UIConstants.TOP_BAR_HEIGHT, UIConstants.FRAME_WIDTH / 2, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT);
-        leftPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        leftPanel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH / 2, Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT);
+        leftPanel.setBackground(Const.COLOR_MAIN_LIGHT);
         int y = 30;
 
         JLabel posterLabel = new JLabel();
@@ -144,7 +145,7 @@ public class ConfirmOrderPage extends JFrame {
 
     private void initRight() {
         rightPanel = new JPanel(null);
-        rightPanel.setBounds(UIConstants.FRAME_WIDTH / 2, UIConstants.TOP_BAR_HEIGHT, UIConstants.FRAME_WIDTH / 2, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT);
+        rightPanel.setBounds(Const.FRAME_WIDTH / 2, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH / 2, Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT);
         rightPanel.setBackground(GRAY);
 
         int ticketPrice = 320;
@@ -247,11 +248,11 @@ public class ConfirmOrderPage extends JFrame {
         y += 80;
 
         CapsuleButton cancelBtn = new CapsuleButton("取消", BACK, BACK_HOVER, new Dimension(130, 40));
-        cancelBtn.setBounds(UIConstants.FRAME_WIDTH / 2 / 2 - 150, y, 130, 40);
+        cancelBtn.setBounds(Const.FRAME_WIDTH / 2 / 2 - 150, y, 130, 40);
         rightPanel.add(cancelBtn);
 
         CapsuleButton payBtn = new CapsuleButton("立即付款", PRIMARY, PRIMARY_HOVER, new Dimension(130, 40));
-        payBtn.setBounds(UIConstants.FRAME_WIDTH / 2 / 2 + 20, y, 130, 40);
+        payBtn.setBounds(Const.FRAME_WIDTH / 2 / 2 + 20, y, 130, 40);
         payBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -280,7 +281,7 @@ public class ConfirmOrderPage extends JFrame {
         JLabel noticeLabel = new JLabel("<html><u>購票須知</u></html>");
         noticeLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         noticeLabel.setForeground(new Color(153, 153, 153));
-        noticeLabel.setBounds(UIConstants.FRAME_WIDTH / 2 / 2 - 20, y, 80, 40);
+        noticeLabel.setBounds(Const.FRAME_WIDTH / 2 / 2 - 20, y, 80, 40);
         noticeLabel.setCursor(Cursor.getDefaultCursor());
 
         noticeLabel.addMouseListener(new MouseAdapter() {
@@ -309,7 +310,7 @@ public class ConfirmOrderPage extends JFrame {
 
         termsLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         termsLabel.setForeground(new Color(153, 153, 153));
-        termsLabel.setBounds(UIConstants.FRAME_WIDTH / 2 / 2 + 40, y, 160, 40);
+        termsLabel.setBounds(Const.FRAME_WIDTH / 2 / 2 + 40, y, 160, 40);
         termsLabel.setCursor(Cursor.getDefaultCursor());
 
         termsLabel.addMouseListener(new MouseAdapter() {

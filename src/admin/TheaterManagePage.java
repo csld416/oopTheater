@@ -6,7 +6,7 @@ import admin.theaterManagehelp.TheaterSlot;
 import admin.theaterManagehelp.TheaterRegisterPanel;
 import connection.DatabaseConnection;
 import global.CapsuleButton;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +30,7 @@ public class TheaterManagePage extends JFrame {
 
     public TheaterManagePage() {
         setTitle("影廳管理");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -44,15 +44,15 @@ public class TheaterManagePage extends JFrame {
 
     private void initTop() {
         AdminTopBarPanel topBar = new AdminTopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         add(topBar);
     }
 
     private void initLeft() {
-        int panelHeight = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int panelHeight = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         leftPanel = new JPanel(null);
-        leftPanel.setBounds(0, UIConstants.TOP_BAR_HEIGHT, LEFT_WIDTH, panelHeight);
+        leftPanel.setBounds(0, Const.TOP_BAR_HEIGHT, LEFT_WIDTH, panelHeight);
         leftPanel.setBackground(LEFT_PANEL_COLOR);
 
         JLabel listTitle = new JLabel("影廳一覽", SwingConstants.LEFT);
@@ -89,12 +89,12 @@ public class TheaterManagePage extends JFrame {
     }
 
     private void initRight() {
-        int rightWidth = UIConstants.FRAME_WIDTH - LEFT_WIDTH;
-        int panelHeight = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int rightWidth = Const.FRAME_WIDTH - LEFT_WIDTH;
+        int panelHeight = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         rightPanel = new JPanel(null);
-        rightPanel.setBounds(LEFT_WIDTH, UIConstants.TOP_BAR_HEIGHT, rightWidth, panelHeight);
-        rightPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        rightPanel.setBounds(LEFT_WIDTH, Const.TOP_BAR_HEIGHT, rightWidth, panelHeight);
+        rightPanel.setBackground(Const.COLOR_MAIN_LIGHT);
 
         JLabel placeholder = new JLabel("請選擇左側操作或新增影廳", SwingConstants.CENTER);
         placeholder.setFont(new Font("SansSerif", Font.ITALIC, 16));
@@ -105,8 +105,8 @@ public class TheaterManagePage extends JFrame {
     }
 
     private void loadRegisterPanel() {
-        int rightWidth = UIConstants.FRAME_WIDTH - LEFT_WIDTH;
-        int panelHeight = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int rightWidth = Const.FRAME_WIDTH - LEFT_WIDTH;
+        int panelHeight = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         rightPanel.removeAll();
         TheaterRegisterPanel registerPanel = new TheaterRegisterPanel();
@@ -117,8 +117,8 @@ public class TheaterManagePage extends JFrame {
     }
 
     private void loadRegisterPanel(Theater theater) {
-        int rightWidth = UIConstants.FRAME_WIDTH - LEFT_WIDTH;
-        int panelHeight = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int rightWidth = Const.FRAME_WIDTH - LEFT_WIDTH;
+        int panelHeight = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         rightPanel.removeAll();
         TheaterRegisterPanel registerPanel = new TheaterRegisterPanel(theater);

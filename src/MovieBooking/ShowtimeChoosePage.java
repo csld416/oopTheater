@@ -1,9 +1,10 @@
 package MovieBooking;
 
+import GlobalConst.Const;
 import Data.Showtime;
 import Data.Movie;
 import Data.Order;
-import Main.help.TopBarPanel;
+import Main.TopBarPanel;
 import MovieBooking.help.UserShowtimeEntryPanel;
 import global.*;
 
@@ -30,7 +31,7 @@ public class ShowtimeChoosePage extends JFrame {
         this.order = order;
         this.movie = order.getMovie();
         setTitle("Online Booking - " + movie.getTitle());
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null); // Absolute layout
@@ -45,10 +46,10 @@ public class ShowtimeChoosePage extends JFrame {
 
     private void initTopBar() {
         topBarSlot = new JPanel(null);
-        topBarSlot.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBarSlot.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
 
         TopBarPanel topBar = new TopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topBarSlot.add(topBar);
 
         add(topBarSlot);
@@ -60,16 +61,16 @@ public class ShowtimeChoosePage extends JFrame {
         titleLabel.setForeground(Color.BLACK);
         titleLabel.setBackground(new Color(209, 202, 202));
         titleLabel.setOpaque(true); // enable background rendering
-        titleLabel.setBounds(0, UIConstants.TOP_BAR_HEIGHT, UIConstants.FRAME_WIDTH, 40); // full width
+        titleLabel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH, 40); // full width
         add(titleLabel);
     }
 
     private void initLeft(Movie movie) {
-        int y = UIConstants.TOP_BAR_HEIGHT + 40;
+        int y = Const.TOP_BAR_HEIGHT + 40;
 
         leftPanel = new JPanel(null);
         leftPanel.setBackground(Color.WHITE);
-        leftPanel.setBounds(0, y, LEFT_WIDTH, UIConstants.FRAME_HEIGHT - y);
+        leftPanel.setBounds(0, y, LEFT_WIDTH, Const.FRAME_HEIGHT - y);
 
         // === Poster ===
         ImageIcon posterIcon = new ImageIcon(movie.getPosterPath());
@@ -102,16 +103,16 @@ public class ShowtimeChoosePage extends JFrame {
     }
 
     private void initRight(Movie movie) {
-        int topY = UIConstants.TOP_BAR_HEIGHT + 40;
+        int topY = Const.TOP_BAR_HEIGHT + 40;
         int rightX = LEFT_WIDTH;
-        int rightWidth = UIConstants.FRAME_WIDTH - rightX;
+        int rightWidth = Const.FRAME_WIDTH - rightX;
 
         rightPanel = new JPanel(null);
-        rightPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
-        rightPanel.setBounds(rightX, topY, rightWidth, UIConstants.FRAME_HEIGHT - topY);
+        rightPanel.setBackground(Const.COLOR_MAIN_LIGHT);
+        rightPanel.setBounds(rightX, topY, rightWidth, Const.FRAME_HEIGHT - topY);
 
         JScrollPane scroll = new JScrollPane(rightPanel);
-        scroll.setBounds(rightX, topY, rightWidth, UIConstants.FRAME_HEIGHT - topY);
+        scroll.setBounds(rightX, topY, rightWidth, Const.FRAME_HEIGHT - topY);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
         add(scroll);
@@ -144,12 +145,12 @@ public class ShowtimeChoosePage extends JFrame {
 
                 int x = (rightWidth - entryWidth) / 2;
                 entry.setBounds(x, yy, entryWidth, entryHeight);
+                order.setShowtime(s);
                 entry.setClickListener(e -> {
                     if (s.getTheaterTypeIsBig()) {
-                        order.setShowtime(s);
                         new BookLargePage(order);
                     } else {
-                        new BookSmallPage(movie, s);
+                        new BookSmallPage(order);
                     }
                     dispose(); // Close the current booking page
                 });

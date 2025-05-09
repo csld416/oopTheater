@@ -1,6 +1,6 @@
 package Main.help.topbarPanel;
 
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +11,11 @@ public class OnShelfMoviePanel extends JPanel {
 
     public OnShelfMoviePanel() {
         setLayout(null);
-        setPreferredSize(new Dimension(UIConstants.ICON_PANEL_WIDTH, UIConstants.ICON_PANEL_HEIGHT));
-        setBackground(UIConstants.COLOR_MAIN_DARK);
+        setPreferredSize(new Dimension(Const.ICON_PANEL_WIDTH, Const.ICON_PANEL_HEIGHT));
+        setBackground(Const.COLOR_MAIN_DARK);
         // setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        int iconSize = UIConstants.ICON_PANEL_HEIGHT - 10; // e.g. 30px for padding
+        int iconSize = Const.ICON_PANEL_HEIGHT - 10; // e.g. 30px for padding
 
         // === Icon (Left)
         JLabel iconLabel = new JLabel();
@@ -29,7 +29,7 @@ public class OnShelfMoviePanel extends JPanel {
         // === Label (Right)
         textLabel = new JLabel("上映電影");
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        textLabel.setBounds(iconSize + 20, 0, UIConstants.ICON_PANEL_WIDTH - iconSize - 10, UIConstants.ICON_PANEL_HEIGHT);
+        textLabel.setBounds(iconSize + 20, 0, Const.ICON_PANEL_WIDTH - iconSize - 10, Const.ICON_PANEL_HEIGHT);
         textLabel.setVerticalAlignment(SwingConstants.CENTER);
         add(textLabel);
     }

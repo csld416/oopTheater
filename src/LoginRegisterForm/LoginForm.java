@@ -5,6 +5,7 @@
 package LoginRegisterForm;
 
 import Data.SessionManager;
+import Data.User;
 import connection.DatabaseConnection;
 import Main.StartingPage;
 import java.awt.AWTEvent;
@@ -154,7 +155,8 @@ public class LoginForm {
                 if (checkLogin(username, password)) {
                     frame.dispose();
                     substrateFrame.dispose();
-                    SessionManager.currentUserPhone = username;
+                    User user = fetchUserByPhone(username);
+                    SessionManager.currentUser = user;
                     if (SessionManager.redirectTargetPage != null) {
                         SessionManager.redirectTargetPage.run();
                         SessionManager.redirectTargetPage = null;
@@ -254,13 +256,32 @@ public class LoginForm {
         return false;
     }
 
+    private User fetchUserByPhone(String phone) {
+        Connection conn = dbConnection.getConnection();
+        if (conn != null) {
+            try {
+                String query = "SELECT * FROM users WHERE phone = ?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, phone);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String name = rs.getString("fullname");
+                    String phoneNumber = rs.getString("phone");
+                    return new User(id, name, phoneNumber);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         JFrame dummyFrame = new JFrame();
         dummyFrame.setSize(W, H);
         dummyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         dummyFrame.setVisible(true);
-        
-        
 
         new LoginForm(dummyFrame);
     }

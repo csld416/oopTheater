@@ -6,11 +6,21 @@ public class User {
     private String name;
     private String phoneNumber;
     
+    private static User currUser;
+
     // === Constructor ===
     public User(int id, String name, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
+    }
+
+    public static User getCurrentUser() {
+        return currUser;
+    }
+
+    public static void setCurrentUser(User user) {
+        currUser = user;
     }
 
     // === Getters ===

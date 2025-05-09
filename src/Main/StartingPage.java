@@ -4,11 +4,12 @@
  */
 package Main;
 
+import GlobalConst.Const;
+import Main.Movie.MoviePanel;
+import Main.help.GapPanel;
 import Main.Movie.MovieCardPanel;
-import Main.help.TopBarPanel;
 import connection.DatabaseConnection;
 import Data.Movie;
-import global.UIConstants;
 import java.awt.Dimension;
 
 import javax.swing.*;
@@ -29,7 +30,7 @@ public class StartingPage extends JFrame {
 
     public StartingPage() {
         setTitle("Starting Page");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null); // Absolute layout for precise positioning
@@ -47,10 +48,10 @@ public class StartingPage extends JFrame {
 
     private void initTopBarSlot() {
         topBarSlot = new JPanel(null); // Allow absolute placement inside
-        topBarSlot.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBarSlot.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
 
         TopBarPanel topBar = new TopBarPanel(); // your custom panel
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topBarSlot.add(topBar);
 
         add(topBarSlot);
@@ -58,7 +59,7 @@ public class StartingPage extends JFrame {
 
     private void initGapSlot() {
         gapPanel = new GapPanel();  // make it a field
-        gapPanel.setBounds(0, UIConstants.TOP_BAR_HEIGHT, UIConstants.FRAME_WIDTH, UIConstants.GAP_BETWEEN);
+        gapPanel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH, Const.GAP_BETWEEN);
         add(gapPanel);
         gapPanel.revalidate();  // 🔥 Force layout manager to layout its children
         gapPanel.repaint();     // 🔥 Force repaint so doLayout() has an effect
@@ -66,14 +67,14 @@ public class StartingPage extends JFrame {
 
     private void initMovieSlot() {
         movieSlot = new JPanel();
-        int y = UIConstants.TOP_BAR_HEIGHT + UIConstants.GAP_BETWEEN;
-        int height = UIConstants.FRAME_HEIGHT - y;
+        int y = Const.TOP_BAR_HEIGHT + Const.GAP_BETWEEN;
+        int height = Const.FRAME_HEIGHT - y;
 
-        movieSlot.setBounds(0, y, UIConstants.FRAME_WIDTH, height);
+        movieSlot.setBounds(0, y, Const.FRAME_WIDTH, height);
         movieSlot.setLayout(null);
 
         moviePanel = new MoviePanel(); // ✅ Initialize here
-        moviePanel.setBounds(0, 0, UIConstants.FRAME_WIDTH, height);
+        moviePanel.setBounds(0, 0, Const.FRAME_WIDTH, height);
 
         movieSlot.add(moviePanel);
         add(movieSlot);
@@ -99,11 +100,9 @@ public class StartingPage extends JFrame {
                         rs.getString("poster_path")
                 ));
             }
-
             rs.close();
             stmt.close();
             conn.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

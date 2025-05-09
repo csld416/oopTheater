@@ -1,10 +1,10 @@
-package MovieBooking.help;
+package Main.TicketHelp;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 
-public class TicketPanel extends JPanel {
+public class TicketPanel_2 extends JPanel {
 
     private final int PANEL_WIDTH = 400;
     private final int PANEL_HEIGHT = 200;
@@ -12,7 +12,7 @@ public class TicketPanel extends JPanel {
     private final int SIDE_RADIUS = 12;
     private final int SIDE_COUNT = 3;
 
-    public TicketPanel() {
+    public TicketPanel_2() {
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setOpaque(false);
     }
@@ -61,7 +61,7 @@ public class TicketPanel extends JPanel {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(600, 400);
             frame.setLayout(new FlowLayout(FlowLayout.CENTER, 80, 80));
-            frame.add(new TicketPanel());
+            frame.add(new TicketPanel_2());
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });

@@ -1,6 +1,6 @@
 package admin.theaterManagehelp;
 
-import global.UIConstants;
+import GlobalConst.Const;
 import global.ToggleButtonPanel;
 
 import javax.swing.*;
@@ -17,8 +17,8 @@ public class TheaterSlot extends JPanel {
 
     public TheaterSlot(String theaterName, boolean isActive) {
         setLayout(null);
-        setPreferredSize(new Dimension(UIConstants.LEFT_PANEL_WIDTH, 60));
-        setMaximumSize(new Dimension(UIConstants.LEFT_PANEL_WIDTH, 60));
+        setPreferredSize(new Dimension(Const.LEFT_PANEL_WIDTH, 60));
+        setMaximumSize(new Dimension(Const.LEFT_PANEL_WIDTH, 60));
         setBackground(new Color(242, 234, 230));
         setBorder(new EmptyBorder(10, 20, 10, 20));
         setOpaque(false);

@@ -3,7 +3,7 @@ package admin.showtimehelp;
 import connection.DatabaseConnection;
 import global.CapsuleButton;
 import Data.Movie;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,10 +17,10 @@ public class ShowtimeRegisterPanel extends JPanel {
 
     public ShowtimeRegisterPanel(Movie movie) {
         setLayout(null);
-        setBackground(UIConstants.COLOR_MAIN_LIGHT);
-        setBounds(0, 0, UIConstants.RIGHT_PANEL_WIDTH, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT);
+        setBackground(Const.COLOR_MAIN_LIGHT);
+        setBounds(0, 0, Const.RIGHT_PANEL_WIDTH, Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT);
 
-        int panelWidth = UIConstants.RIGHT_PANEL_WIDTH;
+        int panelWidth = Const.RIGHT_PANEL_WIDTH;
         int centerX = panelWidth / 2;
         int y = 80;
 

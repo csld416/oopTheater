@@ -1,7 +1,7 @@
 package UserSpace.Panels;
 
 import global.CapsuleButton;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,11 +15,11 @@ public class UserSpace_Panel extends JPanel {
     private final int SPACE_BETWEEN_ROWS = 20;
     private final int BUTTON_Y_OFFSET = 220;
 
-    private final int rightPanelWidth = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
+    private final int rightPanelWidth = Const.FRAME_WIDTH - Const.LEFT_PANEL_WIDTH;
 
     public UserSpace_Panel() {
         setLayout(null);
-        setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        setBackground(Const.COLOR_MAIN_LIGHT);
 
         // ====== Load Icon ======
         JLabel userIcon = new JLabel();

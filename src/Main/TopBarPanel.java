@@ -1,18 +1,15 @@
-package Main.help;
+package Main;
 
+import GlobalConst.Const;
 import Main.help.topbarPanel.MyTicketSpacePanel;
 import Main.help.topbarPanel.ToggleListPanel;
 import Main.help.topbarPanel.LogoPanel;
 import Main.help.topbarPanel.LatestNewsPanel;
 import Main.help.topbarPanel.PersonalSpacePanel;
 import UserSpace.PersonalSpacePage;
-import Pages.*;
 import LoginRegisterForm.*;
-import Pages.ToggleListPage;
-import Pages.LatestNewsPage;
 import global.DimLayer;
 import Data.SessionManager;
-import global.UIConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,22 +20,22 @@ public class TopBarPanel extends JPanel {
 
     public TopBarPanel() {
         setLayout(null);
-        setPreferredSize(new Dimension(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT));
+        setPreferredSize(new Dimension(Const.FRAME_WIDTH, Const.FRAME_HEIGHT));
         setBackground(new Color(169, 183, 198));
 
         // Logo Panel (redirects to StartingPage)
         LogoPanel logo = new LogoPanel();
-        int verticalPadding = (UIConstants.TOP_BAR_HEIGHT - UIConstants.LOGO_HEIGHT) / 2;
-        logo.setBounds(30, verticalPadding, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
+        int verticalPadding = (Const.TOP_BAR_HEIGHT - Const.LOGO_HEIGHT) / 2;
+        logo.setBounds(30, verticalPadding, Const.LOGO_WIDTH, Const.LOGO_HEIGHT);
         add(logo);
 
         // Function Panels from right to left
-        int panelWidth = UIConstants.ICON_PANEL_WIDTH;
-        int panelHeight = UIConstants.ICON_PANEL_HEIGHT;
+        int panelWidth = Const.ICON_PANEL_WIDTH;
+        int panelHeight = Const.ICON_PANEL_HEIGHT;
         int spacing = 10;
-        int toggleWidth = UIConstants.TOGGLE_ICON_WIDTH;
+        int toggleWidth = Const.TOGGLE_ICON_WIDTH;
         int edgePadding = 35;
-        int startX = UIConstants.FRAME_WIDTH - edgePadding - toggleWidth;
+        int startX = Const.FRAME_WIDTH - edgePadding - toggleWidth;
 
         // Toggle List Panel
         ToggleListPanel toggle = new ToggleListPanel();

@@ -1,5 +1,6 @@
-package Pages;
+package Main;
 
+import GlobalConst.Const;
 import Main.help.topbarPanel.MyTicketSpacePanel;
 import Main.help.topbarPanel.LatestNewsPanel;
 import Main.help.topbarPanel.PersonalSpacePanel;
@@ -7,7 +8,6 @@ import Main.help.topbarPanel.LogoutPanel;
 import Main.help.topbarPanel.OnShelfMoviePanel;
 import Main.help.topbarPanel.StaffPanel;
 import UserSpace.PersonalSpacePage;
-import global.UIConstants;
 import Main.help.topbarPanel.LogoPanel;
 
 import javax.swing.*;
@@ -37,7 +37,7 @@ public class ToggleListPage extends JFrame {
     public ToggleListPage(JFrame substrateFrame) {
         this.substrateFrame = substrateFrame;
         setTitle("Toggle List Page");
-        setSize(UIConstants.TOGGLE_PAGE_WIDTH, UIConstants.TOGGLE_PAGE_HEIGHT);
+        setSize(Const.TOGGLE_PAGE_WIDTH, Const.TOGGLE_PAGE_HEIGHT);
         setUndecorated(true);
         setLocationRelativeTo(substrateFrame);
         setAlwaysOnTop(true);
@@ -70,8 +70,8 @@ public class ToggleListPage extends JFrame {
     private void initUI() {
         // === Logo panel ===
         LogoPanel logo = new LogoPanel();
-        int logoX = (UIConstants.TOGGLE_PAGE_WIDTH - UIConstants.LOGO_WIDTH) / 2;
-        logo.setBounds(logoX, LOGO_Y, UIConstants.LOGO_WIDTH, UIConstants.LOGO_HEIGHT);
+        int logoX = (Const.TOGGLE_PAGE_WIDTH - Const.LOGO_WIDTH) / 2;
+        logo.setBounds(logoX, LOGO_Y, Const.LOGO_WIDTH, Const.LOGO_HEIGHT);
         logo.setOpaque(true);
         logo.setBackground(backgroundColor);
         logo.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -96,10 +96,10 @@ public class ToggleListPage extends JFrame {
         add(logo);
 
         int spacing = 20;
-        int panelWidth = UIConstants.ICON_PANEL_WIDTH;
-        int panelHeight = UIConstants.ICON_PANEL_HEIGHT;
+        int panelWidth = Const.ICON_PANEL_WIDTH;
+        int panelHeight = Const.ICON_PANEL_HEIGHT;
         int totalWidthRow = panelWidth * 3 + spacing * 2;
-        int startX = (UIConstants.TOGGLE_PAGE_WIDTH - totalWidthRow) / 2;
+        int startX = (Const.TOGGLE_PAGE_WIDTH - totalWidthRow) / 2;
 
         int row1Y = LOGO_Y + FIRST_ROW_Y_SPACING;
 

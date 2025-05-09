@@ -1,7 +1,8 @@
 package UserSpace;
 
+import GlobalConst.Const;
 import Data.SessionManager;
-import Main.help.TopBarPanel;
+import Main.TopBarPanel;
 import Main.StartingPage;
 import UserSpace.Panels.*;
 import UserSpace.Buttons.*;
@@ -24,7 +25,7 @@ public class PersonalSpacePage extends JFrame {
 
     public PersonalSpacePage() {
         setTitle("Personal Space Page");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null); // Absolute layout
@@ -38,19 +39,19 @@ public class PersonalSpacePage extends JFrame {
 
     private void initTopBar() {
         topBarSlot = new JPanel(null);
-        topBarSlot.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBarSlot.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
 
         TopBarPanel topBar = new TopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topBarSlot.add(topBar);
 
         add(topBarSlot);
     }
 
     private void initLeftPanel() {
-        int y = UIConstants.TOP_BAR_HEIGHT;
-        int height = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
-        int leftPanelWidth = (int) (UIConstants.FRAME_WIDTH * 0.25); // About 25% for left panel
+        int y = Const.TOP_BAR_HEIGHT;
+        int height = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
+        int leftPanelWidth = (int) (Const.FRAME_WIDTH * 0.25); // About 25% for left panel
 
         leftPanel = new JPanel(null);
         leftPanel.setBounds(0, y, leftPanelWidth, height);
@@ -191,14 +192,14 @@ public class PersonalSpacePage extends JFrame {
     }
 
     private void initRightPanel() {
-        int y = UIConstants.TOP_BAR_HEIGHT;
-        int height = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
-        int leftPanelWidth = (int) (UIConstants.FRAME_WIDTH * 0.25);
-        int rightPanelWidth = UIConstants.FRAME_WIDTH - leftPanelWidth;
+        int y = Const.TOP_BAR_HEIGHT;
+        int height = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
+        int leftPanelWidth = (int) (Const.FRAME_WIDTH * 0.25);
+        int rightPanelWidth = Const.FRAME_WIDTH - leftPanelWidth;
 
         rightPanel = new UserSpace_Panel();
         rightPanel.setBounds(leftPanelWidth, y, rightPanelWidth, height);
-        rightPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        rightPanel.setBackground(Const.COLOR_MAIN_LIGHT);
 
         add(rightPanel);
     }

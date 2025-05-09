@@ -3,7 +3,7 @@ package admin.theaterManagehelp;
 import Data.Theater;
 import admin.TheaterManagePage;
 import global.CapsuleButton;
-import global.UIConstants;
+import GlobalConst.Const;
 import connection.DatabaseConnection;
 
 import javax.swing.*;
@@ -35,14 +35,14 @@ public class TheaterRegisterPanel extends JPanel {
 
     public TheaterRegisterPanel() {
         setLayout(null);
-        setPreferredSize(new Dimension(UIConstants.FRAME_WIDTH - 300, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT));
-        setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        setPreferredSize(new Dimension(Const.FRAME_WIDTH - 300, Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT));
+        setBackground(Const.COLOR_MAIN_LIGHT);
 
         // === Title Bar ===
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BorderLayout());
-        titlePanel.setBounds(0, 0, UIConstants.FRAME_WIDTH - 300, 30);
-        titlePanel.setBackground(UIConstants.COLOR_MAIN_GREEN);
+        titlePanel.setBounds(0, 0, Const.FRAME_WIDTH - 300, 30);
+        titlePanel.setBackground(Const.COLOR_MAIN_GREEN);
 
         JLabel title = new JLabel("Theater Registration", SwingConstants.CENTER);
         title.setForeground(Color.WHITE);

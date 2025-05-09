@@ -3,7 +3,7 @@ package admin.showtimehelp;
 import connection.DatabaseConnection;
 import global.CapsuleButton;
 import Data.Movie;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,8 +28,8 @@ public class ShowtimeFormPanel extends JPanel {
         setLayout(null);
         setBackground(Color.WHITE);
 
-        int panelWidth = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
-        int panelHeight = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int panelWidth = Const.FRAME_WIDTH - Const.LEFT_PANEL_WIDTH;
+        int panelHeight = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         JPanel form = new JPanel(null);
         form.setBounds(0, 0, panelWidth, panelHeight);

@@ -5,10 +5,10 @@ import Data.Movie;
 import Data.Order;
 import Data.Seat;
 import Data.Showtime;
-import Main.help.TopBarPanel;
-import Pages.MyTicketSpacePage;
+import Main.TopBarPanel;
+import Main.MyTicketSpacePage;
 import global.CapsuleButton;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +42,7 @@ public class PayPage extends JFrame {
         this.total = order.getTotalCost();
 
         setTitle("付款頁面");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -56,10 +56,10 @@ public class PayPage extends JFrame {
 
     private void initTopBar() {
         topBarPanel = new JPanel(null);
-        topBarPanel.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBarPanel.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
 
         TopBarPanel topBar = new TopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topBarPanel.add(topBar);
 
         add(topBarPanel);
@@ -67,8 +67,8 @@ public class PayPage extends JFrame {
 
     private void initLeft() {
         leftPanel = new JPanel(null);
-        leftPanel.setBounds(0, UIConstants.TOP_BAR_HEIGHT, UIConstants.FRAME_WIDTH / 2, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT);
-        leftPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        leftPanel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH / 2, Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT);
+        leftPanel.setBackground(Const.COLOR_MAIN_LIGHT);
         int y = 30;
 
         JLabel posterLabel = new JLabel();
@@ -149,18 +149,18 @@ public class PayPage extends JFrame {
     }
 
     private int centerX(int width) {
-        return (UIConstants.FRAME_WIDTH / 2 - width) / 2;
+        return (Const.FRAME_WIDTH / 2 - width) / 2;
     }
 
     private void initRight() {
         rightPanel = new JPanel(null);
-        rightPanel.setBounds(UIConstants.FRAME_WIDTH / 2, UIConstants.TOP_BAR_HEIGHT,
-                UIConstants.FRAME_WIDTH / 2, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT);
+        rightPanel.setBounds(Const.FRAME_WIDTH / 2, Const.TOP_BAR_HEIGHT,
+                Const.FRAME_WIDTH / 2, Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT);
         rightPanel.setBackground(GRAY);
         add(rightPanel);
 
         int y = 40;
-        int centerxx = UIConstants.FRAME_WIDTH / 2 / 2;
+        int centerxx = Const.FRAME_WIDTH / 2 / 2;
 
         ImageHoverPanel linePayPanel = new ImageHoverPanel("src/Qrcode/LINE_Pay_logo.png");
         linePayPanel.setBounds(centerxx - 150, y, 300, 60);
@@ -195,7 +195,7 @@ public class PayPage extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 dispose();  // or any logic to close the PayPage
-                Order.storeOrderInDB(order);
+                Order.insertOrder(order);
                 new MyTicketSpacePage();
             }
         });

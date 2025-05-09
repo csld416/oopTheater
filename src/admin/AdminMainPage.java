@@ -2,7 +2,7 @@ package admin;
 
 import admin.topBar.AdminTopBarPanel;
 import global.CapsuleButton;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,7 @@ public class AdminMainPage extends JFrame {
 
     public AdminMainPage() {
         setTitle("Admin Main Page");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setLocationRelativeTo(null);
@@ -26,15 +26,15 @@ public class AdminMainPage extends JFrame {
 
     private void initTop() {
         AdminTopBarPanel topBar = new AdminTopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         add(topBar);
     }
 
     private void initMain() {
         JPanel centerPanel = new JPanel(null);
-        centerPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
-        centerPanel.setBounds(0, UIConstants.TOP_BAR_HEIGHT,
-                UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT);
+        centerPanel.setBackground(Const.COLOR_MAIN_LIGHT);
+        centerPanel.setBounds(0, Const.TOP_BAR_HEIGHT,
+                Const.FRAME_WIDTH, Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT);
 
         int buttonWidth = 180;
         int buttonHeight = 50;
@@ -47,7 +47,7 @@ public class AdminMainPage extends JFrame {
         int startY = (centerPanel.getHeight() - totalHeight) / 2;
 
         int totalWidth = buttonWidth * columns + spacingX;
-        int startX = (UIConstants.FRAME_WIDTH - totalWidth) / 2;
+        int startX = (Const.FRAME_WIDTH - totalWidth) / 2;
 
         CapsuleButton[] buttons = new CapsuleButton[]{
             new CapsuleButton("電影管理", new Color(70, 130, 180), new Color(100, 149, 237), new Dimension(buttonWidth, buttonHeight)),

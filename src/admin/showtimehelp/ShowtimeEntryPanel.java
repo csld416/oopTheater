@@ -3,7 +3,7 @@ package admin.showtimehelp;
 import global.CapsuleButton;
 import Data.Showtime;
 import Data.Theater;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +18,8 @@ public class ShowtimeEntryPanel extends JPanel {
     private final Color BG_COLOR = Color.WHITE;
     private final int ARC_RADIUS = 30;
 
-    private final int WIDTH = UIConstants.ENTRY_WIDTH;
-    private final int HEIGHT = UIConstants.ENTRY_HEIGHT;
+    private final int WIDTH = Const.ENTRY_WIDTH;
+    private final int HEIGHT = Const.ENTRY_HEIGHT;
 
     private final Dimension d = new Dimension(45, 20);
 
@@ -107,7 +107,7 @@ public class ShowtimeEntryPanel extends JPanel {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(650, 200);
             frame.setLayout(null);
-            frame.getContentPane().setBackground(UIConstants.COLOR_MAIN_LIGHT);
+            frame.getContentPane().setBackground(Const.COLOR_MAIN_LIGHT);
 
             Showtime s = new Showtime(
                     1,

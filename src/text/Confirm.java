@@ -3,7 +3,7 @@ package text;
 import Data.*;
 import MovieBooking.PayPage;
 import global.CapsuleButton;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +39,7 @@ public class Confirm extends JFrame {
         add(label);
 
         y += 40;
-        CapsuleButton confirmBtn = new CapsuleButton("是", UIConstants.COLOR_MAIN_GREEN, new Color(60, 130, 125), new Dimension(60, 35));
+        CapsuleButton confirmBtn = new CapsuleButton("是", Const.COLOR_MAIN_GREEN, new Color(60, 130, 125), new Dimension(60, 35));
         confirmBtn.setBounds(190, y, 60, 35);
         add(confirmBtn);
 
@@ -102,7 +102,7 @@ public class Confirm extends JFrame {
 
     public static void main(String[] args) {
         JFrame dummy = new JFrame();
-        dummy.setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        dummy.setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         dummy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         dummy.setVisible(true);
         new Confirm(dummy, Order.dummyOrder);

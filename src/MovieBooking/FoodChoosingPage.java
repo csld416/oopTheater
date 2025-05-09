@@ -1,11 +1,12 @@
 package MovieBooking;
 
+import GlobalConst.Const;
 import Data.Food;
 import Data.Showtime;
 import Data.Movie;
 import Data.Order;
 import Data.Seat;
-import Main.help.TopBarPanel;
+import Main.TopBarPanel;
 import MovieBooking.foodPanels.FoodEntry;
 import global.*;
 
@@ -45,8 +46,8 @@ public class FoodChoosingPage extends JFrame {
     private Order order;
 
     private JPanel foodContentPanel;
-    private final int FOOD_PANEL_HEIGHT = UIConstants.FOOD_PANEL_HEIGHT;
-    private final int FOOD_PANEL_WIDTH = UIConstants.FRAME_WIDTH / 2;
+    private final int FOOD_PANEL_HEIGHT = Const.FOOD_PANEL_HEIGHT;
+    private final int FOOD_PANEL_WIDTH = Const.FRAME_WIDTH / 2;
     private final int FOOD_PANEL_Y = gap10 * 2 + 40;
 
     private int total = 0;
@@ -60,7 +61,7 @@ public class FoodChoosingPage extends JFrame {
         this.seatList = order.getSeatList();
 
         setTitle("Online Booking - " + movie.getTitle());
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -75,10 +76,10 @@ public class FoodChoosingPage extends JFrame {
 
     private void initTopBar() {
         topBarSlot = new JPanel(null);
-        topBarSlot.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBarSlot.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
 
         TopBarPanel topBar = new TopBarPanel();
-        topBar.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topBar.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         topBarSlot.add(topBar);
 
         add(topBarSlot);
@@ -89,17 +90,17 @@ public class FoodChoosingPage extends JFrame {
         titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
         titleLabel.setForeground(Color.BLACK);
         titleLabel.setOpaque(true);
-        titleLabel.setBackground(UIConstants.COLOR_TITLE);
-        titleLabel.setBounds(0, UIConstants.TOP_BAR_HEIGHT, UIConstants.FRAME_WIDTH, 30);
+        titleLabel.setBackground(Const.COLOR_TITLE);
+        titleLabel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH, 30);
         add(titleLabel);
     }
 
     private void initLeft() {
-        int y = UIConstants.TOP_BAR_HEIGHT + 30;
-        int height = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int y = Const.TOP_BAR_HEIGHT + 30;
+        int height = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         leftPanel = new JPanel(null);
-        leftPanel.setBounds(0, y, UIConstants.FRAME_WIDTH / 2, height);
+        leftPanel.setBounds(0, y, Const.FRAME_WIDTH / 2, height);
         leftPanel.setBackground(new Color(245, 245, 245));
 
         initLeftUp();
@@ -109,7 +110,7 @@ public class FoodChoosingPage extends JFrame {
 
     private void initLeftUp() {
         int leftUpHeight = 60;
-        int leftUpWidth = UIConstants.FRAME_WIDTH / 2;
+        int leftUpWidth = Const.FRAME_WIDTH / 2;
 
         // Wrapper panel for the top-left category bar
         JPanel leftUpPanel = new JPanel(null);
@@ -176,7 +177,7 @@ public class FoodChoosingPage extends JFrame {
 
         // === Food List Panel ===
         foodContentPanel = new JPanel(new BorderLayout());
-        int xx = UIConstants.FRAME_WIDTH / 4 - FOOD_PANEL_WIDTH / 2;
+        int xx = Const.FRAME_WIDTH / 4 - FOOD_PANEL_WIDTH / 2;
         foodContentPanel.setBounds(xx, FOOD_PANEL_Y, FOOD_PANEL_WIDTH, FOOD_PANEL_HEIGHT);
         foodContentPanel.setBackground(GRAY);
         leftPanel.add(foodContentPanel);
@@ -185,12 +186,12 @@ public class FoodChoosingPage extends JFrame {
     }
 
     private void initRight(Movie movie) {
-        int y = UIConstants.TOP_BAR_HEIGHT + 30;
-        int height = UIConstants.FRAME_HEIGHT - UIConstants.TOP_BAR_HEIGHT;
+        int y = Const.TOP_BAR_HEIGHT + 30;
+        int height = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
 
         rightPanel = new JPanel(null);
-        rightPanel.setBounds(UIConstants.FRAME_WIDTH / 2, y, UIConstants.FRAME_WIDTH / 2, height);
-        rightPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        rightPanel.setBounds(Const.FRAME_WIDTH / 2, y, Const.FRAME_WIDTH / 2, height);
+        rightPanel.setBackground(Const.COLOR_MAIN_LIGHT);
 
         y = 30;
 
@@ -234,7 +235,7 @@ public class FoodChoosingPage extends JFrame {
         selectedSeatDisplay = new JPanel();
         selectedSeatDisplay.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         selectedSeatDisplay.setBounds(30, y, 300, 30);
-        selectedSeatDisplay.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        selectedSeatDisplay.setBackground(Const.COLOR_MAIN_LIGHT);
         for (Seat seat : seatList) {
             JLabel seatLabel = new JLabel(seat.getLabel());
             seatLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -251,7 +252,7 @@ public class FoodChoosingPage extends JFrame {
 
         selectedFoodDisplayArea = new JPanel();
         selectedFoodDisplayArea.setLayout(new BoxLayout(selectedFoodDisplayArea, BoxLayout.Y_AXIS));
-        selectedFoodDisplayArea.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        selectedFoodDisplayArea.setBackground(Const.COLOR_MAIN_LIGHT);
         selectedFoodDisplayArea.setBounds(30, y, 300, 100);
         rightPanel.add(selectedFoodDisplayArea);
         y += 120;
@@ -331,7 +332,7 @@ public class FoodChoosingPage extends JFrame {
         );
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(12);
-        scrollPane.getViewport().setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        scrollPane.getViewport().setBackground(Const.COLOR_MAIN_LIGHT);
 
         // Replace old bounds-based layout with BorderLayout for flexibility
         foodContentPanel.setLayout(new BorderLayout());

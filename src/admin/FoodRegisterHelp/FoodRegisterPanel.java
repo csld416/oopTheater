@@ -3,7 +3,7 @@ package admin.FoodRegisterHelp;
 import connection.DatabaseConnection;
 import global.CapsuleButton;
 import global.ToggleButtonPanel;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +45,7 @@ public class FoodRegisterPanel extends JPanel {
 
         JLabel titleLabel = new JLabel("新增品項", SwingConstants.CENTER);
         titleLabel.setOpaque(true);
-        titleLabel.setBackground(UIConstants.COLOR_MAIN_GREEN);
+        titleLabel.setBackground(Const.COLOR_MAIN_GREEN);
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
         titleLabel.setBounds(0, 0, 500, 50);

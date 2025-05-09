@@ -1,10 +1,10 @@
 package Main.Movie;
 
-import Main.HoverButtonPanel;
+import Main.help.HoverButtonPanel;
 import MovieBooking.ShowtimeChoosePage;
 import Data.Movie;
 import Data.Order;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +24,7 @@ public class MovieCardPanel extends JPanel {
     public MovieCardPanel(Movie movie) {
         this.movie = movie;
 
-        setPreferredSize(new Dimension(UIConstants.MOVIE_CARD_WIDTH, UIConstants.MOVIE_CARD_HEIGHT + 60));
+        setPreferredSize(new Dimension(Const.MOVIE_CARD_WIDTH, Const.MOVIE_CARD_HEIGHT + 60));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
@@ -87,8 +87,8 @@ public class MovieCardPanel extends JPanel {
     private void setPosterImage(String path) {
         try {
             BufferedImage img = ImageIO.read(new File(path));
-            int targetWidth = UIConstants.MOVIE_CARD_WIDTH;
-            int targetHeight = UIConstants.MOVIE_CARD_WIDTH * 3 / 2;
+            int targetWidth = Const.MOVIE_CARD_WIDTH;
+            int targetHeight = Const.MOVIE_CARD_WIDTH * 3 / 2;
             Image scaled = img.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
             posterLabel.setIcon(new ImageIcon(scaled));
             posterLabel.setPreferredSize(new Dimension(targetWidth, targetHeight));

@@ -2,7 +2,7 @@ package admin.movieRegisterhelp;
 
 import admin.MovieRegisterPage;
 import Data.Movie;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +17,7 @@ public class MovieSlotPanel extends JPanel {
     public MovieSlotPanel(Movie movie) {
         this.movie = movie;
 
-        int panelWidth = UIConstants.LEFT_PANEL_WIDTH; // or subtract padding if needed
+        int panelWidth = Const.LEFT_PANEL_WIDTH; // or subtract padding if needed
         setPreferredSize(new Dimension(panelWidth, 50));
         setMaximumSize(new Dimension(panelWidth, 50));
         setMinimumSize(new Dimension(panelWidth, 50));

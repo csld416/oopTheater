@@ -1,8 +1,8 @@
-package global;
+package GlobalConst;
 
 import java.awt.Color;
 
-public class UIConstants {
+public class Const {
 
     //main color
     public static final Color COLOR_MAIN_DARK = new Color(169, 183, 198);
@@ -51,5 +51,6 @@ public class UIConstants {
     //FOOD
     public static final int FOOD_PANEL_HEIGHT = FRAME_HEIGHT - TOP_BAR_HEIGHT - 50 - 30;
     public static final int FOOD_PANEL_WIDTH = FRAME_WIDTH / 2;
-
+    
+    //TICKET
 }

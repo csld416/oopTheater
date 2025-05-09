@@ -7,7 +7,7 @@ import admin.topBar.AdminTopBarPanel;
 import connection.DatabaseConnection;
 import global.CapsuleButton;
 import Data.Movie;
-import global.UIConstants;
+import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +27,7 @@ public class ShowtimeRegister extends JFrame {
 
     public ShowtimeRegister() {
         setTitle("Movie Itinerary Registration");
-        setSize(UIConstants.FRAME_WIDTH, UIConstants.FRAME_HEIGHT);
+        setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -41,16 +41,16 @@ public class ShowtimeRegister extends JFrame {
 
     private void initTopPanel() {
         topPanel = new AdminTopBarPanel();
-        topPanel.setBounds(0, 0, UIConstants.FRAME_WIDTH, UIConstants.TOP_BAR_HEIGHT);
+        topPanel.setBounds(0, 0, Const.FRAME_WIDTH, Const.TOP_BAR_HEIGHT);
         add(topPanel);
     }
 
     private void initLeftPanel() {
-        int topOffset = UIConstants.TOP_BAR_HEIGHT;
-        int height = UIConstants.FRAME_HEIGHT - topOffset;
+        int topOffset = Const.TOP_BAR_HEIGHT;
+        int height = Const.FRAME_HEIGHT - topOffset;
 
         leftPanel = new JPanel(null);
-        leftPanel.setBounds(0, topOffset, UIConstants.LEFT_PANEL_WIDTH, height);
+        leftPanel.setBounds(0, topOffset, Const.LEFT_PANEL_WIDTH, height);
         leftPanel.setBackground(Color.WHITE);
         add(leftPanel);
 
@@ -58,7 +58,7 @@ public class ShowtimeRegister extends JFrame {
         CapsuleButton downBtn = new CapsuleButton("\u2B07", new Color(180, 180, 180), new Color(140, 140, 140), new Dimension(40, 40));
 
         buttonRow = new JPanel(null);
-        buttonRow.setBounds((UIConstants.LEFT_PANEL_WIDTH - 80) / 2, SPACING, 80, 45);
+        buttonRow.setBounds((Const.LEFT_PANEL_WIDTH - 80) / 2, SPACING, 80, 45);
         buttonRow.setOpaque(false);
 
         upBtn.setBounds(0, 0, 40, 40);
@@ -73,7 +73,7 @@ public class ShowtimeRegister extends JFrame {
         slotsPanel.setBackground(Color.WHITE);
 
         scrollPane = new JScrollPane(slotsPanel);
-        scrollPane.setBounds(0, SPACING + 50, UIConstants.LEFT_PANEL_WIDTH, height - SPACING - 50);
+        scrollPane.setBounds(0, SPACING + 50, Const.LEFT_PANEL_WIDTH, height - SPACING - 50);
         scrollPane.setBorder(null);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         leftPanel.add(scrollPane);
@@ -98,13 +98,13 @@ public class ShowtimeRegister extends JFrame {
     }
 
     private void initRightPanel() {
-        int topOffset = UIConstants.TOP_BAR_HEIGHT;
-        int width = UIConstants.FRAME_WIDTH - UIConstants.LEFT_PANEL_WIDTH;
-        int height = UIConstants.FRAME_HEIGHT - topOffset;
+        int topOffset = Const.TOP_BAR_HEIGHT;
+        int width = Const.FRAME_WIDTH - Const.LEFT_PANEL_WIDTH;
+        int height = Const.FRAME_HEIGHT - topOffset;
 
         rightPanel = new JPanel(null);
-        rightPanel.setBounds(UIConstants.LEFT_PANEL_WIDTH, topOffset, width, height);
-        rightPanel.setBackground(UIConstants.COLOR_MAIN_LIGHT);
+        rightPanel.setBounds(Const.LEFT_PANEL_WIDTH, topOffset, width, height);
+        rightPanel.setBackground(Const.COLOR_MAIN_LIGHT);
         add(rightPanel);
     }
 
