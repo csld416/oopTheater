@@ -134,3 +134,30 @@ Since we are working on the food part, we need to implement the food register pa
 created the food entry, admin page, and the register.
 
 next is the image of that.
+
+## 05/08
+
+Update the images of the food, and the display in the client side. Same rule, make the corner rounded, and the approriate color. 
+
+Other than that, I connect the logic of the action of pressing the increment and the decrement label on the entry to the right panel of the food choosing page, and use the html for displaying.
+
+## 05/09
+
+Added the ConfirmOrderPage, which lists the order of a customer, also added the terms and conditions along with the dim layer effect.
+
+Added the confirm rounded corner Jframe.
+
+Now linking to Paypage, which is the final step.
+
+Major update, I added the Order class to replace the primitive way to pass the movie, showtime, seatList, FoodList, etc.
+Next step, we will store the order in the Database, shift to the ticket page, and update the ticket displaying panel.
+
+so i should create a Ticket.java, and a database table for Ticket, which has:
+- id
+- user id(cascade)
+- movie id (cascade)
+- showtime (cascade)
+- seatList no cascade
+- FoodList, no cascade
+
+so work in database, and so on and so forth, we are 96% close, come on, let's go.
