@@ -1,16 +1,31 @@
 package Main;
 
+import Data.Order;
 import GlobalConst.Const;
-import Main.TopBarPanel;
-import global.*;
+import Main.TicketHelp.TicketPanel_1;
+import Main.TicketHelp.TicketPanel_2;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class MyTicketSpacePage extends JFrame {
 
     private JPanel topBarSlot;
+    private JPanel middlePanel;
     private JPanel contentPanel;
+
+    private final Color DEFAULT_BG = Color.WHITE;
+    private final Color HOVER_BG = new Color(230, 230, 230);
+    private final Color SELECTED_BG = new Color(200, 230, 255);
+    private final Font FONT = new Font("SansSerif", Font.BOLD, 16);
+
+    private int select = 0; // 0 = 未使用, 1 = 已使用
+
+    private JPanel tabNotUsed;
+    private JPanel tabUsed;
 
     public MyTicketSpacePage() {
         setTitle("My Ticket Page");
@@ -20,6 +35,7 @@ public class MyTicketSpacePage extends JFrame {
         setLayout(null); // Absolute layout
 
         initTopBar();
+        initMiddle();
         initContent();
 
         setVisible(true);
@@ -36,20 +52,135 @@ public class MyTicketSpacePage extends JFrame {
         add(topBarSlot);
     }
 
+    private void initMiddle() {
+        middlePanel = new JPanel(null);
+        middlePanel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH, 60);
+        middlePanel.setBackground(new Color(245, 245, 245));
+
+        int tabWidth = 120;
+        int tabHeight = 40;
+        int spacing = 20;
+        int y = 10;
+        int x0 = (Const.FRAME_WIDTH - (tabWidth * 2 + spacing)) / 2;
+        int x1 = x0 + tabWidth + spacing;
+
+        tabNotUsed = createTabPanel("未使用", x0, y, tabWidth, tabHeight, 0);
+        tabUsed = createTabPanel("已使用", x1, y, tabWidth, tabHeight, 1);
+
+        middlePanel.add(tabNotUsed);
+        middlePanel.add(tabUsed);
+
+        add(middlePanel);
+    }
+
+    private JPanel createTabPanel(String text, int x, int y, int w, int h, int id) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBounds(x, y, w, h);
+        panel.setBackground(select == id ? SELECTED_BG : DEFAULT_BG);
+
+        JLabel label = new JLabel(text, SwingConstants.CENTER);
+        label.setFont(FONT);
+        panel.add(label, BorderLayout.CENTER);
+        panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (select != id) {
+                    panel.setBackground(HOVER_BG);
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (select != id) {
+                    panel.setBackground(DEFAULT_BG);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (select != id) {
+                    select = id;
+                    refreshContent();
+                    tabNotUsed.setBackground(select == 0 ? SELECTED_BG : DEFAULT_BG);
+                    tabUsed.setBackground(select == 1 ? SELECTED_BG : DEFAULT_BG);
+                }
+            }
+        });
+
+        return panel;
+    }
+
+    private JScrollPane scrollPane;
+
     private void initContent() {
-        int y = Const.TOP_BAR_HEIGHT;
-        int height = Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT;
+        int y = Const.TOP_BAR_HEIGHT + 60;
+        int height = Const.FRAME_HEIGHT - y;
 
         contentPanel = new JPanel();
-        contentPanel.setBounds(0, y, Const.FRAME_WIDTH, height);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); // VERTICAL layout
         contentPanel.setBackground(Const.COLOR_MAIN_LIGHT);
-        contentPanel.setLayout(new GridBagLayout()); // to center the label
 
-        JLabel label = new JLabel("My ticket Page");
-        label.setFont(new Font("SansSerif", Font.BOLD, 28));
-        contentPanel.add(label);
+        JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        wrapperPanel.setBackground(Const.COLOR_MAIN_LIGHT);
+        wrapperPanel.add(contentPanel);
 
-        add(contentPanel);
+        scrollPane = new JScrollPane(wrapperPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBounds(0, y, Const.FRAME_WIDTH, height);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        add(scrollPane);
+
+        loadContent();
+
+        add(scrollPane);
+    }
+
+    private void refreshContent() {
+        contentPanel.removeAll();
+        loadContent();
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    private void loadContent() {
+        contentPanel.removeAll(); // Clear previous items
+
+        ArrayList<Order> allOrders = Data.Order.getList();
+        ArrayList<Order> filtered = new ArrayList<>();
+
+        for (Order o : allOrders) {
+            int status = o.getStatus();
+            if ((select == 0 && status == 1) || (select == 1 && status == 0)) {
+                filtered.add(o);
+            }
+        }
+
+        if (filtered.isEmpty()) {
+            JLabel emptyLabel = new JLabel("目前此區域尚無票券資料");
+            emptyLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+            emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            contentPanel.add(Box.createVerticalStrut(20));
+            contentPanel.add(emptyLabel);
+        } else {
+            for (Order o : filtered) {
+                contentPanel.add(Box.createVerticalStrut(8));
+                if (select == 0) {
+                    contentPanel.add(new TicketPanel_1(o)); // 未使用
+                } else {
+                    contentPanel.add(new TicketPanel_2(o)); // 已使用 或 已取消
+                }
+            }
+        }
+
+        contentPanel.add(Box.createVerticalGlue()); // Pushes content upward
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 
     public static void main(String[] args) {

@@ -1,8 +1,9 @@
 package Qrcode;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.util.Random;
-import javax.swing.ImageIcon;
 
 public class QRImageLoader {
     private static final String QR_FOLDER = "src/Qrcode/random";
@@ -18,5 +19,27 @@ public class QRImageLoader {
 
         File selected = files[new Random().nextInt(files.length)];
         return new ImageIcon(selected.getAbsolutePath());
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Random QR Code");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(300, 300);
+            frame.setLayout(new BorderLayout());
+
+            ImageIcon qrIcon = getRandomQRCode();
+            if (qrIcon != null) {
+                JLabel label = new JLabel(qrIcon);
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setVerticalAlignment(SwingConstants.CENTER);
+                frame.add(label, BorderLayout.CENTER);
+            } else {
+                frame.add(new JLabel("No QR image found."), BorderLayout.CENTER);
+            }
+
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
     }
 }

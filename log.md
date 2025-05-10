@@ -165,3 +165,10 @@ so work in database, and so on and so forth, we are 96% close, come on, let's go
 ## 05/10
 - Established the workflow of the data, and patched the final piece of the projet --ticket
 - Now a ticket can be stored in a database, I am creating a env for that.
+For the ticket page, I am dividing it with two different panels, one for `already used` one for `Not yet used`.
+and created the scroll pane and the box layout to contain the bunch of the tickets. as for the unused tickets. Nice.
+then i will alter the loading panel for the used tickets, and add red stamp to that. ah, looking good, we are close guys!!! lets go!!
+
+## 05/11
+
+Designed the layout of the `ALready used` ticket, and divide that into the left panel and the right panel (`ChatGPT sucks`) FR, my gut has always been correct, and this shit keep telling me the wrong answer, but I am better.

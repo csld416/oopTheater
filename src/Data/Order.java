@@ -8,33 +8,55 @@ import java.util.AbstractMap;
 
 public class Order {
 
+    private User user;
     private Movie movie = null;
     private Showtime showtime = null;
     private ArrayList<Seat> seatList = new ArrayList<>();
     private ArrayList<AbstractMap.SimpleEntry<Food, Integer>> foodList = new ArrayList<>();
     private int totalCost = 0;
-    private User user;
+    private int status = 1;
 
     private static ArrayList<Order> cachedOrderList = null;
 
     public static final Order dummyOrder;
 
+    public static final ArrayList<Order> dummyOrderList;
+
     static {
-        User dummyUser = new User(1, "測試用戶", "0912345678");
-        Order temp = new Order();
-        temp.setUser(dummyUser);
-        temp.setMovie(Movie.dummyMovie);
-        temp.setShowtime(Showtime.dummyShowtime);
-        ArrayList<Seat> dummySeats = new ArrayList<>(Seat.dummySeats);
-        temp.setSeatList(dummySeats);
-        ArrayList<AbstractMap.SimpleEntry<Food, Integer>> dummyFoodList = new ArrayList<>();
-        dummyFoodList.add(new AbstractMap.SimpleEntry<>(new Food("path/to/cola.png", 60, "可樂", true, 0), 2));
-        dummyFoodList.add(new AbstractMap.SimpleEntry<>(new Food("path/to/popcorn.png", 80, "爆米花", true, 2), 1));
-        temp.setFoodList(dummyFoodList);
-        int ticketTotal = dummySeats.size() * 320;
-        int foodTotal = dummyFoodList.stream().mapToInt(e -> e.getKey().getPrice() * e.getValue()).sum();
-        temp.setTotalCost(ticketTotal + foodTotal + 20);
-        dummyOrder = temp;
+        dummyOrderList = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            Order active = new Order();
+            active.setUser(new User(1, "測試用戶", "0912345678"));
+            active.setMovie(Movie.dummyMovie);
+            active.setShowtime(Showtime.dummyShowtime);
+            active.setSeatList(new ArrayList<>(Seat.dummySeats));
+            ArrayList<AbstractMap.SimpleEntry<Food, Integer>> food = new ArrayList<>();
+            food.add(new AbstractMap.SimpleEntry<>(new Food("path/to/cola.png", 60, "可樂", true, 0), 1));
+            food.add(new AbstractMap.SimpleEntry<>(new Food("path/to/popcorn.png", 80, "爆米花", true, 2), 2));
+            active.setFoodList(food);
+            int cost = 320 * Seat.dummySeats.size() + food.stream().mapToInt(e -> e.getKey().getPrice() * e.getValue()).sum();
+            active.setTotalCost(cost);
+            active.setStatus(1);  // 未使用
+            dummyOrderList.add(active);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            Order used = new Order();
+            used.setUser(new User(1, "測試用戶", "0912345678"));
+            used.setMovie(Movie.dummyMovie);
+            used.setShowtime(Showtime.dummyShowtime);
+            used.setSeatList(new ArrayList<>(Seat.dummySeats));
+            ArrayList<AbstractMap.SimpleEntry<Food, Integer>> food = new ArrayList<>();
+            food.add(new AbstractMap.SimpleEntry<>(new Food("path/to/cola.png", 60, "可樂", true, 0), 1));
+            food.add(new AbstractMap.SimpleEntry<>(new Food("path/to/popcorn.png", 80, "爆米花", true, 2), 2));
+            used.setFoodList(food);
+            int cost = 320 * Seat.dummySeats.size() + food.stream().mapToInt(e -> e.getKey().getPrice() * e.getValue()).sum();
+            used.setTotalCost(cost);
+            used.setStatus(0);  // 已使用
+            dummyOrderList.add(used);
+        }
+        dummyOrder = dummyOrderList.get(0);
     }
 
     public Order() {
@@ -66,6 +88,10 @@ public class Order {
         this.totalCost = totalCost;
     }
 
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     // === Getters ===
     public Movie getMovie() {
         return movie;
@@ -91,6 +117,10 @@ public class Order {
         return user;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
     public void clear() {
         movie = null;
         showtime = null;
@@ -101,7 +131,8 @@ public class Order {
 
     public static ArrayList<Order> getList() {
         if (cachedOrderList == null) {
-            fetchOrdersFromDB();
+            cachedOrderList = dummyOrderList;
+            //fetchOrdersFromDB();
         }
         return cachedOrderList;
     }
@@ -121,6 +152,7 @@ public class Order {
                 order.setMovie(Movie.fetchById(rs.getInt("movie_id")));
                 order.setShowtime(Showtime.fetchById(rs.getInt("showtime_id")));
                 order.setSeatList(Seat.fetchByTicketId(ticketId));
+                order.setStatus(rs.getInt("status"));
                 order.setTotalCost(rs.getInt("total_price"));
 
                 // Note: foodList not stored in tickets table

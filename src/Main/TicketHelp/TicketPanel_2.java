@@ -1,67 +1,60 @@
 package Main.TicketHelp;
 
+import Data.Order;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.*;
+import java.time.LocalDateTime;
 
 public class TicketPanel_2 extends JPanel {
 
-    private final int PANEL_WIDTH = 400;
-    private final int PANEL_HEIGHT = 200;
-    private final int CORNER_RADIUS = 30;
-    private final int SIDE_RADIUS = 12;
-    private final int SIDE_COUNT = 3;
+    private final int WIDTH = 600;
+    private final int HEIGHT = 180;
+    private final int ARC = 30;
+    private final Order order;
 
-    public TicketPanel_2() {
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        setOpaque(false);
+    public TicketPanel_2(Order order) {
+        this.order = order;
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setLayout(null);
+        setOpaque(false);  // So the left/right segment's custom paint shows through
+
+        initContent();
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    private void initContent() {
+        // === Left Segment (Rounded corner left) ===
+        LocalDateTime time = order.getShowtime().getStartTime().toLocalDateTime();
+        String year = String.valueOf(time.getYear());
+        String date = String.format("%02d/%02d", time.getMonthValue(), time.getDayOfMonth());
+        String timeStr = String.format("%02d:%02d", time.getHour(), time.getMinute());
+        String statusText = order.getStatus() == -1 ? "已取消" : "已使用";
 
-        Area ticketArea = new Area(new Rectangle2D.Double(0, 0, PANEL_WIDTH, PANEL_HEIGHT));
+        Ticket2LeftPanel left = new Ticket2LeftPanel(
+                year,
+                date,
+                timeStr,
+                statusText,
+                new Color(245, 245, 245),
+                ARC
+        );
+        left.setBounds(0, 0, 100, HEIGHT);
+        add(left);
 
-        int r = CORNER_RADIUS;
-        int d = r * 2;
-
-        // Subtract corner circles
-        ticketArea.subtract(new Area(new Ellipse2D.Double(-r, -r, d, d))); // Top-left
-        ticketArea.subtract(new Area(new Ellipse2D.Double(PANEL_WIDTH - r, -r, d, d))); // Top-right
-        ticketArea.subtract(new Area(new Ellipse2D.Double(-r, PANEL_HEIGHT - r, d, d))); // Bottom-left
-        ticketArea.subtract(new Area(new Ellipse2D.Double(PANEL_WIDTH - r, PANEL_HEIGHT - r, d, d))); // Bottom-right
-
-        int sr = SIDE_RADIUS;
-        int sd = sr * 2;
-        int baseY = 60;
-        int spacing = 40;
-
-        for (int i = 0; i < SIDE_COUNT; i++) {
-            int y = baseY + i * spacing;
-            ticketArea.subtract(new Area(new Ellipse2D.Double(-sr, y - sr, sd, sd)));
-            ticketArea.subtract(new Area(new Ellipse2D.Double(PANEL_WIDTH - sr, y - sr, sd, sd)));
-        }
-
-        g2.setColor(Color.WHITE);
-        g2.fill(ticketArea);
-
-        g2.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(2));
-        g2.draw(ticketArea);
-
-        g2.dispose();
+        // === Right Segment (Rounded corner right) ===
+        Ticket2RightPanel right = new Ticket2RightPanel(order, WIDTH - 100, HEIGHT, ARC);
+        right.setBounds(100, 0, WIDTH - 100, HEIGHT);
+        add(right);
     }
 
+    // No painting here — corners handled by left/right components
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Ticket Preview");
+            JFrame frame = new JFrame("TicketPanel_2 Preview");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(600, 400);
-            frame.setLayout(new FlowLayout(FlowLayout.CENTER, 80, 80));
-            frame.add(new TicketPanel_2());
+            frame.setSize(700, 300);
+            frame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 40));
+            frame.add(new TicketPanel_2(Data.Order.dummyOrder));
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
