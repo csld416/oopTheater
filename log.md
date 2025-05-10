@@ -172,3 +172,13 @@ then i will alter the loading panel for the used tickets, and add red stamp to t
 ## 05/11
 
 Designed the layout of the `ALready used` ticket, and divide that into the left panel and the right panel (`ChatGPT sucks`) FR, my gut has always been correct, and this shit keep telling me the wrong answer, but I am better.
+
+next:
+- age in register -> user db needs to be rewritten.
+- showtime register -> conflict check
+- refund feature
+- movie sorting in starting page
+- Qrcode generate in Paypage
+- Order Information after clicking the ticket (either 1 or 2)
+- patch error for OPlogin
+- ?
