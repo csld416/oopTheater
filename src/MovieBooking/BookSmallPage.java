@@ -164,9 +164,13 @@ public class BookSmallPage extends JFrame {
                     frame.setGlassPane(dim);
                     dim.setVisible(true);
                     SessionManager.returnAfterLogin = frame;
-                    SessionManager.redirectTargetPage = () -> new FoodChoosingPage(order).setVisible(true);
+                    SessionManager.redirectTargetPage = () -> {
+                        order.setUser(User.currUser);
+                        new FoodChoosingPage(order).setVisible(true);
+                    };
                     new LoginForm(frame);
                 } else {
+                     order.setUser(User.currUser);
                     new FoodChoosingPage(order);
                     BookSmallPage.this.dispose();
                 }

@@ -26,6 +26,7 @@ public class Movie {
     public static Movie dummyMovie = new Movie(1, "500 Days of Summer", 95, "Boy meets girl. Boy falls in love. Girl doesn't.", "PG-13",
             java.sql.Date.valueOf("2009-08-07"), java.sql.Date.valueOf("2009-12-07"), "src/MoviePosters/500DaysOfSummer.jpg");
 
+    
     // === Constructor ===
     public Movie(Integer id, String title, int duration, String description, String rating,
             Date releaseDate, Date removalDate, String posterPath) {

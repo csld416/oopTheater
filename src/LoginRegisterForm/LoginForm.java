@@ -42,11 +42,9 @@ import javax.swing.JOptionPane;
 public class LoginForm {
 
     private JFrame frame;
-    private JPanel titleBar;
-    private JLabel minimizeLabel;
-    private JLabel titleLabel;
-    private JLabel closeLabel;
-    private JPanel contentPanel;
+    private final JPanel titleBar;
+    private final JLabel titleLabel;
+    private final JPanel contentPanel;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton buttonLogin;
@@ -58,9 +56,6 @@ public class LoginForm {
     //dragging the form
     private boolean isdragging = false;
     private Point mouseoffset;
-
-    // db connection
-    private final DatabaseConnection dbConnection;
 
     private JFrame substrateFrame;
 
@@ -110,7 +105,7 @@ public class LoginForm {
         contentPanel.setBounds(10, 30, frame.getWidth() - 10, frame.getHeight() - 40);
         frame.add(contentPanel);
         //=== username Label
-        JLabel usernameLabel = new JLabel("Phone:");
+        JLabel usernameLabel = new JLabel("Email:");
         usernameLabel.setBounds(30, 40, 80, 25);
         contentPanel.add(usernameLabel);
         //=== UsernameField
@@ -152,11 +147,11 @@ public class LoginForm {
                 isLoggin = true;
                 String username = usernameField.getText();
                 String password = String.valueOf(passwordField.getPassword());
-                if (checkLogin(username, password)) {
+                if (User.checkLogin(username, password)) {
                     frame.dispose();
                     substrateFrame.dispose();
-                    User user = fetchUserByPhone(username);
-                    SessionManager.currentUser = user;
+                    User user = User.fetchUserByEmail(username);
+                    User.setCurrentUser(user);
                     if (SessionManager.redirectTargetPage != null) {
                         SessionManager.redirectTargetPage.run();
                         SessionManager.redirectTargetPage = null;
@@ -229,52 +224,7 @@ public class LoginForm {
                 }
             }
         });
-
-        //=== Init
-        dbConnection = new DatabaseConnection();
         frame.setVisible(true);
-    }
-
-    //check username and passowrd
-    private boolean checkLogin(String Phone, String password) {
-        Connection connection = dbConnection.getConnection();
-        if (connection != null) {
-            try {
-                String query = "SELECT * FROM `users` WHERE `phone` = ?";
-                PreparedStatement ps = connection.prepareStatement(query);
-                ps.setString(1, Phone);
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    String storedPassword = rs.getString("password");
-                    userEmail = rs.getString("email");
-                    return password.equals(storedPassword);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    private User fetchUserByPhone(String phone) {
-        Connection conn = dbConnection.getConnection();
-        if (conn != null) {
-            try {
-                String query = "SELECT * FROM users WHERE phone = ?";
-                PreparedStatement stmt = conn.prepareStatement(query);
-                stmt.setString(1, phone);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    int id = rs.getInt("id");
-                    String name = rs.getString("fullname");
-                    String phoneNumber = rs.getString("phone");
-                    return new User(id, name, phoneNumber);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     public static void main(String[] args) {

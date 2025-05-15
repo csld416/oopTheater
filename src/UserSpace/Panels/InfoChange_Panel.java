@@ -3,6 +3,7 @@ package UserSpace.Panels;
 import connection.DatabaseConnection;
 import global.CapsuleButton;
 import Data.SessionManager;
+import Data.User;
 import GlobalConst.Const;
 
 import javax.swing.*;
@@ -158,7 +159,7 @@ public class InfoChange_Panel extends JPanel {
             Connection conn = new DatabaseConnection().getConnection();
             String sql = "SELECT fullname, email, phone, gender FROM users WHERE phone = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, SessionManager.currentUserPhone); // fetch by phone
+            stmt.setString(1, User.currUser.getPhoneNumber()); // fetch by phone
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -178,9 +179,9 @@ public class InfoChange_Panel extends JPanel {
                     femaleRadioButton.setSelected(true);
                 }
             } else {
-                System.out.println("[DEBUG] No user found with phone: " + SessionManager.currentUserPhone);
+                System.out.println("[DEBUG] No user found with phone: " + User.currUser.getPhoneNumber());
             }
-
+            
             stmt.close();
             conn.close();
         } catch (SQLException e) {
@@ -209,7 +210,7 @@ public class InfoChange_Panel extends JPanel {
             stmt.setString(2, emailField.getText().trim());
             String gender = maleRadioButton.isSelected() ? "Male" : "Female";
             stmt.setString(3, gender);
-            stmt.setString(4, SessionManager.currentUserPhone);
+            stmt.setString(4, User.currUser.getPhoneNumber());
 
             int rows = stmt.executeUpdate();
             if (rows > 0) {

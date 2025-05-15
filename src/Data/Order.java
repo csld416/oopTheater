@@ -27,7 +27,7 @@ public class Order {
 
         for (int i = 0; i < 4; i++) {
             Order active = new Order();
-            active.setUser(new User(1, "測試用戶", "0912345678"));
+            active.setUser(User.dummyUser);
             active.setMovie(Movie.dummyMovie);
             active.setShowtime(Showtime.dummyShowtime);
             active.setSeatList(new ArrayList<>(Seat.dummySeats));
@@ -43,7 +43,7 @@ public class Order {
 
         for (int i = 0; i < 3; i++) {
             Order used = new Order();
-            used.setUser(new User(1, "測試用戶", "0912345678"));
+            used.setUser(User.dummyUser);
             used.setMovie(Movie.dummyMovie);
             used.setShowtime(Showtime.dummyShowtime);
             used.setSeatList(new ArrayList<>(Seat.dummySeats));
@@ -216,7 +216,7 @@ public class Order {
 
     public static void refund(Order order) {
         if (order.getUser() == null) {
-            order.setUser(SessionManager.currentUser); // fallback
+            order.setUser(User.currUser);
             if (order.getUser() == null) {
                 System.err.println("❌ Refund failed: user not set and no session user found.");
                 return;

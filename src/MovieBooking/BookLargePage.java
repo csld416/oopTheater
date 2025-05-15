@@ -127,12 +127,12 @@ public class BookLargePage extends JFrame {
                     dim.setVisible(true);
                     SessionManager.returnAfterLogin = frame;
                     SessionManager.redirectTargetPage = () -> {
-                        order.setUser(SessionManager.currentUser);
+                        order.setUser(User.currUser);
                         new FoodChoosingPage(order).setVisible(true);
                     };
                     new LoginForm(frame);
                 } else {
-                    order.setUser(SessionManager.currentUser);
+                    order.setUser(User.currUser);
                     new FoodChoosingPage(order);
                     BookLargePage.this.dispose();
                 }

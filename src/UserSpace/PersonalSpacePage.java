@@ -175,7 +175,7 @@ public class PersonalSpacePage extends JFrame {
 
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
-                SessionManager.currentUserPhone = null; // Clear user session
+                SessionManager.logout();
                 dispose(); // Close current window
                 new StartingPage(); // Open starting page
             }

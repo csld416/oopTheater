@@ -11,18 +11,17 @@ import javax.swing.JFrame;
  * @author csld
  */
 public class SessionManager {
-    public static User currentUser = null;
     public static String AdminString = null;
     public static JFrame returnAfterLogin = null;
     public static Runnable redirectTargetPage = null;
 
     public static boolean isLoggedIn() {
-        return currentUser != null;
+        return User.currUser != null;
     }
 
     public static void logout() {
-        currentUser.clear();
-        currentUser = null;
+        User.currUser.clear();
+        User.currUser = null;
         returnAfterLogin = null;
         redirectTargetPage = null;
     }

@@ -139,7 +139,6 @@ public class BigRoomSeatPanel extends JPanel {
                         label = String.valueOf(seatLabel);
                     }
                 }
-
                 String rowLabel = "";
                 if (row == 14) {
                     rowLabel = "L";
@@ -154,7 +153,6 @@ public class BigRoomSeatPanel extends JPanel {
                     }
                     rowLabel = String.valueOf((char) ('A' + actualRow - 1));
                 }
-
                 RoundedSeatPanel seat = new RoundedSeatPanel(
                         panelColor,
                         HOVER_COLOR,
@@ -190,7 +188,6 @@ public class BigRoomSeatPanel extends JPanel {
                                     }
                                 }
                             }
-
                             if (onSeatSelectionChange != null) {
                                 onSeatSelectionChange.run();
                             }
