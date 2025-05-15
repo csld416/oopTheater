@@ -67,7 +67,7 @@ public class Ticket2RightPanel extends JPanel {
                 .collect(Collectors.joining(" "));
         JLabel seats = new JLabel("座位：" + seatStr);
         seats.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        seats.setBounds(xText, yText, 400, 20);
+        seats.setBounds(xText, yText, width - xText - 20, 20);
         add(seats);
     }
 

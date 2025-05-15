@@ -114,12 +114,13 @@ public class BookLargePage extends JFrame {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
                 List<String> selectedSeatLabels = seatPanel.getSeatList();
+                
                 ArrayList<Seat> selectedSeats = new ArrayList<>();
                 for (String label : selectedSeatLabels) {
                     selectedSeats.add(new Seat(label));
                 }
                 order.setSeatList(selectedSeats);
-                if (order.getUser() == null) {
+                if (User.getCurrentUser() == null) {
                     JFrame frame = BookLargePage.this;
                     DimLayer dim = new DimLayer(frame);
                     frame.setGlassPane(dim);

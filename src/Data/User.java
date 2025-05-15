@@ -16,7 +16,7 @@ public class User {
     }
 
     public static User getCurrentUser() {
-        return currUser;
+        return SessionManager.currentUser;
     }
 
     public static void setCurrentUser(User user) {

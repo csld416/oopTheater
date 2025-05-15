@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class TicketPanel_2 extends JPanel {
 
-    private final int WIDTH = 600;
+    private final int WIDTH = 700;
     private final int HEIGHT = 180;
     private final int ARC = 30;
     private final Order order;

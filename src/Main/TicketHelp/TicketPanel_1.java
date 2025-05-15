@@ -2,10 +2,15 @@ package Main.TicketHelp;
 
 import Data.Order;
 import Data.Seat;
+import Main.MyTicketSpacePage;
 import global.CapsuleButton;
+import global.DimLayer;
+import global.Message;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.stream.Collectors;
 
@@ -77,6 +82,24 @@ public class TicketPanel_1 extends JPanel {
         // === Refund Button ===
         CapsuleButton refundBtn = new CapsuleButton("退票", new Color(255, 128, 84), new Color(255, 102, 51), new Dimension(60, 30));
         refundBtn.setBounds(WIDTH - 80, HEIGHT - 50, 60, 30);
+        refundBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(refundBtn);
+                DimLayer dim = new DimLayer(frame);
+                frame.setGlassPane(dim);
+                dim.setVisible(true);
+                new Message(frame, "是否確認退票？退票後將無法復原。", () -> {
+                    Order.refund(order);
+                    SwingUtilities.invokeLater(() -> {
+                        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(refundBtn);
+                        if (parent instanceof MyTicketSpacePage) {
+                            ((MyTicketSpacePage) parent).refreshContentExternally(); // 👈 define this
+                        }
+                    });
+                });
+            }
+        });
         add(refundBtn);
     }
 

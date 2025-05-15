@@ -131,8 +131,8 @@ public class Order {
 
     public static ArrayList<Order> getList() {
         if (cachedOrderList == null) {
-            cachedOrderList = dummyOrderList;
-            //fetchOrdersFromDB();
+            //cachedOrderList = dummyOrderList;
+            fetchOrdersFromDB();
         }
         return cachedOrderList;
     }
@@ -165,7 +165,7 @@ public class Order {
     }
 
     public static void insertOrder(Order order) {
-        String ticketSql = "INSERT INTO Tickets (user_id, movie_id, showtime_id, total_price, status) VALUES (?, ?, ?, ?, 0)";
+        String ticketSql = "INSERT INTO Tickets (user_id, movie_id, showtime_id, total_price, status) VALUES (?, ?, ?, ?, 1)";
         String seatSql = "INSERT INTO BookedSeat (ticket_id, seat_label, showtime_id) VALUES (?, ?, ?)";
 
         try (Connection conn = new DatabaseConnection().getConnection()) {
@@ -211,6 +211,28 @@ public class Order {
 
         } catch (SQLException e) {
             System.err.println("❌ DB error during order insert: " + e.getMessage());
+        }
+    }
+
+    public static void refund(Order order) {
+        if (order.getUser() == null) {
+            order.setUser(SessionManager.currentUser); // fallback
+            if (order.getUser() == null) {
+                System.err.println("❌ Refund failed: user not set and no session user found.");
+                return;
+            }
+        }
+        try (Connection conn = new DatabaseConnection().getConnection()) {
+            String sql = "UPDATE Tickets SET status = -1 WHERE user_id = ? AND movie_id = ? AND showtime_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, order.getUser().getId());
+            stmt.setInt(2, order.getMovie().getId());
+            stmt.setInt(3, order.getShowtime().getId());
+            int updated = stmt.executeUpdate();
+            System.out.println("✅ Refunded ticket: " + updated + " rows affected");
+            cachedOrderList = null; // Invalidate cache
+        } catch (SQLException e) {
+            System.err.println("❌ Refund failed: " + e.getMessage());
         }
     }
 

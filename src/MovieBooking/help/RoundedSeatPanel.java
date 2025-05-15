@@ -16,12 +16,14 @@ public class RoundedSeatPanel extends JPanel {
     private final boolean touchable;
 
     private Color currentColor;
-    private boolean isSelected = false;
 
     private static final int BASE_SIZE = 40;
     private static final double SCALE = 0.5;
     private static final int ARC_WIDTH = 20;
     private static final int ARC_HEIGHT = 20;
+
+    private boolean isFull = false;
+    private boolean isSelected = false;
 
     public RoundedSeatPanel(Color defaultColor, Color hoverColor, Color pressedColor, Color textColor, String text, boolean touchable) {
         this(defaultColor, hoverColor, pressedColor, textColor, text, "", touchable);
@@ -45,7 +47,14 @@ public class RoundedSeatPanel extends JPanel {
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    if (!isSelected) {
+                    if (isFull) {
+                        if (isSelected) {
+                            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                        }
+                    }else{
+                        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                    }
+                    if (!isFull && !isSelected) {
                         currentColor = hoverColor;
                         repaint();
                     }
@@ -53,6 +62,7 @@ public class RoundedSeatPanel extends JPanel {
 
                 @Override
                 public void mouseExited(MouseEvent e) {
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                     if (!isSelected) {
                         currentColor = defaultColor;
                         repaint();
@@ -61,14 +71,33 @@ public class RoundedSeatPanel extends JPanel {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    if (!touchable) return;
-                    isSelected = !isSelected;
-                    currentColor = isSelected ? pressedColor : defaultColor;
-                    repaint();
-                    System.out.println((isSelected ? "Selected: " : "Unselected: ") + getSeat());
+                    if (!touchable) {
+                        return;
+                    }
+                    if (isFull) {
+                        if (!isSelected) {
+                            return;
+                        }
+                        currentColor = defaultColor;
+                        repaint();
+                        System.out.println("Unselected" + getSeat());
+                    } else {
+                        isSelected = !isSelected;
+                        currentColor = isSelected ? pressedColor : defaultColor;
+                        repaint();
+                        System.out.println((isSelected ? "Selected: " : "Unselected: ") + getSeat());
+                    }
                 }
             });
         }
+    }
+
+    public void setFull() {
+        isFull = true;
+    }
+
+    public void disableFull() {
+        isFull = false;
     }
 
     @Override

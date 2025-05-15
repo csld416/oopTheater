@@ -22,7 +22,7 @@ public class MyTicketSpacePage extends JFrame {
     private final Color SELECTED_BG = new Color(200, 230, 255);
     private final Font FONT = new Font("SansSerif", Font.BOLD, 16);
 
-    private int select = 0; // 0 = 未使用, 1 = 已使用
+    private int select = 0; // 0 = 未使用, 1 = 已使用 (paging)
 
     private JPanel tabNotUsed;
     private JPanel tabUsed;
@@ -156,7 +156,7 @@ public class MyTicketSpacePage extends JFrame {
 
         for (Order o : allOrders) {
             int status = o.getStatus();
-            if ((select == 0 && status == 1) || (select == 1 && status == 0)) {
+            if ((select == 0 && status == 1) || (select == 1 && status == 0) || (select == 1 && status == -1)) {
                 filtered.add(o);
             }
         }
@@ -179,6 +179,13 @@ public class MyTicketSpacePage extends JFrame {
         }
 
         contentPanel.add(Box.createVerticalGlue()); // Pushes content upward
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    public void refreshContentExternally() {
+        contentPanel.removeAll();
+        loadContent();
         contentPanel.revalidate();
         contentPanel.repaint();
     }

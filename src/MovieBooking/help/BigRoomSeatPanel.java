@@ -23,6 +23,8 @@ public class BigRoomSeatPanel extends JPanel {
     private Runnable onSeatSelectionChange;
 
     private final ArrayList<String> selectedSeats = new ArrayList<>();
+    private boolean isFull = false;
+    private final List<RoundedSeatPanel> allSeatPanels = new ArrayList<>();
 
     public BigRoomSeatPanel() {
         setLayout(new BorderLayout());
@@ -168,12 +170,25 @@ public class BigRoomSeatPanel extends JPanel {
                         @Override
                         public void mousePressed(MouseEvent e) {
                             String seatId = seat.getSeat();
+
                             if (selectedSeats.contains(seatId)) {
                                 selectedSeats.remove(seatId);
                                 seat.setSelectedState(false);
                             } else {
+                                if (selectedSeats.size() >= 10) {
+                                    return;
+                                }
                                 selectedSeats.add(seatId);
                                 seat.setSelectedState(true);
+                            }
+
+                            isFull = selectedSeats.size() >= 10;
+                            if (isFull) {
+                                for (RoundedSeatPanel s : allSeatPanels) {
+                                    if (!s.isSelected()) {
+                                        s.setFull();
+                                    }
+                                }
                             }
 
                             if (onSeatSelectionChange != null) {
@@ -183,6 +198,7 @@ public class BigRoomSeatPanel extends JPanel {
                     });
                 }
                 gridPanel.add(seat);
+                allSeatPanels.add(seat);
             }
         }
 
