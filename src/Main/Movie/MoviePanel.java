@@ -2,9 +2,6 @@ package Main.Movie;
 
 import GlobalConst.Const;
 import Data.Movie;
-import Main.Movie.MovieCardPanel;
-import Main.Movie.MovieCardPanel;
-import global.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

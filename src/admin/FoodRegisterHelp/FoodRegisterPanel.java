@@ -22,9 +22,13 @@ public class FoodRegisterPanel extends JPanel {
     private final JTextField imgField;
 
     private final JFrame substrateFrame;
+    private final Runnable onSuccessCallback;
+    
+    private int selectedCategory;
 
-    public FoodRegisterPanel(JFrame substrateFrame) {
+    public FoodRegisterPanel(JFrame substrateFrame, Runnable onSuccessCallback) {
         this.substrateFrame = substrateFrame;
+        this.onSuccessCallback = onSuccessCallback;
 
         setLayout(null);
         setBackground(Color.WHITE);
@@ -102,9 +106,7 @@ public class FoodRegisterPanel extends JPanel {
         submitBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (!validateFields()) {
-                    return;
-                }
+                if (!validateFields()) return;
                 insertToDatabase();
             }
         });
@@ -147,35 +149,26 @@ public class FoodRegisterPanel extends JPanel {
 
         try {
             int price = Integer.parseInt(priceText);
-            if (price < 0) {
-                throw new NumberFormatException();
-            }
+            if (price < 0) throw new NumberFormatException();
         } catch (NumberFormatException e) {
             showErrorMessage("價格必須為正整數！");
             return false;
         }
 
-        try {
-            Connection conn = new DatabaseConnection().getConnection();
+        try (Connection conn = new DatabaseConnection().getConnection()) {
             String sql = "SELECT COUNT(*) FROM foods WHERE name = ? AND category = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, name);
             stmt.setInt(2, categoryCombo.getSelectedIndex());
-
+            selectedCategory = categoryCombo.getSelectedIndex();
             ResultSet rs = stmt.executeQuery();
             rs.next();
-            int count = rs.getInt(1);
-            rs.close();
-            stmt.close();
-            conn.close();
-
-            if (count > 0) {
+            if (rs.getInt(1) > 0) {
                 showErrorMessage("該品項已存在！");
                 return false;
             }
         } catch (Exception e) {
             showErrorMessage("檢查重複時錯誤：" + e.getMessage());
-            e.printStackTrace();
             return false;
         }
 
@@ -183,9 +176,7 @@ public class FoodRegisterPanel extends JPanel {
     }
 
     private void insertToDatabase() {
-        try {
-            Connection conn = new DatabaseConnection().getConnection();
-
+        try (Connection conn = new DatabaseConnection().getConnection()) {
             String sql = "INSERT INTO foods (name, price, category, is_valid, image_path) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, nameField.getText().trim());
@@ -197,16 +188,17 @@ public class FoodRegisterPanel extends JPanel {
             int rows = stmt.executeUpdate();
             if (rows > 0) {
                 showSuccessMessage("新增成功！");
+                if (onSuccessCallback != null) {
+                    SwingUtilities.invokeLater(onSuccessCallback);  // ensure thread safety
+                }
                 closeModal();
             } else {
                 showErrorMessage("新增失敗，請重試。");
             }
 
             stmt.close();
-            conn.close();
         } catch (Exception e) {
             showErrorMessage("資料庫錯誤：" + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -214,43 +206,6 @@ public class FoodRegisterPanel extends JPanel {
         JPanel glass = (JPanel) substrateFrame.getGlassPane();
         glass.setVisible(false);
         glass.removeAll();
-        glass.repaint();
-    }
-
-    private void showError(String message) {
-        JOptionPane.showMessageDialog(this, message, "錯誤", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void showModal(JFrame substrate) {
-        JPanel glass = (JPanel) substrate.getGlassPane();
-        glass.setVisible(true);
-        glass.setOpaque(false);
-        glass.setLayout(null);
-        glass.removeAll();
-
-        JPanel dim = new JPanel() {
-            protected void paintComponent(Graphics g) {
-                g.setColor(new Color(0, 0, 0, 100));
-                g.fillRect(0, 0, getWidth(), getHeight());
-            }
-        };
-        dim.setBounds(0, 0, substrate.getWidth(), substrate.getHeight());
-        dim.setOpaque(false);
-        dim.setLayout(null);
-
-        dim.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                Component clicked = SwingUtilities.getDeepestComponentAt(glass, e.getX(), e.getY());
-                if (clicked == dim) {
-                    glass.setVisible(false);
-                    glass.removeAll();
-                    glass.repaint();
-                }
-            }
-        });
-
-        glass.add(dim);
-        glass.add(new FoodRegisterPanel(substrate));
         glass.repaint();
     }
 

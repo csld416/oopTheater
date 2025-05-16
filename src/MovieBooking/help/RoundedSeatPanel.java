@@ -29,6 +29,21 @@ public class RoundedSeatPanel extends JPanel {
         this(defaultColor, hoverColor, pressedColor, textColor, text, "", touchable);
     }
 
+    public RoundedSeatPanel(Color bookedColor, Color textColor, String text, String row, boolean booked) {
+        this(
+                bookedColor, // defaultColor
+                bookedColor, // hoverColor
+                bookedColor, // pressedColor
+                textColor,
+                text,
+                row,
+                false // ⛔ touchable = false
+        );
+        if (booked) {
+            setFull(); // mark as full
+        }
+    }
+
     public RoundedSeatPanel(Color defaultColor, Color hoverColor, Color pressedColor, Color textColor, String text, String row, boolean touchable) {
         this.defaultColor = defaultColor;
         this.hoverColor = hoverColor;
@@ -51,7 +66,7 @@ public class RoundedSeatPanel extends JPanel {
                         if (isSelected) {
                             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                         }
-                    }else{
+                    } else {
                         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     }
                     if (!isFull && !isSelected) {

@@ -16,7 +16,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import javax.swing.border.LineBorder;
 
 public class PayPage extends JFrame {
 
@@ -30,6 +29,8 @@ public class PayPage extends JFrame {
     private JPanel topBarPanel;
     private JPanel leftPanel;
     private JPanel rightPanel;
+    
+    private JLabel qrLabel;
 
     private final Color GRAY = new Color(245, 245, 245);
 
@@ -164,23 +165,53 @@ public class PayPage extends JFrame {
 
         ImageHoverPanel linePayPanel = new ImageHoverPanel("src/Qrcode/LINE_Pay_logo.png");
         linePayPanel.setBounds(centerxx - 150, y, 300, 60);
+        linePayPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                ImageIcon randomQR = Qrcode.QRImageLoader.getRandomQRCode();
+                if (randomQR != null) {
+                    Image scaled = randomQR.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                    qrLabel.setIcon(new ImageIcon(scaled));
+                }
+            }
+        });
         rightPanel.add(linePayPanel);
 
         y += 70;
         ImageHoverPanel JKOPayPanel = new ImageHoverPanel("src/Qrcode/JKOPAY_logo.png");
         JKOPayPanel.setBounds(centerxx - 150, y, 300, 60);
+        JKOPayPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                ImageIcon randomQR = Qrcode.QRImageLoader.getRandomQRCode();
+                if (randomQR != null) {
+                    Image scaled = randomQR.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                    qrLabel.setIcon(new ImageIcon(scaled));
+                }
+            }
+        });
         rightPanel.add(JKOPayPanel);
 
         y += 70;
         ImageHoverPanel SAMSUNG_PayPanel = new ImageHoverPanel("src/Qrcode/SAMSUNG_Pay_logo.jpg");
         SAMSUNG_PayPanel.setBounds(centerxx - 150, y, 300, 60);
+        SAMSUNG_PayPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                ImageIcon randomQR = Qrcode.QRImageLoader.getRandomQRCode();
+                if (randomQR != null) {
+                    Image scaled = randomQR.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                    qrLabel.setIcon(new ImageIcon(scaled));
+                }
+            }
+        });
         rightPanel.add(SAMSUNG_PayPanel);
 
         // Load demo QR code below
         y += 80;
         ImageIcon qrIcon = new ImageIcon("src/Qrcode/demo_qrcode.png");
         Image scaledQR = qrIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-        JLabel qrLabel = new JLabel(new ImageIcon(scaledQR));
+        qrLabel = new JLabel(new ImageIcon(scaledQR));
         qrLabel.setBounds(centerX(200), y, 200, 200); // adjust Y as needed
         rightPanel.add(qrLabel);
 

@@ -1,11 +1,14 @@
 package Data;
 
 import connection.DatabaseConnection;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.*;
-import javax.swing.JOptionPane;
+import java.time.LocalDate;
+import java.security.MessageDigest;
 
 public class User {
 
@@ -13,8 +16,9 @@ public class User {
     private String name;
     private String email;
     private String phoneNumber;
-    private int age;
+    private LocalDate dob; // ⬅️ Replaces int age
     private String gender;
+    private BufferedImage profileImage;
 
     public static User currUser = null;
 
@@ -26,22 +30,24 @@ public class User {
                 "測試用戶",
                 "dummy@example.com",
                 "0912345678",
-                20,
-                "Male"
+                LocalDate.of(2004, 1, 1),
+                "Male",
+                null
         );
     }
 
     // === Constructor ===
-    public User(int id, String name, String email, String phoneNumber, int age, String gender) {
+    public User(int id, String name, String email, String phoneNumber, LocalDate dob, String gender, BufferedImage profileImage) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.age = age;
+        this.dob = dob;
         this.gender = gender;
+        this.profileImage = profileImage;
     }
 
-    // === Session Management (via SessionManager) ===
+    // === Session Management ===
     public static User getCurrentUser() {
         return currUser;
     }
@@ -67,12 +73,16 @@ public class User {
         return phoneNumber;
     }
 
-    public int getAge() {
-        return age;
+    public LocalDate getDob() {
+        return dob;
     }
 
     public String getGender() {
         return gender;
+    }
+
+    public BufferedImage getProfileImage() {
+        return profileImage;
     }
 
     // === Setters ===
@@ -88,24 +98,45 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     public void setGender(String gender) {
         this.gender = gender;
     }
 
-    // === Clear User Info (optional) ===
     public void clear() {
         this.id = -1;
         this.name = null;
         this.email = null;
         this.phoneNumber = null;
-        this.age = 0;
+        this.dob = null;
         this.gender = null;
+        this.profileImage = null;
     }
 
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            return hexString.toString(); // 64-character hex string
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // === Fetch user from DB ===
     public static User fetchUserByEmail(String email) {
         DatabaseConnection dbConnection = new DatabaseConnection();
         Connection conn = dbConnection.getConnection();
@@ -120,55 +151,63 @@ public class User {
                 if (rs.next()) {
                     int id = rs.getInt("id");
                     String name = rs.getString("fullname");
-                    String phoneNumber = rs.getString("phone");
-                    int age = rs.getInt("age");
+                    String phone = rs.getString("phone");
+                    Date sqlDob = rs.getDate("dob");
+                    LocalDate dob = sqlDob != null ? sqlDob.toLocalDate() : null;
                     String gender = rs.getString("gender");
-                    return new User(id, name, email, phoneNumber, age, gender);
+
+                    // Load profile image
+                    InputStream imageStream = rs.getBinaryStream("picture");
+                    BufferedImage profileImg = null;
+                    if (imageStream != null) {
+                        profileImg = ImageIO.read(imageStream);
+                    }
+
+                    return new User(id, name, email, phone, dob, gender, profileImg);
                 }
-            } catch (SQLException e) {
+
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
         }
+
         return null;
     }
 
-    public static void registerUser(String fullname, String email, String password, String phone, int age, String gender, File profilePictureFile) {
+    // === Register user to DB ===
+    public static void registerUser(String fullname, String email, String password, String phone, LocalDate dob, String gender, File profilePictureFile) {
         DatabaseConnection dbConnection = new DatabaseConnection();
 
         try {
             Connection connection = dbConnection.getConnection();
-            String query = "INSERT INTO `users`(`fullname`, `email`, `password`, `phone`, `age`, `gender`, `picture`) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement prepareStatement = connection.prepareStatement(query);
+            String query = "INSERT INTO users(fullname, email, password, phone, dob, gender, picture) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
 
-            prepareStatement.setString(1, fullname);
-            prepareStatement.setString(2, email);
-            prepareStatement.setString(3, password);
-            prepareStatement.setString(4, phone);
-            prepareStatement.setInt(5, age);
-            prepareStatement.setString(6, gender);
+            stmt.setString(1, fullname);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.setString(4, phone);
+            stmt.setDate(5, Date.valueOf(dob)); // ⬅️ store LocalDate as SQL DATE
+            stmt.setString(6, gender);
 
-            // Profile picture fallback
+            // Image handling
             if (profilePictureFile == null || !profilePictureFile.exists()) {
                 profilePictureFile = new File("src/icons/profile-icon.jpg");
             }
 
-            FileInputStream fileStream = new FileInputStream(profilePictureFile);
-            prepareStatement.setBinaryStream(7, fileStream, profilePictureFile.length());
+            FileInputStream imageStream = new FileInputStream(profilePictureFile);
+            stmt.setBinaryStream(7, imageStream, profilePictureFile.length());
 
-            int rowsAffected = prepareStatement.executeUpdate();
-
+            int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "註冊成功！", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "註冊失敗。", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "SQL 錯誤: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        } catch (FileNotFoundException eex) {
-            JOptionPane.showMessageDialog(null, "圖片檔案未找到: " + eex.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
-            eex.printStackTrace();
+        } catch (SQLException | FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "資料庫錯誤: " + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
@@ -185,19 +224,21 @@ public class User {
 
                 if (rs.next()) {
                     String storedPassword = rs.getString("password");
-                    return password.equals(storedPassword);
+                    String hashedInput = hashPassword(password); // 🔐 hash the input
+                    return hashedInput.equals(storedPassword);
                 }
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+
         return false;
     }
 
-    // === Debug String ===
     @Override
     public String toString() {
         return "User{id=" + id + ", name='" + name + "', email='" + email
-                + "', phone='" + phoneNumber + "', age=" + age + ", gender='" + gender + "'}";
+                + "', phone='" + phoneNumber + "', dob=" + dob + ", gender='" + gender + "'}";
     }
 }

@@ -1,11 +1,18 @@
 package MovieBooking.help;
 
+import Data.*;
+import connection.DatabaseConnection;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BigRoomSeatPanel extends JPanel {
 
@@ -26,7 +33,14 @@ public class BigRoomSeatPanel extends JPanel {
     private boolean isFull = false;
     private final List<RoundedSeatPanel> allSeatPanels = new ArrayList<>();
 
-    public BigRoomSeatPanel() {
+    private Showtime showtime;
+    private Set<String> bookedSeats;
+
+    public BigRoomSeatPanel(Showtime showtime) {
+
+        this.showtime = showtime;
+        this.bookedSeats = fetchBookedSeatsFromDatabase(showtime); // 🔥 fetch from DB here
+
         setLayout(new BorderLayout());
 
         JPanel screenPanel = new JPanel();
@@ -44,7 +58,8 @@ public class BigRoomSeatPanel extends JPanel {
 
         for (int row = 0; row < SEAT_ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                boolean isTouchable = true;
+                boolean isSeat = true;
+                boolean isTaken = false;
                 Color panelColor = DEFAULT_COLOR;
                 String label = "";
                 Color textColor = TEXT_COLOR;
@@ -53,12 +68,12 @@ public class BigRoomSeatPanel extends JPanel {
                 boolean isSeatRow = row >= 1 && row <= 7 || row >= 9 && row <= 12 || row == 15;
 
                 if (row == 0 || row == 8 || row == 13) {
-                    isTouchable = false;
+                    isSeat = false;
                     panelColor = BACKGROUND_COLOR;
                 }
 
                 if (col == 0 || col == COLS - 1) {
-                    isTouchable = false;
+                    isSeat = false;
                     panelColor = BACKGROUND_COLOR;
                     textColor = Color.BLACK;
                     switch (row) {
@@ -92,17 +107,17 @@ public class BigRoomSeatPanel extends JPanel {
                 }
 
                 if (row == 15 && col >= 9 && col <= 30) {
-                    isTouchable = false;
+                    isSeat = false;
                     panelColor = BACKGROUND_COLOR;
                 }
 
                 if (col == 12 || col == 13 || col == 14 || col == 27 || col == 28 || col == 29) {
-                    isTouchable = false;
+                    isSeat = false;
                     panelColor = BACKGROUND_COLOR;
                 }
 
                 if ((col == 14 || col == 27) && row != 0 && row != 8 && row != 13) {
-                    isTouchable = false;
+                    isSeat = false;
                     panelColor = BACKGROUND_COLOR;
                     label = String.valueOf((char) ('A' + (row - 1 - (row > 8 ? 1 : 0))));
                     if (row < 13) {
@@ -111,7 +126,7 @@ public class BigRoomSeatPanel extends JPanel {
                 }
 
                 if (row == 14 && col != 0 && col != COLS - 1) {
-                    isTouchable = true;
+                    isSeat = true;
                     panelColor = DEFAULT_COLOR;
                     label = String.valueOf(col);
                 }
@@ -120,7 +135,7 @@ public class BigRoomSeatPanel extends JPanel {
                         || (row == 2 && (col >= 1 && col <= 4 || col >= 37 && col <= 40))
                         || (row == 14 && col == 40)
                         || (row == 15 && (col == 39 || col == 40))) {
-                    isTouchable = false;
+                    isSeat = false;
                     panelColor = BACKGROUND_COLOR;
                 }
 
@@ -146,37 +161,43 @@ public class BigRoomSeatPanel extends JPanel {
                 if (isSeatRow) {
                     int actualRow = row;
                     if (row > 13) {
-                        actualRow--; // Skip separator row
+                        actualRow--;
                     }
                     if (row > 8) {
-                        actualRow--;  // Skip another separator
+                        actualRow--;
                     }
                     rowLabel = String.valueOf((char) ('A' + actualRow - 1));
                 }
-                RoundedSeatPanel seat = new RoundedSeatPanel(
-                        panelColor,
-                        HOVER_COLOR,
-                        PRESSED_COLOR,
-                        textColor,
-                        label,
-                        rowLabel,
-                        isTouchable
-                );
-                seat.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
-                if (isTouchable) {
+
+                String seatId = rowLabel + "-" + label;
+                RoundedSeatPanel seat;
+
+                if (isSeat) {
+                    if (bookedSeats.contains(seatId)) {
+                        Color bookedColor = Color.RED;
+                        seat = new RoundedSeatPanel(bookedColor, HOVER_COLOR, PRESSED_COLOR, textColor, label, rowLabel, false);
+                    } else {
+                        seat = new RoundedSeatPanel(DEFAULT_COLOR, HOVER_COLOR, PRESSED_COLOR, textColor, label, rowLabel, true);
+                    }
+                } else {
+                    seat = new RoundedSeatPanel(Color.WHITE, HOVER_COLOR, PRESSED_COLOR, textColor, label, rowLabel, false);
+                }
+
+                // Add listeners if touchable
+                if (isSeat) {
                     seat.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mousePressed(MouseEvent e) {
-                            String seatId = seat.getSeat();
+                            String sid = seat.getSeat();
 
-                            if (selectedSeats.contains(seatId)) {
-                                selectedSeats.remove(seatId);
+                            if (selectedSeats.contains(sid)) {
+                                selectedSeats.remove(sid);
                                 seat.setSelectedState(false);
                             } else {
                                 if (selectedSeats.size() >= 10) {
                                     return;
                                 }
-                                selectedSeats.add(seatId);
+                                selectedSeats.add(sid);
                                 seat.setSelectedState(true);
                             }
 
@@ -194,6 +215,8 @@ public class BigRoomSeatPanel extends JPanel {
                         }
                     });
                 }
+
+                seat.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
                 gridPanel.add(seat);
                 allSeatPanels.add(seat);
             }
@@ -210,10 +233,32 @@ public class BigRoomSeatPanel extends JPanel {
         return new ArrayList<>(selectedSeats);
     }
 
+    private HashSet<String> fetchBookedSeatsFromDatabase(Showtime showtime) {
+        HashSet<String> booked = new HashSet<>();
+        try {
+            Connection conn = new DatabaseConnection().getConnection();
+            String sql = "SELECT seat_label FROM BookedSeat WHERE showtime_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, showtime.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                booked.add(rs.getString("seat_label"));
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return booked;
+    }
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Seat Grid with SCREEN + Row Labels");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new JScrollPane(new BigRoomSeatPanel()));
+        frame.add(new JScrollPane(new BigRoomSeatPanel(Showtime.dummyShowtime)));
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

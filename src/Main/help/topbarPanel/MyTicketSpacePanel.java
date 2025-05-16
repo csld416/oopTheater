@@ -4,6 +4,8 @@ import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MyTicketSpacePanel extends JPanel {
 
@@ -13,7 +15,6 @@ public class MyTicketSpacePanel extends JPanel {
         setLayout(null);
         setPreferredSize(new Dimension(Const.ICON_PANEL_WIDTH, Const.ICON_PANEL_HEIGHT));
         setBackground(new Color(169, 183, 198));
-        // setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         int iconSize = Const.ICON_PANEL_HEIGHT - 10;
 
@@ -28,9 +29,25 @@ public class MyTicketSpacePanel extends JPanel {
         // Text
         textLabel = new JLabel("我的票夾");
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        textLabel.setForeground(Color.BLACK);
         textLabel.setBounds(iconSize + 20, 0, Const.ICON_PANEL_WIDTH - iconSize - 10, Const.ICON_PANEL_HEIGHT);
         textLabel.setVerticalAlignment(SwingConstants.CENTER);
         add(textLabel);
+
+        // === Hover Effect ===
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                textLabel.setForeground(Color.WHITE);
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                textLabel.setForeground(Color.BLACK);
+                setCursor(Cursor.getDefaultCursor());
+            }
+        });
     }
 
     public JLabel getLabel() {

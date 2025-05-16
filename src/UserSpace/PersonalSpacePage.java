@@ -2,11 +2,11 @@ package UserSpace;
 
 import GlobalConst.Const;
 import Data.SessionManager;
+import Data.User;
 import Main.TopBarPanel;
 import Main.StartingPage;
 import UserSpace.Panels.*;
 import UserSpace.Buttons.*;
-import global.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -205,6 +205,7 @@ public class PersonalSpacePage extends JFrame {
     }
 
     public static void main(String[] args) {
+        User.setCurrentUser(User.dummyUser);
         SwingUtilities.invokeLater(PersonalSpacePage::new);
     }
 }

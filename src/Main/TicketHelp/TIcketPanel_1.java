@@ -35,10 +35,11 @@ public class TicketPanel_1 extends JPanel {
         int textX = 120;
         int y = 15;
 
-        JLabel theaterLabel = new JLabel(order.getShowtime().getTheaterName());
-        theaterLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        theaterLabel.setBounds(textX, y, 200, 20);
-        add(theaterLabel);
+        String id = Integer.toString(order.getShowtime().getId());
+        JLabel OrderID = new JLabel(id);
+        OrderID.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        OrderID.setBounds(textX, y, 200, 20);
+        add(OrderID);
         y += 20;
 
         JLabel titleLabel = new JLabel(order.getMovie().getTitle());

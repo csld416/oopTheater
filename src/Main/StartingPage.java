@@ -8,13 +8,11 @@ import GlobalConst.Const;
 import Main.Movie.MoviePanel;
 import Main.help.GapPanel;
 import Main.Movie.MovieCardPanel;
-import connection.DatabaseConnection;
 import Data.Movie;
 import java.awt.Dimension;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.sql.*;
 
 public class StartingPage extends JFrame {
 
@@ -40,7 +38,7 @@ public class StartingPage extends JFrame {
         initGapSlot();
         initMovieSlot();
 
-        fetchMoviesFromDB();
+        allMovies = Movie.getAllMovies();
         refreshMovieCards();
 
         setVisible(true);
@@ -61,8 +59,8 @@ public class StartingPage extends JFrame {
         gapPanel = new GapPanel();  // make it a field
         gapPanel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH, Const.GAP_BETWEEN);
         add(gapPanel);
-        gapPanel.revalidate();  // 🔥 Force layout manager to layout its children
-        gapPanel.repaint();     // 🔥 Force repaint so doLayout() has an effect
+        gapPanel.revalidate();
+        gapPanel.repaint(); 
     }
 
     private void initMovieSlot() {
@@ -78,34 +76,6 @@ public class StartingPage extends JFrame {
 
         movieSlot.add(moviePanel);
         add(movieSlot);
-    }
-
-    private void fetchMoviesFromDB() {
-        allMovies.clear();
-        try {
-            Connection conn = new DatabaseConnection().getConnection();
-            String sql = "SELECT * FROM Movies ORDER BY release_date ASC";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                allMovies.add(new Movie(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getInt("duration"),
-                        rs.getString("description"),
-                        rs.getString("rating"),
-                        rs.getDate("release_date"),
-                        rs.getDate("removal_date"),
-                        rs.getString("poster_path")
-                ));
-            }
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public void refreshMovieCards() {

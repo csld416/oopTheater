@@ -81,7 +81,7 @@ public class BookLargePage extends JFrame {
         contentPanel.add(titleLabel);
 
         // === Seat Panel ===
-        seatPanel = new BigRoomSeatPanel();
+        seatPanel = new BigRoomSeatPanel(showtime);
         seatPanel.setBounds((Const.FRAME_WIDTH - 928) / 2, 30, 928, 412);
         seatPanel.setOnSeatSelectionChange(this::refreshSeatList);
         contentPanel.add(seatPanel);

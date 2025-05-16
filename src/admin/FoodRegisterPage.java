@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import admin.FoodRegisterHelp.FoodRegisterPanel;
 import global.DimLayer;
-import javax.swing.border.LineBorder;
 
 public class FoodRegisterPage extends JFrame {
 
@@ -25,6 +24,7 @@ public class FoodRegisterPage extends JFrame {
 
     private JScrollPane foodEntryScrollPane;
     private JPanel topPanel, middlePanel, bottomPanel;
+    private JPanel contentPanel;
 
     public FoodRegisterPage() {
         setTitle("餐點管理");
@@ -86,7 +86,7 @@ public class FoodRegisterPage extends JFrame {
                     toggled[index] = true;
                     label.setBackground(new Color(185, 128, 109));
                     selectedCategory = index;
-                    loadFoodEntries();
+                    refreshFoodContent();
                 }
 
                 @Override
@@ -113,7 +113,7 @@ public class FoodRegisterPage extends JFrame {
                 new Dimension(100, 40));
         addButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         addButton.setBounds(
-                x + CATEGORY_WIDTH + 30, // spacing to the right
+                x + CATEGORY_WIDTH + 30,
                 y + (labelHeight - 40) / 2,
                 100, 40
         );
@@ -123,7 +123,7 @@ public class FoodRegisterPage extends JFrame {
                 JFrame frame = FoodRegisterPage.this;
                 DimLayer dim = new DimLayer(frame);
                 dim.setSize(frame.getSize());
-                FoodRegisterPanel modal = new FoodRegisterPanel(frame);
+                FoodRegisterPanel modal = new FoodRegisterPanel(frame, () -> refreshFoodContent());
                 dim.add(modal);
                 frame.setGlassPane(dim);
                 dim.setVisible(true);
@@ -138,31 +138,39 @@ public class FoodRegisterPage extends JFrame {
         bottomPanel.setBounds(0, Const.TOP_BAR_HEIGHT + MIDDLE_HEIGHT, Const.FRAME_WIDTH,
                 Const.FRAME_HEIGHT - Const.TOP_BAR_HEIGHT - MIDDLE_HEIGHT);
         bottomPanel.setBackground(Const.COLOR_MAIN_LIGHT);
-        add(bottomPanel);  // ← add bottomPanel to the JFrame directly
+        add(bottomPanel);
 
-        foodEntryScrollPane = new JScrollPane();
+        // Inner content panel inside scrollpane
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(Const.COLOR_MAIN_LIGHT);
+
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        wrapper.setBackground(Const.COLOR_MAIN_LIGHT);
+        wrapper.add(contentPanel);
+
+        foodEntryScrollPane = new JScrollPane(wrapper,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         foodEntryScrollPane.setBounds(Const.FRAME_WIDTH / 2 - 250, 0, 500,
                 bottomPanel.getHeight());
         foodEntryScrollPane.getVerticalScrollBar().setUnitIncrement(12);
-        foodEntryScrollPane.setBackground(Const.COLOR_MAIN_LIGHT);
-
         foodEntryScrollPane.setBorder(null);
         foodEntryScrollPane.setViewportBorder(null);
 
-        bottomPanel.add(foodEntryScrollPane);  // ← add scrollPane to bottomPanel
-        loadFoodEntries();
+        bottomPanel.add(foodEntryScrollPane);
+        refreshFoodContent();
     }
 
-    private void loadFoodEntries() {
-        ArrayList<Food> all = Food.getAllFoods();
-        JPanel container = new JPanel();
-        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setBackground(Const.COLOR_MAIN_LIGHT);
+    public void refreshFoodContent() {
+        contentPanel.removeAll();
 
+        ArrayList<Food> all = Food.getAllFoods();
         int count = 0;
         for (Food f : all) {
             if (f.getCategory() == selectedCategory) {
-                container.add(new FoodEntry(f));
+                contentPanel.add(new FoodEntry(f));
+                contentPanel.add(Box.createVerticalStrut(8));
                 count++;
             }
         }
@@ -171,15 +179,16 @@ public class FoodRegisterPage extends JFrame {
             JLabel emptyLabel = new JLabel("此分類尚未有資料", SwingConstants.CENTER);
             emptyLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
             emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            container.add(Box.createVerticalStrut(40));
-            container.add(emptyLabel);
+            contentPanel.add(Box.createVerticalStrut(40));
+            contentPanel.add(emptyLabel);
         }
 
-        container.add(Box.createVerticalGlue());
-        foodEntryScrollPane.setViewportView(container);
+        contentPanel.add(Box.createVerticalGlue());
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 
     public static void main(String[] args) {
-        new FoodRegisterPage();
+        SwingUtilities.invokeLater(FoodRegisterPage::new);
     }
 }

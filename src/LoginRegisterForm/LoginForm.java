@@ -6,7 +6,6 @@ package LoginRegisterForm;
 
 import Data.SessionManager;
 import Data.User;
-import connection.DatabaseConnection;
 import Main.StartingPage;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -29,10 +28,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 /**
@@ -144,32 +139,15 @@ public class LoginForm {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                isLoggin = true;
-                String username = usernameField.getText();
-                String password = String.valueOf(passwordField.getPassword());
-                if (User.checkLogin(username, password)) {
-                    frame.dispose();
-                    substrateFrame.dispose();
-                    User user = User.fetchUserByEmail(username);
-                    User.setCurrentUser(user);
-                    if (SessionManager.redirectTargetPage != null) {
-                        SessionManager.redirectTargetPage.run();
-                        SessionManager.redirectTargetPage = null;
-                    } else if (SessionManager.returnAfterLogin != null) {
-                        SessionManager.returnAfterLogin.setVisible(true);
-                        SessionManager.returnAfterLogin = null;
-                    } else {
-                        new StartingPage().setVisible(true); // fallback
-                    }
-                    // open main page
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Invalid username or password", "Invalid Data", JOptionPane.ERROR_MESSAGE);
-                    isLoggin = false;
-                }
+                loginAction();
             }
 
         });
         contentPanel.add(buttonLogin);
+        frame.getRootPane().setDefaultButton(buttonLogin);
+        buttonLogin.addActionListener(e -> {
+            loginAction(); // reuse the same logic from mousePressed
+        });
         //=== Button Register
         buttonRegister = new JButton("Register");
         buttonRegister.setBounds(220, 120, 110, 35);
@@ -227,10 +205,35 @@ public class LoginForm {
         frame.setVisible(true);
     }
 
+    private void loginAction() {
+        isLoggin = true;
+        String username = usernameField.getText();
+        String password = String.valueOf(passwordField.getPassword());
+        if (User.checkLogin(username, password)) {
+            frame.dispose();
+            substrateFrame.dispose();
+            User user = User.fetchUserByEmail(username);
+            User.setCurrentUser(user);
+            if (SessionManager.redirectTargetPage != null) {
+                SessionManager.redirectTargetPage.run();
+                SessionManager.redirectTargetPage = null;
+            } else if (SessionManager.returnAfterLogin != null) {
+                SessionManager.returnAfterLogin.setVisible(true);
+                SessionManager.returnAfterLogin = null;
+            } else {
+                new StartingPage().setVisible(true); // fallback
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "Invalid username or password", "Invalid Data", JOptionPane.ERROR_MESSAGE);
+            isLoggin = false;
+        }
+    }
+
     public static void main(String[] args) {
         JFrame dummyFrame = new JFrame();
         dummyFrame.setSize(W, H);
         dummyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        dummyFrame.setLocationRelativeTo(null);
         dummyFrame.setVisible(true);
 
         new LoginForm(dummyFrame);

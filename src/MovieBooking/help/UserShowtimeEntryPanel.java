@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import connection.DatabaseConnection;
 
 public class UserShowtimeEntryPanel extends JPanel {

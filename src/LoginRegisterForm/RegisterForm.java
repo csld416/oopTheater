@@ -1,17 +1,17 @@
 package LoginRegisterForm;
 
-import connection.DatabaseConnection;
+import Data.User;
 import global.CapsuleButton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.time.LocalDate;
 
 public class RegisterForm {
 
@@ -22,7 +22,7 @@ public class RegisterForm {
     private final JTextField fullnameField;
     private final JTextField usernameField;
     private final JTextField phoneField;
-    private final JTextField ageField;
+    private final JTextField dobField;
     private final JPasswordField passwordField;
     private final JPasswordField confirmPasswordField;
     private final JRadioButton maleRadioButton;
@@ -30,8 +30,8 @@ public class RegisterForm {
     private final ButtonGroup genderGroup;
     private JLabel profilepictureImage;
     private CapsuleButton browseButton;
-    private CapsuleButton buttonRegister;
-    private CapsuleButton buttonLogin;
+    private final CapsuleButton buttonRegister;
+    private final CapsuleButton buttonLogin;
 
     private String selectedImage;
     private BufferedImage profileImage;
@@ -39,12 +39,13 @@ public class RegisterForm {
     private boolean isdragging = false;
     private Point mouseoffset;
 
-    private final DatabaseConnection dbConnection;
     private final JFrame substrateFrame;
     private static final int W = 450;
     private static final int H = 550;
     private boolean isLoggin = false;
     private boolean isRegistering = false;
+
+    private File profilePictureFile;
 
     public RegisterForm(JFrame SubstrateFrame) {
         this.substrateFrame = SubstrateFrame;
@@ -98,7 +99,7 @@ public class RegisterForm {
         fullnameField = createLabeledField("Full name:", 20);
         usernameField = createLabeledField("Email:", 50);
         phoneField = createLabeledField("Phone:", 80);
-        ageField = createLabeledField("Age:", 110);
+        dobField = createDateField("Date of Birth:", 110);
         passwordField = createPasswordField("Password:", 140);
         confirmPasswordField = createPasswordField("Confirm Password:", 170);
 
@@ -133,7 +134,7 @@ public class RegisterForm {
         browseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                 chooseImage();
+                chooseImage();
             }
         });
         contentPanel.add(browseButton);
@@ -159,6 +160,7 @@ public class RegisterForm {
                 if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     selectedImage = selectedFile.getAbsolutePath();
+                    profilePictureFile = selectedFile;
                     try {
                         profileImage = ImageIO.read(selectedFile);
                         Image scaled = profileImage.getScaledInstance(130, 130, Image.SCALE_SMOOTH);
@@ -176,7 +178,7 @@ public class RegisterForm {
                 new Color(107, 123, 140),
                 new Color(90, 107, 122),
                 new Dimension(160, 40), 16);
-        buttonLogin.setBounds(40, 400, 160, 40);
+        buttonLogin.setBounds(50, 400, 160, 40);
         buttonLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         buttonLogin.addMouseListener(new MouseAdapter() {
             @Override
@@ -193,23 +195,43 @@ public class RegisterForm {
                 new Color(189, 170, 165),
                 new Color(68, 149, 145),
                 new Dimension(160, 40), 16);
-        buttonRegister.setBounds(225, 400, 160, 40);
+        buttonRegister.setBounds(245, 400, 160, 40);
         buttonRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         buttonRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 isRegistering = true;
                 if (isValidInput()) {
-                    registerUser();
+                    String fullname = fullnameField.getText().trim();
+                    String email = usernameField.getText().trim();
+                    String password = User.hashPassword(String.valueOf(passwordField.getPassword()));
+                    String phone = phoneField.getText().trim();
+                    String dobText = dobField.getText().trim();
+                    String gender = maleRadioButton.isSelected() ? "Male" : "Female";
+
+                    LocalDate dob = LocalDate.parse(dobText);
+                    User.registerUser(fullname, email, password, phone, dob, gender, profilePictureFile);
+                    new LoginForm(substrateFrame);
+                    frame.dispose();
                 }
                 isRegistering = false;
             }
         });
         contentPanel.add(buttonRegister);
-
-        // Final frame setup
         frame.setVisible(true);
-        dbConnection = new DatabaseConnection();
+    }
+
+    private JFormattedTextField createDateField(String label, int y) {
+        JLabel l = new JLabel(label);
+        l.setBounds(30, y, 120, 25);
+        contentPanel.add(l);
+
+        JFormattedTextField f = new JFormattedTextField(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        f.setBounds(150, y, 250, 25);
+        f.setToolTipText("Format: yyyy-MM-dd");
+        f.setText(LocalDate.now().toString());
+        contentPanel.add(f);
+        return f;
     }
 
     private JTextField createLabeledField(String label, int y) {
@@ -258,12 +280,17 @@ public class RegisterForm {
         String fullname = fullnameField.getText().trim();
         String email = usernameField.getText().trim();
         String phone = phoneField.getText().trim();
-        String ageText = ageField.getText().trim();
+        String dobText = dobField.getText().trim();
         String password = new String(passwordField.getPassword());
         String confirmPassword = new String(confirmPasswordField.getPassword());
 
-        if (fullname.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || ageText.isEmpty()) {
+        if (fullname.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || dobText.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "All fields must be filled.");
+            return false;
+        }
+
+        if (!dobText.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+            JOptionPane.showMessageDialog(frame, "Invalid date format. Use yyyy-MM-dd.");
             return false;
         }
 
@@ -273,13 +300,16 @@ public class RegisterForm {
         }
 
         try {
-            int age = Integer.parseInt(ageText);
+            java.time.LocalDate birthDate = java.time.LocalDate.parse(dobText);
+            java.time.LocalDate now = java.time.LocalDate.now();
+            int age = java.time.Period.between(birthDate, now).getYears();
+
             if (age <= 0) {
-                JOptionPane.showMessageDialog(frame, "Age must be positive.");
+                JOptionPane.showMessageDialog(frame, "Date of Birth must be in the past.");
                 return false;
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(frame, "Age must be a number.");
+        } catch (java.time.format.DateTimeParseException e) {
+            JOptionPane.showMessageDialog(frame, "Invalid date. Please use format yyyy-MM-dd and enter a valid date.");
             return false;
         }
 
@@ -289,10 +319,6 @@ public class RegisterForm {
         }
 
         return true;
-    }
-
-    private void registerUser() {
-        // Your DB insertion logic remains here, based on validated input
     }
 
     public static void main(String[] args) {
