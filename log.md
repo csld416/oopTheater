@@ -182,3 +182,30 @@ next:
 - Order Information after clicking the ticket (either 1 or 2)
 - patch error for OPlogin
 - ?
+
+## 05/13
+
+- refund feature done.
+- patch error for OPlogin
+
+## 05/15
+
+Too many things are being dealing with, can' have the time. Btw, I was cracking on the PDE and the electronics. Anyways, now we are back. Here are some updates:
+
+- the seat panel now has a minimum standard and a maximum seat chosed. The reason for this is to avoid robot booking, or sudden greate value of refund, causing the theater to lose profits.
+
+## 05/16
+
+- Update the age in the register form and the DB.
+- update the hash of the password
+- update the age -> date of birth
+- Qrcode generate in Paypage
+- update Ticket Entry with id
+- diable the hover and the selection of the seat if booked
+- update the date format from 19:30:0.0 -> 19:30
+- update showtime register -> conflict check
+
+next:
+- movie sorting in starting page
+- Order Information after clicking the ticket (either 1 or 2)
+- timer for the booking.
