@@ -39,7 +39,7 @@ public class BigRoomSeatPanel extends JPanel {
     public BigRoomSeatPanel(Showtime showtime) {
 
         this.showtime = showtime;
-        this.bookedSeats = fetchBookedSeatsFromDatabase(showtime); // 🔥 fetch from DB here
+        this.bookedSeats = fetchBookedSeatsFromDatabase(showtime);
 
         setLayout(new BorderLayout());
 
@@ -59,7 +59,6 @@ public class BigRoomSeatPanel extends JPanel {
         for (int row = 0; row < SEAT_ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 boolean isSeat = true;
-                boolean isTaken = false;
                 Color panelColor = DEFAULT_COLOR;
                 String label = "";
                 Color textColor = TEXT_COLOR;

@@ -83,7 +83,7 @@ public class BookSmallPage extends JFrame {
         leftPanel.setBounds(0, y, Const.FRAME_WIDTH / 2, height);
         leftPanel.setBackground(new Color(245, 245, 245));
 
-        seatPanel = new SmallRoomSeatPanel();
+        seatPanel = new SmallRoomSeatPanel(showtime);
         Dimension preferred = seatPanel.getPreferredSize();
         int seatPanelX = (leftPanel.getWidth() - preferred.width) / 2;
         int seatPanelY = 100;
@@ -122,7 +122,10 @@ public class BookSmallPage extends JFrame {
         durationLabel.setBounds(160, 85, 300, 20);
         rightPanel.add(durationLabel);
 
-        JLabel showtimeLabel = new JLabel("場次：" + showtime.getStartTime().toString());
+        JLabel showtimeLabel = new JLabel("場次："
+                + showtime.getStartTime()
+                        .toLocalDateTime()
+                        .format(java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
         showtimeLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         showtimeLabel.setBounds(160, 110, 300, 20);
         rightPanel.add(showtimeLabel);
@@ -170,7 +173,7 @@ public class BookSmallPage extends JFrame {
                     };
                     new LoginForm(frame);
                 } else {
-                     order.setUser(User.currUser);
+                    order.setUser(User.currUser);
                     new FoodChoosingPage(order);
                     BookSmallPage.this.dispose();
                 }

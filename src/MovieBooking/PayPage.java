@@ -29,7 +29,7 @@ public class PayPage extends JFrame {
     private JPanel topBarPanel;
     private JPanel leftPanel;
     private JPanel rightPanel;
-    
+
     private JLabel qrLabel;
 
     private final Color GRAY = new Color(245, 245, 245);
@@ -97,7 +97,10 @@ public class PayPage extends JFrame {
         leftPanel.add(durationLabel);
         y += 30;
 
-        JLabel showtimeLabel = new JLabel("場次：" + showtime.getStartTime().toString());
+        JLabel showtimeLabel = new JLabel("場次："
+                + showtime.getStartTime()
+                        .toLocalDateTime()
+                        .format(java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
         showtimeLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         showtimeLabel.setBounds(170, y, 300, 20);
         leftPanel.add(showtimeLabel);

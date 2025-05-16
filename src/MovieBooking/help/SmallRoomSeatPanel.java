@@ -1,11 +1,17 @@
 package MovieBooking.help;
 
+import Data.Showtime;
+import connection.DatabaseConnection;
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 public class SmallRoomSeatPanel extends JPanel {
 
@@ -26,7 +32,10 @@ public class SmallRoomSeatPanel extends JPanel {
     private boolean isFull = false;
     private final List<RoundedSeatPanel> allSeatPanels = new ArrayList<>();
 
-    public SmallRoomSeatPanel() {
+    private final Set<String> bookedSeats;
+
+    public SmallRoomSeatPanel(Showtime showtime) {
+        this.bookedSeats = fetchBookedSeatsFromDatabase(showtime);
         setLayout(new BorderLayout());
 
         JPanel screenPanel = new JPanel();
@@ -43,78 +52,67 @@ public class SmallRoomSeatPanel extends JPanel {
 
         for (int row = 0; row < SEAT_ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                boolean isTouchable = true;
+                boolean isSeat = true;
                 Color panelColor = DEFAULT_COLOR;
                 String label = "";
                 Color textColor = TEXT_COLOR;
                 String rowValue = "";
 
-                // Row 1 (index 0 in grid) is untouchable
-                if (row == 0) {
-                    isTouchable = false;
+                if (row == 0 || col == 0 || col == COLS - 1) {
+                    isSeat = false;
                     panelColor = BACKGROUND_COLOR;
                 }
 
-                // First and last columns are untouchable
-                if (col == 0 || col == COLS - 1) {
-                    isTouchable = false;
-                    panelColor = BACKGROUND_COLOR;
-                }
-
-                // Label columns 5 and 14 (0-based index)
                 if ((col == 5 || col == 14) && row > 0) {
-                    isTouchable = false;
+                    isSeat = false;
                     panelColor = BACKGROUND_COLOR;
                     textColor = Color.BLACK;
                     label = String.valueOf((char) ('A' + row - 1));
                 }
 
-                // Seat numbering orientation
-                if (isTouchable && row > 0) {
+                if (isSeat && row > 0) {
                     rowValue = String.valueOf((char) ('A' + row - 1));
-                    if (col >= 1 && col <= 4) {
+                    if (col >= 1 && col <= 4)
                         label = String.valueOf(col);
-                    } else if (col >= 6 && col <= 13) {
+                    else if (col >= 6 && col <= 13)
                         label = String.valueOf(col - 1);
-                    } else if (col >= 15 && col <= 18) {
+                    else if (col >= 15 && col <= 18)
                         label = String.valueOf(col - 2);
-                    }
                 }
 
-                RoundedSeatPanel seat = new RoundedSeatPanel(
-                        panelColor,
-                        HOVER_COLOR,
-                        PRESSED_COLOR,
-                        textColor,
-                        label,
-                        rowValue,
-                        isTouchable
-                );
-                seat.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
+                String seatId = rowValue + "-" + label;
+                RoundedSeatPanel seat;
 
-                if (isTouchable) {
+                if (isSeat) {
+                    if (bookedSeats.contains(seatId)) {
+                        Color bookedColor = Color.RED;
+                        seat = new RoundedSeatPanel(bookedColor, textColor, label, rowValue, true);
+                    } else {
+                        seat = new RoundedSeatPanel(DEFAULT_COLOR, HOVER_COLOR, PRESSED_COLOR, textColor, label, rowValue, true);
+                    }
+                } else {
+                    seat = new RoundedSeatPanel(Color.WHITE, HOVER_COLOR, PRESSED_COLOR, textColor, label, rowValue, false);
+                }
+
+                if (isSeat) {
                     seat.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mousePressed(MouseEvent e) {
-                            String seatId = seat.getSeat();
+                            String sid = seat.getSeat();
 
-                            if (selectedSeats.contains(seatId)) {
-                                selectedSeats.remove(seatId);
+                            if (selectedSeats.contains(sid)) {
+                                selectedSeats.remove(sid);
                                 seat.setSelectedState(false);
                             } else {
-                                if (selectedSeats.size() >= 10) {
-                                    return;
-                                }
-                                selectedSeats.add(seatId);
+                                if (selectedSeats.size() >= 10) return;
+                                selectedSeats.add(sid);
                                 seat.setSelectedState(true);
                             }
 
                             isFull = selectedSeats.size() >= 10;
                             if (isFull) {
                                 for (RoundedSeatPanel s : allSeatPanels) {
-                                    if (!s.isSelected()) {
-                                        s.setFull();
-                                    }
+                                    if (!s.isSelected()) s.setFull();
                                 }
                             }
 
@@ -125,12 +123,14 @@ public class SmallRoomSeatPanel extends JPanel {
                     });
                 }
 
+                seat.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
                 gridPanel.add(seat);
                 allSeatPanels.add(seat);
             }
         }
+
         add(gridPanel, BorderLayout.CENTER);
-        // Spacer panel to add 10px bottom margin
+
         JPanel spacer = new JPanel();
         spacer.setPreferredSize(new Dimension(1, 10));
         spacer.setOpaque(true);
@@ -146,12 +146,25 @@ public class SmallRoomSeatPanel extends JPanel {
         return new ArrayList<>(selectedSeats);
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Small Room Seat Layout");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new JScrollPane(new SmallRoomSeatPanel()));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+    private HashSet<String> fetchBookedSeatsFromDatabase(Showtime showtime) {
+        HashSet<String> booked = new HashSet<>();
+        try {
+            Connection conn = new DatabaseConnection().getConnection();
+            String sql = "SELECT seat_label FROM BookedSeat WHERE showtime_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, showtime.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                booked.add(rs.getString("seat_label"));
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return booked;
     }
 }

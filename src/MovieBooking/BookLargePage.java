@@ -114,7 +114,12 @@ public class BookLargePage extends JFrame {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
                 List<String> selectedSeatLabels = seatPanel.getSeatList();
-                
+
+                if (selectedSeatLabels.isEmpty()) {
+                    JOptionPane.showMessageDialog(BookLargePage.this, "請選擇至少一個座位！", "尚未選擇座位", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 ArrayList<Seat> selectedSeats = new ArrayList<>();
                 for (String label : selectedSeatLabels) {
                     selectedSeats.add(new Seat(label));

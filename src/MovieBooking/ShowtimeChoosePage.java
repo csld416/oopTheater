@@ -6,7 +6,6 @@ import Data.Movie;
 import Data.Order;
 import Main.TopBarPanel;
 import MovieBooking.help.UserShowtimeEntryPanel;
-import global.*;
 
 import javax.swing.*;
 import java.awt.*;
