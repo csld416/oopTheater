@@ -274,6 +274,17 @@ public class FoodChoosingPage extends JFrame {
 
         CapsuleButton backBtn = new CapsuleButton("回上頁", BACK_color, BACK_color_hover, new Dimension(130, 40));
         backBtn.setBounds(100, y, 130, 40);
+        backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                if (order.getShowtime().getTheaterTypeIsBig()) {
+                    new BookLargePage(order);
+                } else {
+                    new BookSmallPage(order);
+                }
+                dispose();
+            }
+        });
         rightPanel.add(backBtn);
 
         add(rightPanel);

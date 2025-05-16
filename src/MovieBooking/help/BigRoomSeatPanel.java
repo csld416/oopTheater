@@ -40,7 +40,7 @@ public class BigRoomSeatPanel extends JPanel {
 
         this.showtime = showtime;
         this.bookedSeats = fetchBookedSeatsFromDatabase(showtime);
-
+        
         setLayout(new BorderLayout());
 
         JPanel screenPanel = new JPanel();
@@ -52,7 +52,7 @@ public class BigRoomSeatPanel extends JPanel {
         screenPanel.setLayout(new BorderLayout());
         screenPanel.add(screenLabel, BorderLayout.CENTER);
         add(screenPanel, BorderLayout.NORTH);
-
+        
         JPanel gridPanel = new JPanel(new GridLayout(SEAT_ROWS, COLS, 2, 2));
         gridPanel.setBackground(Color.WHITE);
 

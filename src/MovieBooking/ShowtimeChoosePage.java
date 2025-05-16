@@ -144,8 +144,8 @@ public class ShowtimeChoosePage extends JFrame {
 
                 int x = (rightWidth - entryWidth) / 2;
                 entry.setBounds(x, yy, entryWidth, entryHeight);
-                order.setShowtime(s);
                 entry.setClickListener(e -> {
+                    order.setShowtime(s);
                     if (s.getTheaterTypeIsBig()) {
                         new BookLargePage(order);
                     } else {

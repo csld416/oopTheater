@@ -19,7 +19,7 @@ import GlobalConst.Const;
 
 public class MovieRegisterPanel extends JPanel {
 
-   private JTextField titleField;
+    private JTextField titleField;
     private JTextField durationField;
     private JTextArea descriptionArea;
     private JComboBox<String> ratingComboBox;
@@ -136,6 +136,7 @@ public class MovieRegisterPanel extends JPanel {
             public void mouseEntered(MouseEvent e) {
                 browseButton.setBackground(new Color(158, 171, 184));
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 browseButton.setBackground(new Color(182, 193, 201));
@@ -157,7 +158,9 @@ public class MovieRegisterPanel extends JPanel {
         saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         saveButton.addActionListener((e) -> {
             System.out.println("Movie Register button clicked!");
-            if (!validateFields()) return;
+            if (!validateFields()) {
+                return;
+            }
             if (editingMovie != null && editingMovie.getId() != null) {
                 updateMovieInDatabase(editingMovie.getId());
             } else {
@@ -173,6 +176,7 @@ public class MovieRegisterPanel extends JPanel {
             public void mouseEntered(MouseEvent e) {
                 saveButton.setBackground(new Color(68, 149, 145));
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 saveButton.setBackground(new Color(189, 170, 165));
@@ -194,6 +198,7 @@ public class MovieRegisterPanel extends JPanel {
             public void mouseEntered(MouseEvent e) {
                 clearButton.setBackground(new Color(90, 107, 122));
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 clearButton.setBackground(new Color(107, 123, 140));
@@ -340,7 +345,41 @@ public class MovieRegisterPanel extends JPanel {
             e.printStackTrace();
             return false;
         }
+        try {
+            Connection conn = new DatabaseConnection().getConnection();
+            String sql = """
+        SELECT COUNT(*) FROM Showtimes
+        WHERE start_time BETWEEN ? AND ?
+           OR end_time BETWEEN ? AND ?
+    """;
 
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            java.sql.Date releaseSql = new java.sql.Date(release.getTime());
+            java.sql.Date removalSql = new java.sql.Date(removal.getTime());
+
+            stmt.setDate(1, releaseSql);
+            stmt.setDate(2, removalSql);
+            stmt.setDate(3, releaseSql);
+            stmt.setDate(4, removalSql);
+
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            int conflictCount = rs.getInt(1);
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+            if (conflictCount > 0) {
+                showErrorMessage("此區間已有排定場次，請選擇不同上映與下檔日期！");
+                return false;
+            }
+
+        } catch (Exception e) {
+            showErrorMessage("檢查上映時間衝突時發生錯誤：" + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -351,7 +390,7 @@ public class MovieRegisterPanel extends JPanel {
             UPDATE Movies
             SET title=?, duration=?, description=?, rating=?, release_date=?, removal_date=?, poster_path=?
             WHERE id=?
-        """;
+            """;
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, titleField.getText().trim());
