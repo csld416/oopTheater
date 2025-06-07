@@ -16,6 +16,7 @@ public class AdminMainPage extends JFrame {
         setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
+        setResizable(false);
         setLocationRelativeTo(null);
 
         initTop();
@@ -50,8 +51,7 @@ public class AdminMainPage extends JFrame {
         int startX = (Const.FRAME_WIDTH - totalWidth) / 2;
 
         CapsuleButton[] buttons = new CapsuleButton[]{
-            new CapsuleButton("電影管理", new Color(70, 130, 180), new Color(100, 149, 237), new Dimension(buttonWidth, buttonHeight)),
-            new CapsuleButton("上檔/下檔", new Color(60, 179, 113), new Color(144, 238, 144), new Dimension(buttonWidth, buttonHeight)),
+            new CapsuleButton("電影檔案", new Color(70, 130, 180), new Color(100, 149, 237), new Dimension(buttonWidth, buttonHeight)),
             new CapsuleButton("營收管理", new Color(255, 140, 0), new Color(255, 165, 0), new Dimension(buttonWidth, buttonHeight)),
             new CapsuleButton("場次管理", new Color(138, 43, 226), new Color(186, 85, 211), new Dimension(buttonWidth, buttonHeight)),
             new CapsuleButton("操作紀錄", new Color(220, 20, 60), new Color(255, 69, 0), new Dimension(buttonWidth, buttonHeight)),
@@ -66,18 +66,18 @@ public class AdminMainPage extends JFrame {
                 new MovieRegisterPage();
             }
         });
+//        buttons[1].addMouseListener(new MouseAdapter() {
+//            public void mousePressed(MouseEvent e) {
+//                JOptionPane.showMessageDialog(null, "此頁面尚未開發。");
+//            }
+//        });
         buttons[1].addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "此頁面尚未開發。");
-            }
-        });
-        buttons[2].addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 dispose();
                 new RevenuePage();
             }
         });
-        buttons[3].addMouseListener(new MouseAdapter() {
+        buttons[2].addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 try {
                     dispose();
@@ -87,18 +87,18 @@ public class AdminMainPage extends JFrame {
                 }
             }
         });
-        buttons[4].addMouseListener(new MouseAdapter() {
+        buttons[3].addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 JOptionPane.showMessageDialog(null, "此頁面尚未開發。");
             }
         });
-        buttons[5].addMouseListener(new MouseAdapter() {
+        buttons[4].addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 dispose();
                 new TheaterManagePage();
             }
         });
-        buttons[6].addMouseListener(new MouseAdapter() {
+        buttons[5].addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 dispose();
                 new FoodRegisterPage();

@@ -140,8 +140,10 @@ public class Order {
     private static void fetchOrdersFromDB() {
         cachedOrderList = new ArrayList<>();
         try (Connection conn = new DatabaseConnection().getConnection()) {
-            String sql = "SELECT * FROM Tickets";
+            String sql = "SELECT * FROM Tickets WHERE user_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, User.getCurrentUser().getId());
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

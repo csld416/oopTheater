@@ -12,6 +12,10 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MyTicketSpacePage extends JFrame {
+    
+    private final int USED = 0;
+    private final int FRESH = 1;
+    private final int REFUNDED = -1;
 
     private JPanel topBarSlot;
     private JPanel middlePanel;
@@ -135,10 +139,7 @@ public class MyTicketSpacePage extends JFrame {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         add(scrollPane);
-
         loadContent();
-
-        add(scrollPane);
     }
 
     private void refreshContent() {

@@ -20,13 +20,13 @@ public class Movie {
     private Date releaseDate;
     private Date removalDate;
     private String posterPath;
+    private int isDisplaying = 1; // default to showing
 
     // === Global Shared Movie List ===
     public static ArrayList<Movie> allMovies = null;
     public static Movie dummyMovie = new Movie(1, "500 Days of Summer", 95, "Boy meets girl. Boy falls in love. Girl doesn't.", "PG-13",
             java.sql.Date.valueOf("2009-08-07"), java.sql.Date.valueOf("2009-12-07"), "src/MoviePosters/500DaysOfSummer.jpg");
 
-    
     // === Constructor ===
     public Movie(Integer id, String title, int duration, String description, String rating,
             Date releaseDate, Date removalDate, String posterPath) {
@@ -71,6 +71,35 @@ public class Movie {
 
     public String getPosterPath() {
         return posterPath;
+    }
+
+    public int getIsDisplaying() {
+        return isDisplaying;
+    }
+
+    public void setIsDisplaying(int isDisplaying) {
+        this.isDisplaying = isDisplaying;
+    }
+
+    public int getAgeLimit() {
+        if (rating == null) {
+            return 0;
+        }
+
+        switch (rating) {
+            case "普遍級": // General audience
+                return 0;
+            case "保護級": // Parental Guidance
+                return 6;
+            case "輔12":   // PG-12
+                return 12;
+            case "輔15":   // PG-15
+                return 15;
+            case "限制級": // Restricted (18+)
+                return 18;
+            default:       // Unknown or unregistered rating
+                return 0;
+        }
     }
 
     // === Setters ===
@@ -120,7 +149,11 @@ public class Movie {
 
         try (Connection conn = new DatabaseConnection().getConnection(); PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Movies ORDER BY release_date ASC"); ResultSet rs = stmt.executeQuery()) {
 
+            java.util.Date today = new java.util.Date();
+
             while (rs.next()) {
+                Date removalDate = rs.getDate("removal_date");
+
                 Movie movie = new Movie(
                         rs.getInt("id"),
                         rs.getString("title"),
@@ -128,13 +161,17 @@ public class Movie {
                         rs.getString("description"),
                         rs.getString("rating"),
                         rs.getDate("release_date"),
-                        rs.getDate("removal_date"),
+                        removalDate,
                         rs.getString("poster_path")
                 );
+
+                int flag = (removalDate != null && removalDate.before(today)) ? 0 : 1;
+                movie.setIsDisplaying(flag);
+
                 list.add(movie);
             }
         } catch (SQLException e) {
-            System.err.println("\u274C Error fetching movies: " + e.getMessage());
+            System.err.println("❌ Error fetching movies: " + e.getMessage());
         }
 
         return list;

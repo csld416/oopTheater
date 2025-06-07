@@ -4,6 +4,8 @@ import GlobalConst.Const;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StaffPanel extends JPanel {
 
@@ -32,6 +34,17 @@ public class StaffPanel extends JPanel {
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
         textLabel.setBounds(iconSize + 20, 0, Const.ICON_PANEL_WIDTH - iconSize - 10, Const.ICON_PANEL_HEIGHT);
         textLabel.setVerticalAlignment(SwingConstants.CENTER);
+        textLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                textLabel.setForeground(Color.WHITE);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                textLabel.setForeground(Color.BLACK);
+            }
+        });
 
         add(textLabel);
     }

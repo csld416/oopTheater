@@ -3,7 +3,6 @@ package Main.Movie;
 import GlobalConst.Const;
 import Data.Movie;
 import Main.TopBarPanel;
-import global.*;
 
 import javax.swing.*;
 import javax.swing.text.*;

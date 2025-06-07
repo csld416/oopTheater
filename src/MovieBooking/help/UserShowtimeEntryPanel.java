@@ -53,13 +53,6 @@ public class UserShowtimeEntryPanel extends JPanel {
                 setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 repaint();
             }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (clickListener != null) {
-                    clickListener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
-                }
-            }
         });
 
         // Format times

@@ -9,6 +9,7 @@ import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.security.MessageDigest;
+import java.time.Period;
 
 public class User {
 
@@ -83,6 +84,11 @@ public class User {
 
     public BufferedImage getProfileImage() {
         return profileImage;
+    }
+    
+    public int getAge(){
+        if (dob == null) return -1; // or throw an exception if age must not be null
+        return Period.between(dob, LocalDate.now()).getYears();
     }
 
     // === Setters ===

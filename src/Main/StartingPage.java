@@ -9,7 +9,9 @@ import Main.Movie.MoviePanel;
 import Main.help.GapPanel;
 import Main.Movie.MovieCardPanel;
 import Data.Movie;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class StartingPage extends JFrame {
         gapPanel.setBounds(0, Const.TOP_BAR_HEIGHT, Const.FRAME_WIDTH, Const.GAP_BETWEEN);
         add(gapPanel);
         gapPanel.revalidate();
-        gapPanel.repaint(); 
+        gapPanel.repaint();
     }
 
     private void initMovieSlot() {
@@ -85,17 +87,38 @@ public class StartingPage extends JFrame {
 
         moviePanel.removeAll();
 
-        // Add spacer first
-        JPanel spacer = new JPanel();
-        spacer.setOpaque(false);
-        spacer.setPreferredSize(new Dimension(5, 1));
-        moviePanel.add(spacer);
+        // Filter displayable movies only
+        ArrayList<Movie> displayingMovies = new ArrayList<>();
+        for (Movie m : allMovies) {
+            if (m.getIsDisplaying() == 1) {
+                displayingMovies.add(m);
+            }
+        }
 
-        // Add up to 4 cards from currentStartIndex
-        for (int i = currentStartIndex; i < Math.min(currentStartIndex + MOVIES_PER_PAGE, allMovies.size()); i++) {
-            Movie m = allMovies.get(i);
-            MovieCardPanel card = new MovieCardPanel(m);
-            moviePanel.add(card);
+        if (displayingMovies.isEmpty()) {
+            JLabel noMovieLabel = new JLabel("目前沒有可訂票之電影！", SwingConstants.CENTER);
+            noMovieLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
+            noMovieLabel.setForeground(Color.BLACK);
+            noMovieLabel.setBounds(0, 200, Const.FRAME_WIDTH, 40); // vertically offset for aesthetics
+            moviePanel.setLayout(null);
+            moviePanel.add(noMovieLabel);
+        } else {
+            // Add spacer first
+            JPanel spacer = new JPanel();
+            spacer.setOpaque(false);
+            spacer.setPreferredSize(new Dimension(5, 1));
+            moviePanel.add(spacer);
+
+            // Display at most MOVIES_PER_PAGE cards from currentStartIndex
+            int shownCount = 0;
+            int index = currentStartIndex;
+            while (index < displayingMovies.size() && shownCount < MOVIES_PER_PAGE) {
+                Movie m = displayingMovies.get(index);
+                MovieCardPanel card = new MovieCardPanel(m);
+                moviePanel.add(card);
+                shownCount++;
+                index++;
+            }
         }
 
         moviePanel.revalidate();

@@ -174,6 +174,10 @@ public class BookLargePage extends JFrame {
         selectedSeatDisplay.repaint();
     }
 
+    public Order getOrder() {
+        return this.order;
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new BookLargePage(Order.dummyOrder);

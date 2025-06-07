@@ -4,8 +4,7 @@
  */
 package LoginRegisterForm;
 
-import Data.SessionManager;
-import Data.User;
+import Data.*;
 import Main.StartingPage;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -209,11 +208,32 @@ public class LoginForm {
         isLoggin = true;
         String username = usernameField.getText();
         String password = String.valueOf(passwordField.getPassword());
+
         if (User.checkLogin(username, password)) {
-            frame.dispose();
-            substrateFrame.dispose();
             User user = User.fetchUserByEmail(username);
             User.setCurrentUser(user);
+
+            // === Age restriction check ===
+            if (substrateFrame instanceof MovieBooking.BookLargePage || substrateFrame instanceof MovieBooking.BookSmallPage) {
+                Order order = (substrateFrame instanceof MovieBooking.BookLargePage)
+                        ? ((MovieBooking.BookLargePage) substrateFrame).getOrder()
+                        : ((MovieBooking.BookSmallPage) substrateFrame).getOrder();
+
+                int userAge = user.getAge();          // Assume User class has getAge()
+                int ageLimit = order.getMovie().getAgeLimit();   // Assume Movie class has getAgeLimit()
+
+                if (userAge < ageLimit) {
+                    JOptionPane.showMessageDialog(frame,
+                            "您未滿 " + ageLimit + " 歲，無法訂購本電影票。",
+                            "年齡限制", JOptionPane.WARNING_MESSAGE);
+                    isLoggin = false;
+                    return;
+                }
+            }
+
+            frame.dispose();
+            substrateFrame.dispose();
+
             if (SessionManager.redirectTargetPage != null) {
                 SessionManager.redirectTargetPage.run();
                 SessionManager.redirectTargetPage = null;

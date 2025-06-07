@@ -9,6 +9,8 @@ import MovieBooking.help.UserShowtimeEntryPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,7 @@ public class ShowtimeChoosePage extends JFrame {
     private static final int LEFT_WIDTH = 300;
     private static final int GAP_Y = 10;
     private static final int ENTRY_WIDTH = 600;
-    
+
     private final Movie movie;
     private final Order order;
 
@@ -144,14 +146,18 @@ public class ShowtimeChoosePage extends JFrame {
 
                 int x = (rightWidth - entryWidth) / 2;
                 entry.setBounds(x, yy, entryWidth, entryHeight);
-                entry.setClickListener(e -> {
-                    order.setShowtime(s);
-                    if (s.getTheaterTypeIsBig()) {
-                        new BookLargePage(order);
-                    } else {
-                        new BookSmallPage(order);
+                entry.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        order.setShowtime(s);
+                        if (s.getTheaterTypeIsBig()) {
+                            new BookLargePage(order);
+                        } else {
+                            new BookSmallPage(order);
+                        }
+                        dispose();
                     }
-                    dispose(); // Close the current booking page
+
                 });
                 rightPanel.add(entry);
                 yy += entryHeight + GAP_Y;

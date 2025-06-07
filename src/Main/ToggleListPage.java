@@ -288,11 +288,20 @@ public class ToggleListPage extends JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
+                shouldDismiss = false;  // prevent premature dismissal
+
+                JFrame frame = substrateFrame;
                 dispose();
-                substrateFrame.getGlassPane().setVisible(false);
-                substrateFrame.dispose();
-                //SessionManager.logout();
-                new StartingPage().setVisible(true);
+                if (!SessionManager.isLoggedIn()) {
+                    SessionManager.returnAfterLogin = frame;
+                    SessionManager.redirectTargetPage = () -> new StartingPage().setVisible(true);
+
+                    new LoginForm(frame);
+                } else {
+                    frame.getGlassPane().setVisible(false);
+                    frame.dispose();
+                    new StartingPage().setVisible(true);
+                }
             }
         });
         add(logoutPanel);

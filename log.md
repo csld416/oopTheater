@@ -204,8 +204,18 @@ Too many things are being dealing with, can' have the time. Btw, I was cracking 
 - diable the hover and the selection of the seat if booked
 - update the date format from 19:30:0.0 -> 19:30
 - update showtime register -> conflict check
+- updated `LatestNews.java`
 
 next:
 - movie sorting in starting page
 - Order Information after clicking the ticket (either 1 or 2)
 - timer for the booking.
+- the rating image -> movie info
+- when a member is not qualified, disable the movie order(we dont let him order)
+
+## 06/07
+
+Finally, this term has come to an end.
+
+Developed:
+- if a minor tries to book a movie that is not legit, we'd block this shit.
