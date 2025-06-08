@@ -219,3 +219,12 @@ Finally, this term has come to an end.
 
 Developed:
 - if a minor tries to book a movie that is not legit, we'd block this shit.
+- only display the movie that is in the correct lifespan and has more than one showtime option
+- add LONGBLOB for inserting logic
+- replace local image with db buffered image
+- add sorting comboBox
+- change the display logic of the movies
+
+## 06/08
+- Fuck i hate this shit.
+- add six movies on display
