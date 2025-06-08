@@ -146,12 +146,55 @@ public class ShowtimeRegisterPanel extends JPanel {
                 return false;
             }
 
-            // 2. Compute endTime using movie duration
+            // 2. Compute start & end time
             java.sql.Timestamp startTime = java.sql.Timestamp.valueOf(startTimeText + ":00");
             long endMillis = startTime.getTime() + movie.getDuration() * 60 * 1000;
             java.sql.Timestamp endTime = new java.sql.Timestamp(endMillis);
 
-            // 3. Insert showtime
+            java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
+            if (startTime.before(now)) {
+                JOptionPane.showMessageDialog(this, "❌ 開始時間不可早於目前時間", "錯誤", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // 3. Validate: must fall within movie’s release/removal date
+            if (startTime.before(movie.getReleaseDate()) || endTime.after(movie.getRemovalDate())) {
+                JOptionPane.showMessageDialog(this, "❌ 場次時間必須在電影的上映與下檔日期之間", "錯誤", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // 4. Validate: no overlap in the same theater
+            String conflictSql = """
+            SELECT COUNT(*) FROM Showtimes
+            WHERE theater_id = ?
+              AND is_canceled = 0
+              AND (
+                   (start_time < ? AND end_time > ?)  -- overlaps in middle
+                   OR (start_time >= ? AND start_time < ?) -- starts during
+                   OR (end_time > ? AND end_time <= ?)     -- ends during
+              )
+            """;
+            PreparedStatement conflictStmt = conn.prepareStatement(conflictSql);
+            conflictStmt.setInt(1, theaterId);
+            conflictStmt.setTimestamp(2, endTime);
+            conflictStmt.setTimestamp(3, startTime);
+            conflictStmt.setTimestamp(4, startTime);
+            conflictStmt.setTimestamp(5, endTime);
+            conflictStmt.setTimestamp(6, startTime);
+            conflictStmt.setTimestamp(7, endTime);
+
+            ResultSet conflictRs = conflictStmt.executeQuery();
+            conflictRs.next();
+            int count = conflictRs.getInt(1);
+            conflictRs.close();
+            conflictStmt.close();
+
+            if (count > 0) {
+                JOptionPane.showMessageDialog(this, "❌ 此時段已有其他電影排定在同一放映廳", "衝突", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            // 5. Insert showtime
             String insertSql = "INSERT INTO Showtimes (movies_id, theater_id, start_time, end_time, is_canceled) VALUES (?, ?, ?, ?, 0)";
             PreparedStatement insertStmt = conn.prepareStatement(insertSql);
             insertStmt.setInt(1, movie.getId());
@@ -170,11 +213,12 @@ public class ShowtimeRegisterPanel extends JPanel {
             theaterStmt.close();
             insertStmt.close();
             conn.close();
-            return true;
+            return affected > 0;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "❌ 發生錯誤: " + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
             return false;
         }
     }
+
 }

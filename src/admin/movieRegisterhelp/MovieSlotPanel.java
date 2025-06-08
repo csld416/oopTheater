@@ -12,16 +12,19 @@ import java.awt.event.MouseEvent;
 public class MovieSlotPanel extends JPanel {
 
     private JLabel titleLabel;
-    private Movie movie; // ⬅ Store the movie object
+    private Movie movie;
+
+    private final Color defaultColor = new Color(213, 221, 226);
+    private final Color hoverColor = new Color(200, 191, 184);
+    private boolean isHovered = false;
 
     public MovieSlotPanel(Movie movie) {
         this.movie = movie;
 
-        int panelWidth = Const.LEFT_PANEL_WIDTH; // or subtract padding if needed
+        int panelWidth = Const.LEFT_PANEL_WIDTH;
         setPreferredSize(new Dimension(panelWidth, 50));
         setMaximumSize(new Dimension(panelWidth, 50));
         setMinimumSize(new Dimension(panelWidth, 50));
-        setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 
         setLayout(new GridBagLayout());
 
@@ -30,27 +33,45 @@ public class MovieSlotPanel extends JPanel {
         add(titleLabel);
 
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        setBackground(Color.WHITE);
+        setOpaque(false); // Important to allow custom background painting
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                setBackground(new Color(210, 225, 240));
+                isHovered = true;
+                titleLabel.setForeground(Color.WHITE); // <-- set to white on hover
+                repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                setBackground(Color.WHITE);
+                isHovered = false;
+                titleLabel.setForeground(Color.BLACK); // <-- revert to black when not hovering
+                repaint();
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
                 Container topLevel = SwingUtilities.getWindowAncestor(MovieSlotPanel.this);
                 if (topLevel instanceof MovieRegisterPage frame) {
-                    frame.loadMovieEditor(movie); // ✅ now valid
+                    frame.loadMovieEditor(movie);
                 }
             }
         });
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        int arc = 10; // fully rounded top/bottom
+        g2.setColor(defaultColor);
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+
+        g2.dispose();
     }
 
     public String getTitle() {

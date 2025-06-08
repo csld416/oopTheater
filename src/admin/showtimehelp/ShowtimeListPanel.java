@@ -44,6 +44,11 @@ public class ShowtimeListPanel extends JPanel {
         movieLabel.setBounds(30, 20, 400, 25);
         container.add(movieLabel);
 
+        JLabel dateLabel = new JLabel("📅 上映: " + movie.getReleaseDate() + "　⛔ 下檔: " + movie.getRemovalDate());
+        dateLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        dateLabel.setBounds(30, 45, 600, 20);
+        container.add(dateLabel);
+
         CapsuleButton addButton = new CapsuleButton("新增場次",
                 NEW_COLOR, NEW_COLOR_HOVOR, new Dimension(130, 40), 16);
         addButton.setBounds(ADD_X, ADD_Y, 130, 40);
@@ -76,9 +81,9 @@ public class ShowtimeListPanel extends JPanel {
 
         try {
             Connection conn = new DatabaseConnection().getConnection();
-            String sql = "SELECT s.id, s.movies_id, s.theater_id, s.start_time, s.end_time, s.is_canceled, t.name " +
-                    "FROM Showtimes s JOIN Theaters t ON s.theater_id = t.id " +
-                    "WHERE s.movies_id = ? AND s.is_canceled = 0 ORDER BY s.start_time ASC";
+            String sql = "SELECT s.id, s.movies_id, s.theater_id, s.start_time, s.end_time, s.is_canceled, t.name "
+                    + "FROM Showtimes s JOIN Theaters t ON s.theater_id = t.id "
+                    + "WHERE s.movies_id = ? AND s.is_canceled = 0 ORDER BY s.start_time ASC";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, movie.getId());
             ResultSet rs = stmt.executeQuery();
@@ -111,4 +116,25 @@ public class ShowtimeListPanel extends JPanel {
         listContainer.revalidate();
         listContainer.repaint();
     }
-} 
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            // === Optional: inject dummyShowtime into the cache if needed ===
+            Showtime s = Showtime.dummyShowtime;
+            Showtime.getAllShowtimes().add(s); // this won't persist, but allows testing
+
+            // === Create dummy JFrame ===
+            JFrame frame = new JFrame("Showtime List - Dummy Test");
+            frame.setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
+            frame.setLayout(new BorderLayout());
+
+            // === Use dummy movie for testing ===
+            ShowtimeListPanel panel = new ShowtimeListPanel(Movie.dummyMovie);
+            frame.add(panel, BorderLayout.CENTER);
+
+            frame.setVisible(true);
+        });
+    }
+}

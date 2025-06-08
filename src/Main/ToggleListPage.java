@@ -199,6 +199,7 @@ public class ToggleListPage extends JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
+                System.out.println("helo?");
                 dispose();
                 substrateFrame.getGlassPane().setVisible(false);
                 substrateFrame.dispose();
@@ -311,6 +312,7 @@ public class ToggleListPage extends JFrame {
         JFrame dummyFrame = new JFrame();
         dummyFrame.setSize(900, 600);
         dummyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        dummyFrame.setLocationRelativeTo(null);
         dummyFrame.setVisible(true);
 
         new ToggleListPage(dummyFrame);

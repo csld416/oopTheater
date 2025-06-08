@@ -28,7 +28,18 @@ public class TicketPanel_2 extends JPanel {
         String year = String.valueOf(time.getYear());
         String date = String.format("%02d/%02d", time.getMonthValue(), time.getDayOfMonth());
         String timeStr = String.format("%02d:%02d", time.getHour(), time.getMinute());
-        String statusText = order.getStatus() == -1 ? "已取消" : "已使用";
+        String statusText = "";
+        switch (order.getStatus()) {
+            case 0:
+                statusText = "已使用";
+                break;
+            case -1:
+                statusText = "已逾期";
+                break;
+            default:
+                statusText = "已取消";
+                break;
+        }
 
         Ticket2LeftPanel left = new Ticket2LeftPanel(
                 year,

@@ -66,4 +66,33 @@ public class CapsuleButton extends JPanel {
 
         g2.dispose();
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("CapsuleButton Demo");
+            frame.setSize(400, 200);
+            frame.setLocationRelativeTo(null); // center on screen
+            frame.setLayout(null); // manual layout
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            Color defaultColor = new Color(60, 80, 100);   // darker default
+            Color hoverColor = new Color(40, 60, 80);      // even darker hover
+
+            Dimension size = new Dimension(180, 50);
+            CapsuleButton button = new CapsuleButton("點我", defaultColor, hoverColor, size);
+
+            int frameWidth = frame.getWidth();
+            int frameHeight = 200;
+            int btnWidth = size.width;
+            int btnHeight = size.height;
+
+            int x = (frameWidth - btnWidth) / 2;
+            int y = (frameHeight - btnHeight) / 2 - 20;
+
+            button.setBounds(x, y, btnWidth, btnHeight);
+
+            frame.add(button);
+            frame.setVisible(true);
+        });
+    }
 }

@@ -52,4 +52,19 @@ public class StaffPanel extends JPanel {
     public JLabel getLabel() {
         return textLabel;
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Dummy Frame for StaffPanel");
+            frame.setSize(300, 100);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLayout(new FlowLayout());
+
+            StaffPanel staffPanel = new StaffPanel();
+            frame.add(staffPanel);
+
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
+    }
 }

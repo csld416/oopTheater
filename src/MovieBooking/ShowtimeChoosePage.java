@@ -120,11 +120,16 @@ public class ShowtimeChoosePage extends JFrame {
 
         int y = 0;
 
+        java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
+
         List<Showtime> filtered = Showtime.getAllShowtimes()
                 .stream()
-                .filter(s -> s.getMovieId() == movie.getId() && !s.isCanceled())
+                .filter(s -> s.getMovieId() == movie.getId()
+                && !s.isCanceled()
+                && s.getStartTime().after(now)) // 👈 Exclude past showtimes
                 .collect(Collectors.toList());
-
+        
+        
         if (filtered.isEmpty()) {
             JLabel noShowtime = new JLabel("此電影目前無可用場次。", SwingConstants.CENTER);
             noShowtime.setFont(new Font("SansSerif", Font.PLAIN, 16));

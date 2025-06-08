@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class MovieRegisterPage extends JFrame {
 
@@ -134,7 +133,9 @@ public class MovieRegisterPage extends JFrame {
                     loadMovieEditor(movie);
                 }
             });
+
             slotsPanel.add(slot);
+            slotsPanel.add(Box.createVerticalStrut(10)); // ⬅ Adds spacing between each slot
         }
 
         slotsPanel.revalidate();

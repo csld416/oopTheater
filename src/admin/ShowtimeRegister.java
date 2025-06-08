@@ -1,10 +1,8 @@
 package admin;
 
 import admin.movieRegisterhelp.MovieSlotPanel;
-import admin.showtimehelp.ShowtimeFormPanel;
 import admin.showtimehelp.ShowtimeListPanel;
 import admin.topBar.AdminTopBarPanel;
-import connection.DatabaseConnection;
 import global.CapsuleButton;
 import Data.Movie;
 import GlobalConst.Const;
@@ -120,6 +118,7 @@ public class ShowtimeRegister extends JFrame {
                 }
             });
             slotsPanel.add(slot);
+            slotsPanel.add(Box.createVerticalStrut(10)); // ← Add spacing between slots
         }
 
         slotsPanel.revalidate();

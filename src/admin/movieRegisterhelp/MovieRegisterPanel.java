@@ -16,6 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import connection.DatabaseConnection;
 import GlobalConst.Const;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class MovieRegisterPanel extends JPanel {
 
@@ -30,6 +32,7 @@ public class MovieRegisterPanel extends JPanel {
     private JButton saveButton;
     private JButton clearButton;
     private JLabel titleBar;
+    private JLabel statusLabel;
 
     private String selectedPosterPath;
 
@@ -74,7 +77,25 @@ public class MovieRegisterPanel extends JPanel {
         int height = 25;
         int width = fieldWidth;
         int gap = 35;
-        int y = 60;
+        int statusHeight = 40;
+        int y = 40 + statusHeight + 20;
+        JPanel statusPanel = new JPanel(null);
+        statusPanel.setBounds(0, 40, WIDTH, statusHeight);
+        statusPanel.setBackground(new Color(255, 250, 230)); // light background
+        formContainer.add(statusPanel);
+
+        statusLabel = new JLabel("", SwingConstants.CENTER);
+        statusLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        statusLabel.setBounds(0, 0, WIDTH, statusHeight);
+
+        if (editingMovie != null && !editingMovie.getIsDisplaying()) {
+            statusLabel.setText("⛔ 此電影已下檔");
+            statusLabel.setForeground(Color.RED.darker());
+        } else {
+            statusLabel.setText("🎬 此電影目前正在上映");
+            statusLabel.setForeground(new Color(0, 128, 0)); // dark green
+        }
+        statusPanel.add(statusLabel);
 
         formContainer.add(label("Title:", labelX, y));
         titleField = field(fieldX, y, width);
@@ -161,11 +182,14 @@ public class MovieRegisterPanel extends JPanel {
             if (!validateFields()) {
                 return;
             }
-            if (editingMovie != null && editingMovie.getId() != null) {
-                updateMovieInDatabase(editingMovie.getId());
-            } else {
+            if (editingMovie == null) {
                 insertMovieToDatabase();
+            } else {
+                if (editingMovie.getId() != null) {
+                    updateMovieInDatabase(editingMovie.getId());
+                }
             }
+            Movie.allMovies = null;
             Window window = SwingUtilities.getWindowAncestor(MovieRegisterPanel.this);
             if (window instanceof MovieRegisterPage frame) {
                 frame.refreshMovieLeftPanel();
@@ -223,6 +247,17 @@ public class MovieRegisterPanel extends JPanel {
         removalDateSpinner.setValue(movie.getRemovalDate());
 
         posterPathField.setText(movie.getPosterPath());
+        this.selectedPosterPath = movie.getPosterPath();
+
+        if (movie != null) {
+            if (!movie.getIsDisplaying()) {
+                statusLabel.setText("⛔ 此電影已下檔");
+                statusLabel.setForeground(Color.RED.darker());
+            } else {
+                statusLabel.setText("🎬 此電影目前正在上映");
+                statusLabel.setForeground(new Color(0, 128, 0));
+            }
+        }
     }
 
     private JLabel label(String text, int x, int y) {
@@ -253,30 +288,65 @@ public class MovieRegisterPanel extends JPanel {
 
     private void insertMovieToDatabase() {
         try {
-            // Get a connection to the database
             Connection conn = new DatabaseConnection().getConnection();
 
-            // Define SQL insert statement (no triple quotes!)
-            String sql = "INSERT INTO Movies (title, duration, description, rating, release_date, removal_date, poster_path) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            // === Attempt to load image ===
+            byte[] imageBytes = null;
+            if (selectedPosterPath != null && !selectedPosterPath.trim().isEmpty()) {
+                File file = new File(selectedPosterPath);
+                if (file.exists()) {
+                    try (FileInputStream fis = new FileInputStream(file)) {
+                        imageBytes = fis.readAllBytes();
+                    } catch (IOException e) {
+                        showErrorMessage("⚠️ 無法讀取圖片檔案！");
+                        e.printStackTrace();
+                    }
+                } else {
+                    showErrorMessage("⚠️ 找不到圖片檔案，將略過圖片儲存！");
+                }
+            }
 
-            // Create prepared statement
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, titleField.getText().trim());
-            stmt.setInt(2, Integer.parseInt(durationField.getText().trim()));
-            stmt.setString(3, descriptionArea.getText().trim());
-            stmt.setString(4, ratingComboBox.getSelectedItem().toString());
-            stmt.setDate(5, new java.sql.Date(((Date) releaseDateSpinner.getValue()).getTime()));
-            stmt.setDate(6, new java.sql.Date(((Date) removalDateSpinner.getValue()).getTime()));
-            stmt.setString(7, posterPathField.getText().trim());
+            // === Prepare SQL ===
+            String sql;
+            PreparedStatement stmt;
 
-            // Execute and check result
+            if (imageBytes != null) {
+                sql = """
+                INSERT INTO Movies
+                (title, duration, description, rating, release_date, removal_date, poster_path, poster_blob)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """;
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, titleField.getText().trim());
+                stmt.setInt(2, Integer.parseInt(durationField.getText().trim()));
+                stmt.setString(3, descriptionArea.getText().trim());
+                stmt.setString(4, ratingComboBox.getSelectedItem().toString());
+                stmt.setDate(5, new java.sql.Date(((Date) releaseDateSpinner.getValue()).getTime()));
+                stmt.setDate(6, new java.sql.Date(((Date) removalDateSpinner.getValue()).getTime()));
+                stmt.setString(7, posterPathField.getText().trim());
+                stmt.setBytes(8, imageBytes);
+            } else {
+                sql = """
+                INSERT INTO Movies
+                (title, duration, description, rating, release_date, removal_date, poster_path)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """;
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, titleField.getText().trim());
+                stmt.setInt(2, Integer.parseInt(durationField.getText().trim()));
+                stmt.setString(3, descriptionArea.getText().trim());
+                stmt.setString(4, ratingComboBox.getSelectedItem().toString());
+                stmt.setDate(5, new java.sql.Date(((Date) releaseDateSpinner.getValue()).getTime()));
+                stmt.setDate(6, new java.sql.Date(((Date) removalDateSpinner.getValue()).getTime()));
+                stmt.setString(7, posterPathField.getText().trim());
+            }
+
             int rows = stmt.executeUpdate();
             if (rows > 0) {
-                showSuccessMessage("Movie added Succesfully");
+                showSuccessMessage("✅ 電影新增成功！");
                 clearForm();
             } else {
-                showErrorMessage("Failed unexpectedly");
+                showErrorMessage("❌ 新增失敗！");
             }
 
             stmt.close();
@@ -346,32 +416,38 @@ public class MovieRegisterPanel extends JPanel {
             return false;
         }
         try {
+            if (editingMovie == null) {
+                return true;
+            }
             Connection conn = new DatabaseConnection().getConnection();
             String sql = """
-        SELECT COUNT(*) FROM Showtimes
-        WHERE start_time BETWEEN ? AND ?
-           OR end_time BETWEEN ? AND ?
-    """;
+                SELECT id, movies_id, start_time, end_time FROM Showtimes
+                WHERE movies_id = ?
+                  AND (start_time < ? OR end_time > ?)
+            """;
 
             PreparedStatement stmt = conn.prepareStatement(sql);
-            java.sql.Date releaseSql = new java.sql.Date(release.getTime());
-            java.sql.Date removalSql = new java.sql.Date(removal.getTime());
-
-            stmt.setDate(1, releaseSql);
-            stmt.setDate(2, removalSql);
-            stmt.setDate(3, releaseSql);
-            stmt.setDate(4, removalSql);
+            stmt.setInt(1, editingMovie.getId());  // Only check showtimes from this movie
+            stmt.setTimestamp(2, new java.sql.Timestamp(release.getTime()));
+            stmt.setTimestamp(3, new java.sql.Timestamp(removal.getTime()));
 
             ResultSet rs = stmt.executeQuery();
-            rs.next();
-            int conflictCount = rs.getInt(1);
+
+            boolean hasConflict = false;
+            while (rs.next()) {
+                hasConflict = true;
+                int id = rs.getInt("id");
+                java.sql.Timestamp start = rs.getTimestamp("start_time");
+                java.sql.Timestamp end = rs.getTimestamp("end_time");
+                System.out.printf("❌ 不合法場次 ID: %d, Start: %s, End: %s%n", id, start, end);
+            }
 
             rs.close();
             stmt.close();
             conn.close();
 
-            if (conflictCount > 0) {
-                showErrorMessage("此區間已有排定場次，請選擇不同上映與下檔日期！");
+            if (hasConflict) {
+                showErrorMessage("有場次在電影更新後將變成非法範圍！");
                 return false;
             }
 
@@ -386,22 +462,61 @@ public class MovieRegisterPanel extends JPanel {
     private void updateMovieInDatabase(int movieId) {
         try {
             Connection conn = new DatabaseConnection().getConnection();
-            String sql = """
+
+            // === Try to load image bytes ===
+            byte[] imageBytes = null;
+            if (selectedPosterPath != null && !selectedPosterPath.trim().isEmpty()) {
+                File imageFile = new File(selectedPosterPath);
+                if (imageFile.exists()) {
+                    try (FileInputStream fis = new FileInputStream(imageFile)) {
+                        imageBytes = fis.readAllBytes();
+                    } catch (IOException e) {
+                        showErrorMessage("⚠️ 圖片讀取失敗，將使用原有圖片。");
+                        e.printStackTrace();
+                    }
+                } else {
+                    showErrorMessage("⚠️ 找不到圖片檔案，將使用原有圖片。");
+                }
+            }
+
+            // === Choose SQL based on whether image is available ===
+            String sql;
+            PreparedStatement stmt;
+
+            if (imageBytes != null) {
+                sql = """
+            UPDATE Movies
+            SET title=?, duration=?, description=?, rating=?, release_date=?, removal_date=?, poster_path=?, poster_blob=?
+            WHERE id=?
+            """;
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, titleField.getText().trim());
+                stmt.setInt(2, Integer.parseInt(durationField.getText().trim()));
+                stmt.setString(3, descriptionArea.getText().trim());
+                stmt.setString(4, ratingComboBox.getSelectedItem().toString());
+                stmt.setDate(5, new java.sql.Date(((Date) releaseDateSpinner.getValue()).getTime()));
+                stmt.setDate(6, new java.sql.Date(((Date) removalDateSpinner.getValue()).getTime()));
+                stmt.setString(7, posterPathField.getText().trim());
+                stmt.setBytes(8, imageBytes);
+                stmt.setInt(9, movieId);
+            } else {
+                sql = """
             UPDATE Movies
             SET title=?, duration=?, description=?, rating=?, release_date=?, removal_date=?, poster_path=?
             WHERE id=?
             """;
+                stmt = conn.prepareStatement(sql);
+                stmt.setString(1, titleField.getText().trim());
+                stmt.setInt(2, Integer.parseInt(durationField.getText().trim()));
+                stmt.setString(3, descriptionArea.getText().trim());
+                stmt.setString(4, ratingComboBox.getSelectedItem().toString());
+                stmt.setDate(5, new java.sql.Date(((Date) releaseDateSpinner.getValue()).getTime()));
+                stmt.setDate(6, new java.sql.Date(((Date) removalDateSpinner.getValue()).getTime()));
+                stmt.setString(7, posterPathField.getText().trim());
+                stmt.setInt(8, movieId);
+            }
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, titleField.getText().trim());
-            stmt.setInt(2, Integer.parseInt(durationField.getText().trim()));
-            stmt.setString(3, descriptionArea.getText().trim());
-            stmt.setString(4, ratingComboBox.getSelectedItem().toString());
-            stmt.setDate(5, new java.sql.Date(((Date) releaseDateSpinner.getValue()).getTime()));
-            stmt.setDate(6, new java.sql.Date(((Date) removalDateSpinner.getValue()).getTime()));
-            stmt.setString(7, posterPathField.getText().trim());
-            stmt.setInt(8, movieId);
-
+            // === Execute ===
             int rows = stmt.executeUpdate();
             if (rows > 0) {
                 showSuccessMessage("電影更新成功！");
@@ -437,5 +552,23 @@ public class MovieRegisterPanel extends JPanel {
 
     private void showSuccessMessage(String msg) {
         JOptionPane.showMessageDialog(this, msg, "成功", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("電影管理測試視窗");
+            frame.setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
+            frame.setLayout(new BorderLayout());
+
+            // Test new movie creation:
+            MovieRegisterPanel panel = new MovieRegisterPanel();
+
+            // Test editing mode (uncomment if desired):
+            // MovieRegisterPanel panel = new MovieRegisterPanel(Movie.dummyMovie);
+            frame.add(panel, BorderLayout.CENTER);
+            frame.setVisible(true);
+        });
     }
 }

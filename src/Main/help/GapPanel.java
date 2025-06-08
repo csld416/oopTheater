@@ -1,7 +1,6 @@
 package Main.help;
 
 import Main.StartingPage;
-import Main.help.ArrowPanel;
 import javax.swing.*;
 import java.awt.*;
 import GlobalConst.Const;
@@ -9,25 +8,42 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GapPanel extends JPanel {
-    
+
     private ArrowPanel arrowRight;
     private ArrowPanel arrowLeft;
+    private JComboBox<String> sortComboBox;
 
     public GapPanel() {
-        setLayout(null); // Manual layout
-        setOpaque(false); // Transparent background
+        setLayout(null);
+        setOpaque(false);
         setPreferredSize(new Dimension(Const.FRAME_WIDTH, Const.GAP_BETWEEN));
 
-        // Dimensions and spacing
+        // === Dimensions ===
         int diameter = 40;
         int spacing = 20;
-
-        // Absolute positions
         int y = (Const.GAP_BETWEEN - diameter) / 2;
         int rightX = Const.FRAME_WIDTH - diameter - 70;
         int leftX = rightX - diameter - spacing;
 
-        // Create arrows
+        // === Default JComboBox ===
+        String[] options = {
+            "預設排序",
+            "上映日期 ⬆", "上映日期 ⬇",
+            "片長 ⬆", "片長 ⬇",
+            "下檔日期 ⬆", "下檔日期 ⬇"
+        };
+        sortComboBox = new JComboBox<>(options);
+        sortComboBox.setBounds(50, y, 200, diameter);
+        sortComboBox.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        sortComboBox.setFocusable(false);
+
+        sortComboBox.addActionListener(e -> {
+            String selected = (String) sortComboBox.getSelectedItem();
+            StartingPage.sortBy(selected);
+            ((StartingPage) SwingUtilities.getWindowAncestor(GapPanel.this)).refreshMovieCards();
+        });
+
+        // === Arrows ===
         arrowRight = new ArrowPanel(">");
         arrowRight.setBounds(rightX, y, diameter, diameter);
 
@@ -57,6 +73,7 @@ public class GapPanel extends JPanel {
             }
         });
 
+        add(sortComboBox);
         add(arrowLeft);
         add(arrowRight);
     }
@@ -67,9 +84,10 @@ public class GapPanel extends JPanel {
         int limit = StartingPage.MOVIES_PER_PAGE;
 
         arrowLeft.setArrowEnabled(index > 0);
-
-        int remaining = total - (index + limit);
-        arrowRight.setArrowEnabled(remaining > 0);
+        arrowRight.setArrowEnabled(total > index + limit);
     }
 
+    public String getSortOrder() {
+        return (String) sortComboBox.getSelectedItem();
+    }
 }

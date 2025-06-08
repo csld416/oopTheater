@@ -216,6 +216,33 @@ public class Order {
         }
     }
 
+    public static void markExpiredTicketsForCurrentUser() {
+        try {
+            Connection conn = new DatabaseConnection().getConnection();
+
+            String sql = """
+            UPDATE Tickets o
+            JOIN Showtimes s ON o.showtime_id = s.id
+            SET o.status = -1
+            WHERE o.status = 1
+              AND s.end_time < NOW()
+              AND o.user_id = ?
+            """;
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, User.getCurrentUser().getId());
+
+            int affected = stmt.executeUpdate();
+            System.out.println("✅ Expired orders updated for user: " + affected);
+
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.err.println("❌ Failed to update expired orders for user: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public static void refund(Order order) {
         if (order.getUser() == null) {
             order.setUser(User.currUser);

@@ -66,7 +66,8 @@ public class MovieLeftBarPanel extends JPanel {
                         rs.getString("rating"),
                         rs.getDate("release_date"),
                         rs.getDate("removal_date"),
-                        rs.getString("poster_path")
+                        rs.getString("poster_path"),
+                        null
                 );
 
                 MovieSlotPanel slot = new MovieSlotPanel(movie);

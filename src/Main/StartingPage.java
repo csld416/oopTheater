@@ -25,6 +25,7 @@ public class StartingPage extends JFrame {
 
     // In StartingPage.java
     public static ArrayList<Movie> allMovies = new ArrayList<>();
+    public static ArrayList<Movie> originalMovieOrder = new ArrayList<>();
     public static int currentStartIndex = 0;
     public static final int MOVIES_PER_PAGE = 4;
 
@@ -41,6 +42,7 @@ public class StartingPage extends JFrame {
         initMovieSlot();
 
         allMovies = Movie.getAllMovies();
+        originalMovieOrder = new ArrayList<>(allMovies);
         refreshMovieCards();
 
         setVisible(true);
@@ -80,6 +82,42 @@ public class StartingPage extends JFrame {
         add(movieSlot);
     }
 
+    public static void sortBy(String option) {
+        switch (option) {
+            case "上映日期 ⬆" ->
+                allMovies.sort((a, b) -> a.getReleaseDate().compareTo(b.getReleaseDate()));
+            case "上映日期 ⬇" ->
+                allMovies.sort((a, b) -> b.getReleaseDate().compareTo(a.getReleaseDate()));
+            case "片長 ⬆" ->
+                allMovies.sort((a, b) -> Integer.compare(a.getDuration(), b.getDuration()));
+            case "片長 ⬇" ->
+                allMovies.sort((a, b) -> Integer.compare(b.getDuration(), a.getDuration()));
+            case "下檔日期 ⬆" ->
+                allMovies.sort((a, b) -> {
+                    if (a.getRemovalDate() == null) {
+                        return 1;
+                    }
+                    if (b.getRemovalDate() == null) {
+                        return -1;
+                    }
+                    return a.getRemovalDate().compareTo(b.getRemovalDate());
+                });
+            case "下檔日期 ⬇" ->
+                allMovies.sort((a, b) -> {
+                    if (a.getRemovalDate() == null) {
+                        return 1;
+                    }
+                    if (b.getRemovalDate() == null) {
+                        return -1;
+                    }
+                    return b.getRemovalDate().compareTo(a.getRemovalDate());
+                });
+            default ->
+                allMovies = new ArrayList<>(originalMovieOrder); // restore original
+        }
+        currentStartIndex = 0;
+    }
+
     public void refreshMovieCards() {
         if (moviePanel == null) {
             return;
@@ -89,10 +127,24 @@ public class StartingPage extends JFrame {
 
         // Filter displayable movies only
         ArrayList<Movie> displayingMovies = new ArrayList<>();
+        java.util.Date now = new java.util.Date();
+
         for (Movie m : allMovies) {
-            if (m.getIsDisplaying() == 1) {
-                displayingMovies.add(m);
+            // 1. Skip if movie is past removal date
+            if (m.getRemovalDate() != null && m.getRemovalDate().before(now)) {
+                continue;
             }
+
+            // 2. Skip if no uncanceled future showtimes
+            boolean hasValidShowtime = Data.Showtime.getAllShowtimes().stream()
+                    .anyMatch(s -> s.getMovieId() == m.getId() && !s.isCanceled() && s.getStartTime().after(now));
+
+            if (!hasValidShowtime) {
+                continue;
+            }
+
+            // 3. Valid movie
+            displayingMovies.add(m);
         }
 
         if (displayingMovies.isEmpty()) {

@@ -15,7 +15,8 @@ public class MyTicketSpacePage extends JFrame {
     
     private final int USED = 0;
     private final int FRESH = 1;
-    private final int REFUNDED = -1;
+    private final int EXPIRED = -1;
+    private final int REFUNDED = -2;
 
     private JPanel topBarSlot;
     private JPanel middlePanel;
@@ -26,7 +27,7 @@ public class MyTicketSpacePage extends JFrame {
     private final Color SELECTED_BG = new Color(200, 230, 255);
     private final Font FONT = new Font("SansSerif", Font.BOLD, 16);
 
-    private int select = 0; // 0 = 未使用, 1 = 已使用 (paging)
+    private int tabSelect = 0; // 0 = 未使用, 1 = 已使用 (paging)
 
     private JPanel tabNotUsed;
     private JPanel tabUsed;
@@ -37,6 +38,8 @@ public class MyTicketSpacePage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null); // Absolute layout
+        
+        Data.Order.markExpiredTicketsForCurrentUser();
 
         initTopBar();
         initMiddle();
@@ -81,7 +84,7 @@ public class MyTicketSpacePage extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBounds(x, y, w, h);
-        panel.setBackground(select == id ? SELECTED_BG : DEFAULT_BG);
+        panel.setBackground(tabSelect == id ? SELECTED_BG : DEFAULT_BG);
 
         JLabel label = new JLabel(text, SwingConstants.CENTER);
         label.setFont(FONT);
@@ -91,25 +94,25 @@ public class MyTicketSpacePage extends JFrame {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (select != id) {
+                if (tabSelect != id) {
                     panel.setBackground(HOVER_BG);
                 }
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if (select != id) {
+                if (tabSelect != id) {
                     panel.setBackground(DEFAULT_BG);
                 }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (select != id) {
-                    select = id;
+                if (tabSelect != id) {
+                    tabSelect = id;
                     refreshContent();
-                    tabNotUsed.setBackground(select == 0 ? SELECTED_BG : DEFAULT_BG);
-                    tabUsed.setBackground(select == 1 ? SELECTED_BG : DEFAULT_BG);
+                    tabNotUsed.setBackground(tabSelect == 0 ? SELECTED_BG : DEFAULT_BG);
+                    tabUsed.setBackground(tabSelect == 1 ? SELECTED_BG : DEFAULT_BG);
                 }
             }
         });
@@ -157,7 +160,7 @@ public class MyTicketSpacePage extends JFrame {
 
         for (Order o : allOrders) {
             int status = o.getStatus();
-            if ((select == 0 && status == 1) || (select == 1 && status == 0) || (select == 1 && status == -1)) {
+            if ((tabSelect == 0 && status == 1) || (tabSelect == 1 && (status == 0 || status == -1 || status == -2))) {
                 filtered.add(o);
             }
         }
@@ -171,7 +174,7 @@ public class MyTicketSpacePage extends JFrame {
         } else {
             for (Order o : filtered) {
                 contentPanel.add(Box.createVerticalStrut(8));
-                if (select == 0) {
+                if (tabSelect == 0) {
                     contentPanel.add(new TicketPanel_1(o)); // 未使用
                 } else {
                     contentPanel.add(new TicketPanel_2(o)); // 已使用 或 已取消
