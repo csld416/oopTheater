@@ -40,7 +40,7 @@ public class BigRoomSeatPanel extends JPanel {
 
         this.showtime = showtime;
         this.bookedSeats = fetchBookedSeatsFromDatabase(showtime);
-        
+
         setLayout(new BorderLayout());
 
         JPanel screenPanel = new JPanel();
@@ -52,7 +52,7 @@ public class BigRoomSeatPanel extends JPanel {
         screenPanel.setLayout(new BorderLayout());
         screenPanel.add(screenLabel, BorderLayout.CENTER);
         add(screenPanel, BorderLayout.NORTH);
-        
+
         JPanel gridPanel = new JPanel(new GridLayout(SEAT_ROWS, COLS, 2, 2));
         gridPanel.setBackground(Color.WHITE);
 
@@ -236,7 +236,13 @@ public class BigRoomSeatPanel extends JPanel {
         HashSet<String> booked = new HashSet<>();
         try {
             Connection conn = new DatabaseConnection().getConnection();
-            String sql = "SELECT seat_label FROM BookedSeat WHERE showtime_id = ?";
+            String sql = """
+                SELECT bs.seat_label
+                FROM BookedSeat bs
+                JOIN Tickets t ON bs.ticket_id = t.id
+                WHERE bs.showtime_id = ?
+                  AND t.status = 1
+            """;
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, showtime.getId());
             ResultSet rs = stmt.executeQuery();

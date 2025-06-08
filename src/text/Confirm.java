@@ -8,14 +8,12 @@ import GlobalConst.Const;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.AbstractMap;
-import java.util.ArrayList;
 
 public class Confirm extends JFrame {
 
     private final int arc = 40; // 圓角半徑
 
-    public Confirm(JFrame substrateFrame, Order order) {
+    public Confirm(JFrame substrateFrame, Order order, Runnable onConfirmCallback) {
         setUndecorated(true);
         setAlwaysOnTop(true);
         setSize(360, 160);
@@ -52,6 +50,9 @@ public class Confirm extends JFrame {
             public void mousePressed(MouseEvent e) {
                 dispose();
                 substrateFrame.getGlassPane().setVisible(false);
+                if (onConfirmCallback != null) {
+                    onConfirmCallback.run(); // 💥 close ConfirmOrderPage
+                }
                 new PayPage(order);
             }
         });
@@ -105,6 +106,6 @@ public class Confirm extends JFrame {
         dummy.setSize(Const.FRAME_WIDTH, Const.FRAME_HEIGHT);
         dummy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         dummy.setVisible(true);
-        new Confirm(dummy, Order.dummyOrder);
+        //new Confirm(dummy, Order.dummyOrder);
     }
 }

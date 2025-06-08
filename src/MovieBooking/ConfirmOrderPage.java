@@ -252,7 +252,7 @@ public class ConfirmOrderPage extends JFrame {
 
         CapsuleButton cancelBtn = new CapsuleButton("取消", BACK, BACK_HOVER, new Dimension(130, 40));
         cancelBtn.setBounds(Const.FRAME_WIDTH / 2 / 2 - 150, y, 130, 40);
-        cancelBtn.addMouseListener(new MouseAdapter(){
+        cancelBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
                 new FoodChoosingPage(order);
@@ -281,7 +281,9 @@ public class ConfirmOrderPage extends JFrame {
                 frame.setGlassPane(dim);
                 dim.setVisible(true);
                 order.setTotalCost(total);
-                new Confirm(frame, order);
+                new Confirm(frame, order, () -> {
+                    frame.dispose();
+                });
             }
         });
         rightPanel.add(payBtn);

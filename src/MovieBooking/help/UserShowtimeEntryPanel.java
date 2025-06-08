@@ -4,7 +4,6 @@ import Data.Showtime;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -139,7 +138,13 @@ public class UserShowtimeEntryPanel extends JPanel {
 
         try {
             Connection conn = new DatabaseConnection().getConnection();
-            String sql = "SELECT COUNT(*) FROM BookedSeat WHERE showtime_id = ?";
+            String sql = """
+                SELECT COUNT(*)
+                FROM BookedSeat bs
+                JOIN Tickets t ON bs.ticket_id = t.id
+                WHERE bs.showtime_id = ?
+                  AND t.status = 1
+            """;
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, s.getId());
             ResultSet rs = stmt.executeQuery();

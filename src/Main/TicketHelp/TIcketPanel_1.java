@@ -102,6 +102,30 @@ public class TicketPanel_1 extends JPanel {
             }
         });
         add(refundBtn);
+
+        // === Use Button ===
+        CapsuleButton useBtn = new CapsuleButton("使用", new Color(140, 180, 120), new Color(120, 160, 100), new Dimension(60, 30));
+        useBtn.setBounds(WIDTH - 150, HEIGHT - 50, 60, 30);
+        useBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(useBtn);
+                DimLayer dim = new DimLayer(frame);
+                frame.setGlassPane(dim);
+                dim.setVisible(true);
+
+                new TicketUseConfirmPanel(frame, dim, order, () -> {
+                    Order.markAsUsed(order);
+                    SwingUtilities.invokeLater(() -> {
+                        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(useBtn);
+                        if (parent instanceof MyTicketSpacePage page) {
+                            page.refreshContentExternally();
+                        }
+                    });
+                });
+            }
+        });
+        add(useBtn);
     }
 
     @Override

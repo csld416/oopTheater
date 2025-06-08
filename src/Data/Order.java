@@ -5,10 +5,13 @@ import connection.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Order {
 
     private User user;
+    private int id = -1;
     private Movie movie = null;
     private Showtime showtime = null;
     private ArrayList<Seat> seatList = new ArrayList<>();
@@ -16,7 +19,7 @@ public class Order {
     private int totalCost = 0;
     private int status = 1;
 
-    private static ArrayList<Order> cachedOrderList = null;
+    private static final Map<Integer, ArrayList<Order>> cachedOrderMap = new HashMap<>();
 
     public static final Order dummyOrder;
 
@@ -64,6 +67,10 @@ public class Order {
     }
 
     // === Setters ===
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -93,6 +100,10 @@ public class Order {
     }
 
     // === Getters ===
+    public int getId() {
+        return id;
+    }
+
     public Movie getMovie() {
         return movie;
     }
@@ -130,26 +141,26 @@ public class Order {
     }
 
     public static ArrayList<Order> getList() {
-        if (cachedOrderList == null) {
-            //cachedOrderList = dummyOrderList;
-            fetchOrdersFromDB();
+        int userId = User.getCurrentUser().getId();
+        if (!cachedOrderMap.containsKey(userId)) {
+            cachedOrderMap.put(userId, fetchOrdersFromDB(userId));
         }
-        return cachedOrderList;
+        return cachedOrderMap.get(userId);
     }
 
-    private static void fetchOrdersFromDB() {
-        cachedOrderList = new ArrayList<>();
+    private static ArrayList<Order> fetchOrdersFromDB(int userId) {
+        ArrayList<Order> result = new ArrayList<>();
         try (Connection conn = new DatabaseConnection().getConnection()) {
             String sql = "SELECT * FROM Tickets WHERE user_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, User.getCurrentUser().getId());
-
+            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Order order = new Order();
                 int ticketId = rs.getInt("id");
 
+                order.setId(ticketId);
                 order.setUser(User.getCurrentUser());
                 order.setMovie(Movie.fetchById(rs.getInt("movie_id")));
                 order.setShowtime(Showtime.fetchById(rs.getInt("showtime_id")));
@@ -157,13 +168,12 @@ public class Order {
                 order.setStatus(rs.getInt("status"));
                 order.setTotalCost(rs.getInt("total_price"));
 
-                // Note: foodList not stored in tickets table
-                cachedOrderList.add(order);
+                result.add(order);
             }
-
         } catch (SQLException e) {
             System.err.println("❌ Error fetching orders: " + e.getMessage());
         }
+        return result;
     }
 
     public static void insertOrder(Order order) {
@@ -205,6 +215,7 @@ public class Order {
                 }
 
                 conn.commit();
+                cachedOrderMap.remove(order.getUser().getId());
                 System.out.println("✅ Order inserted with ticket ID: " + ticketId);
             } catch (SQLException e) {
                 conn.rollback();
@@ -244,24 +255,50 @@ public class Order {
     }
 
     public static void refund(Order order) {
-        if (order.getUser() == null) {
-            order.setUser(User.currUser);
-            if (order.getUser() == null) {
-                System.err.println("❌ Refund failed: user not set and no session user found.");
-                return;
-            }
+        if (order.getId() <= 0) {
+            System.err.println("❌ Refund failed: order ID not set.");
+            return;
         }
+
         try (Connection conn = new DatabaseConnection().getConnection()) {
-            String sql = "UPDATE Tickets SET status = -1 WHERE user_id = ? AND movie_id = ? AND showtime_id = ?";
+            String sql = "UPDATE Tickets SET status = -2 WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, order.getUser().getId());
-            stmt.setInt(2, order.getMovie().getId());
-            stmt.setInt(3, order.getShowtime().getId());
+            stmt.setInt(1, order.getId());
             int updated = stmt.executeUpdate();
-            System.out.println("✅ Refunded ticket: " + updated + " rows affected");
-            cachedOrderList = null; // Invalidate cache
+            System.out.println("✅ Refunded ticket: " + updated + " row(s) affected");
+
+            // Invalidate cache for the user
+            int userId = order.getUser().getId();
+            cachedOrderMap.remove(userId);
+
         } catch (SQLException e) {
             System.err.println("❌ Refund failed: " + e.getMessage());
+        }
+    }
+
+    public static void clearCache(int userId) {
+        cachedOrderMap.remove(userId);
+    }
+
+    public static void markAsUsed(Order order) {
+        if (order.getId() <= 0) {
+            System.err.println("❌ Mark as used failed: order ID not set.");
+            return;
+        }
+
+        try (Connection conn = new DatabaseConnection().getConnection()) {
+            String sql = "UPDATE Tickets SET status = 0 WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, order.getId());
+            int updated = stmt.executeUpdate();
+            System.out.println("✅ Marked ticket as used: " + updated + " row(s) affected");
+
+            // Invalidate cache
+            int userId = order.getUser().getId();
+            cachedOrderMap.remove(userId);
+
+        } catch (SQLException e) {
+            System.err.println("❌ Failed to mark ticket as used: " + e.getMessage());
         }
     }
 

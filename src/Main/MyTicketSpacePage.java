@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MyTicketSpacePage extends JFrame {
-    
+
     private final int USED = 0;
     private final int FRESH = 1;
     private final int EXPIRED = -1;
@@ -38,7 +38,7 @@ public class MyTicketSpacePage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null); // Absolute layout
-        
+
         Data.Order.markExpiredTicketsForCurrentUser();
 
         initTopBar();
@@ -188,8 +188,10 @@ public class MyTicketSpacePage extends JFrame {
     }
 
     public void refreshContentExternally() {
+        int userId = Data.User.getCurrentUser().getId();
+        Data.Order.clearCache(userId); // 👈 force invalidate cache
         contentPanel.removeAll();
-        loadContent();
+        loadContent(); // this will now refetch fresh orders
         contentPanel.revalidate();
         contentPanel.repaint();
     }
