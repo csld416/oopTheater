@@ -228,3 +228,7 @@ Developed:
 ## 06/08
 - Fuck i hate this shit.
 - add six movies on display
+- bug fix: weird redirect between pages, use Runnable to solve
+- bug fix: the seat is marked available if it is refunded
+- bug fix: showtime sql
+- add feature: scan qrcode when enter

@@ -11,9 +11,6 @@ def count_java_lines(directory):
                     total += len(lines)
     return total
 
-path1 = "/Users/csld/NetBeansProjects/Vocabdict/src"
-path2 = "/Users/csld/NetBeansProjects/OOP2025_threater/src"
+path = "/Users/csld/NetBeansProjects/OOP2025_threater/src"
+print("Total Java lines of code:", count_java_lines(path))
 
-#print("Total Java lines of code:", count_java_lines(path1))
-print("Total Java lines of code:", count_java_lines(path2))
-#print("Ratio:", count_java_lines(path2) / count_java_lines(path1))
